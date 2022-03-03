@@ -3,17 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:32:30 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/01 13:36:15 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/03 17:12:02 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "srcs/vector.hpp"
+# include <vector>
 
 int	main(void)
 {
-	ft::vector<int> test;
+	std::vector<int> test(10, 17);
+	std::vector<int>::iterator it(test.begin());
+	std::vector<int>::iterator ite(test.end());
+
+	test.erase(ite);
+	
 	return (0);
 }

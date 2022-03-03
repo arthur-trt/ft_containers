@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   random_access_iterator.hpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/02 15:11:26 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/02 17:57:01 by atrouill         ###   ########.fr       */
+/*   Created: 2022/03/03 10:19:20 by arthur            #+#    #+#             */
+/*   Updated: 2022/03/03 16:59:24 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,43 +21,43 @@ namespace ft
 	class random_access_iterator : public ft::iterator<ft::random_access_iterator_tag, T>
 	{
 		public:
-		/* ************************************************************************** */
-		/*                                  TYPEDEFS                                  */
-		/* ************************************************************************** */
+		/** ************************************************************************** */
+		/**                                  TYPEDEFS                                  */
+		/** ************************************************************************** */
 
-			/*
+			/**
 			**	Iterator category
 			*/
 			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::iterator_category	iterator_category;
-			/*
+			/**
 			**	Value type
 			*/
 			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::value_type			value_type;
-			/*
+			/**
 			**	Difference type
 			*/
 			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::difference_type	difference_type;
-			/*
+			/**
 			**	Pointer
 			*/
 			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::pointer			pointer;
-			/*
+			/**
 			**	Reference
 			*/
 			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::reference			reference;
 
-		/* ************************************************************************** */
-		/*                              PRIVATE MEMBERS                               */
-		/* ************************************************************************** */
+		/** ************************************************************************** */
+		/**                              PRIVATE MEMBERS                               */
+		/** ************************************************************************** */
 		private:
 			pointer	_elem;
 
 		public:
-		/* ************************************************************************** */
-		/*                                CONSTRUCTORS                                */
-		/* ************************************************************************** */
+		/** ************************************************************************** */
+		/**                                CONSTRUCTORS                                */
+		/** ************************************************************************** */
 
-			/*
+			/**
 			**	@brief Default.
 			**	Default null constructor. Point on null
 			*/
@@ -65,7 +65,7 @@ namespace ft
 				_elem(0)
 			{}
 
-			/*
+			/**
 			**	@brief Constructor from pointer:
 			**	Construct a random access iterator and point on elem passed in argument
 			**
@@ -75,7 +75,7 @@ namespace ft
 				_elem(elem)
 			{}
 
-			/*
+			/**
 			**	@brief Constructor by copy
 			**	Construct a random access iterator by copy
 			**
@@ -85,18 +85,18 @@ namespace ft
 				_elem(other._elem)
 			{}
 
-			/*
+			/**
 			**	@brief Destructor
 			**	Does nothing
 			*/
 			~random_access_iterator()
 			{}
 
-		/* ************************************************************************** */
-		/*                                  MEMBERS                                   */
-		/* ************************************************************************** */
+		/** ************************************************************************** */
+		/**                                  MEMBERS                                   */
+		/** ************************************************************************** */
 
-			/*
+			/**
 			**	@brief	Convert a reverse iterator in an iterator
 			**
 			**	@return	The iterator
@@ -106,11 +106,11 @@ namespace ft
 				return (this->_elem);
 			}
 
-		/* ************************************************************************** */
-		/*                                 OPERATORS                                  */
-		/* ************************************************************************** */
+		/** ************************************************************************** */
+		/**                                 OPERATORS                                  */
+		/** ************************************************************************** */
 
-			/*
+			/**
 			**	@brief Dereference the rvalue
 			**
 			**	@return The rvalue (where point the pointer)
@@ -120,7 +120,7 @@ namespace ft
 				return (*this->_elem);
 			}
 
-			/*
+			/**
 			**	@brief Give the pointer to the lvalue
 			**
 			**	@return The lvalue (pointer to the element)
@@ -130,7 +130,7 @@ namespace ft
 				return (&(this->_elem));
 			}
 
-			/*
+			/**
 			**	@brief	Increment the pointer to the next value
 			**
 			**	@return A reference to the next value
@@ -141,7 +141,7 @@ namespace ft
 				return (*this);
 			}
 
-			/*
+			/**
 			**	@brief Preincrement the pointer to the next value
 			**
 			**	@return A reference to the current element
@@ -153,7 +153,7 @@ namespace ft
 				return (tmp);
 			}
 
-			/*
+			/**
 			**	@brief	Decrement the pointer to the next value
 			**
 			**	@return A reference to the previous value
@@ -164,7 +164,7 @@ namespace ft
 				return (*this);
 			}
 
-			/*
+			/**
 			**	@brief Predecrement the pointer to the next value
 			**
 			**	@return A reference to the current element
@@ -176,7 +176,7 @@ namespace ft
 				return (tmp);
 			}
 
-			/*
+			/**
 			**	@brief Access the element at this + n
 			**
 			**	@param	n	The number of element to "skip"
@@ -188,7 +188,7 @@ namespace ft
 				return (this->_elem + n);
 			}
 
-			/*
+			/**
 			**	@brief Access the element at this - n
 			**
 			**	@param	n	The number of element to "skip"
@@ -200,7 +200,7 @@ namespace ft
 				return (this->_elem - n);
 			}
 
-			/*
+			/**
 			**	@brief Give the reference to the random access iterator where
 			**	the actuel element is this + n
 			**
@@ -214,7 +214,7 @@ namespace ft
 				return (*this);
 			}
 
-			/*
+			/**
 			**	@brief Give the reference to the random access iterator where
 			**	the actuel element is this - n
 			**
@@ -234,11 +234,11 @@ namespace ft
 			}
 	};
 
-	/* ************************************************************************** */
-	/*                           COMPARAISON OPERATORS                            */
-	/* ************************************************************************** */
+	/** ************************************************************************** */
+	/**                           COMPARAISON OPERATORS                            */
+	/** ************************************************************************** */
 
-	/*
+	/**
 	**	@brief	Check if lhs and rhs are equal in memory
 	**
 	**	@param	lhs	The random access memory to compare
@@ -246,12 +246,12 @@ namespace ft
 	**
 	**	@return	True if equal, false otherwise
 	*/
-	template <typename T>
-	inline bool operator==(	const ft::random_access_iterator<T> lhs,
-							const ft::random_access_iterator<T> rhs)
-	{
-		return ( lhs.base() == rhs.base() );
-	}
+	// template <typename T>
+	// inline bool operator==(	const ft::random_access_iterator<T> lhs,
+	// 						const ft::random_access_iterator<T> rhs)
+	// {
+	// 	return ( lhs.base() == rhs.base() );
+	// }
 
 	/* Same but for `random_access_iterator == const random_access_iterator` */
 	template <typename T_L, typename T_R>
@@ -261,7 +261,7 @@ namespace ft
 		return ( lhs.base() == rhs.base() );
 	}
 
-	/*
+	/**
 	**	@brief	Check if lhs and rhs are different in memory
 	**
 	**	@param	lhs	The random access memory to compare
@@ -283,6 +283,107 @@ namespace ft
 	{
 		return ( lhs.base() != rhs.base() );
 	}
+
+	/**
+	 * @brief Check if lhs is superior as rhs in memory
+	 * 
+	 * @param lhs The random acces memmory to compare
+	 * @param rhs The random access with who check
+	 * 
+	 * @return True if superior, false otherwise
+	 */
+	template <typename T>
+	inline bool operator>(	const ft::random_access_iterator<T> lhs,
+							const ft::random_access_iterator<T> rhs)
+	{
+		return ( lhs.base() > rhs.base() );
+	}
+
+	/* Same but for `random_access_iterator > const random_access_iterator` */
+	template <typename T_L, typename T_R>
+	inline bool	operator>(	const ft::random_access_iterator<T_L> lhs,
+							const ft::random_access_iterator<T_R> rhs)
+	{
+		return ( lhs.base() < rhs.base() );
+	}
+
+	/**
+	 * @brief Check if lhs is inferior as rhs in memory
+	 * 
+	 * @param lhs The random acces memmory to compare
+	 * @param rhs The random access with who check
+	 * 
+	 * @return True if inferior, false otherwise
+	 */
+	template <typename T>
+	inline bool operator<(	const ft::random_access_iterator<T> lhs,
+							const ft::random_access_iterator<T> rhs)
+	{
+		return ( lhs.base() < rhs.base() );
+	}
+	
+	/* Same but for `random_access_iterator > const random_access_iterator` */
+	template <typename T_L, typename T_R>
+	inline bool operator<(	const ft::random_access_iterator<T_L> lhs,
+							const ft::random_access_iterator<T_R> rhs)
+	{
+		return ( lhs.base() < rhs.base() );
+	}
+
+	/**
+	 * @brief Check if lhs is superior or equal as rhs in memory
+	 * 
+	 * @param lhs The random acces memmory to compare
+	 * @param rhs The random access with who check
+	 * 
+	 * @return True if superior or equal, false otherwise
+	 */
+	template <typename T>
+	inline bool operator>=(	const ft::random_access_iterator<T> lhs,
+							const ft::random_access_iterator<T> rhs)
+	{
+		return ( lhs.base() >= rhs.base() );
+	}
+
+	/* Same but for `random_access_iterator > const random_access_iterator` */
+	template <typename T_L, typename T_R>
+	inline bool	operator>=(	const ft::random_access_iterator<T_L> lhs,
+							const ft::random_access_iterator<T_R> rhs)
+	{
+		return ( lhs.base() >= rhs.base() );
+	}
+
+	/**
+	 * @brief Check if lhs is inferior or equal as rhs in memory
+	 * 
+	 * @param lhs The random acces memmory to compare
+	 * @param rhs The random access with who check
+	 * 
+	 * @return True if inferior or equal, false otherwise
+	 */
+	template <typename T>
+	inline bool operator<=(	const ft::random_access_iterator<T> lhs,
+							const ft::random_access_iterator<T> rhs)
+	{
+		return ( lhs.base() <= rhs.base() );
+	}
+	
+	/* Same but for `random_access_iterator > const random_access_iterator` */
+	template <typename T_L, typename T_R>
+	inline bool operator<=(	const ft::random_access_iterator<T_L> lhs,
+							const ft::random_access_iterator<T_R> rhs)
+	{
+		return ( lhs.base() <= rhs.base() );
+	}
+
+	template <typename T_L, typename T_R>
+	inline typename ft::random_access_iterator<T_L>::difference_type
+	operator-(	const ft::random_access_iterator<T_L> lhs,
+				const ft::random_access_iterator<T_R> rhs)
+	{
+		return ( lhs.base() - rhs.base() );
+	}
+				
 
 } // namespace ft
 
