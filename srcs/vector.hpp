@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/03 17:59:21 by arthur           ###   ########.fr       */
+/*   Updated: 2022/03/04 18:24:44 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 # include <memory>
 # include <stdexcept>
 # include "random_access_iterator.hpp"
+# include "utils/utils.hpp"
+# include "utils/enable_if.hpp"
+# include "utils/is_integral.hpp"
+# include "utils/iterator_traits.hpp"
 
 namespace ft {
 
@@ -29,11 +33,11 @@ namespace ft {
 			/**
 			**	First template parameter (T)
 			*/
-			typedef				T											value_type;
+			typedef				T												value_type;
 			/**
 			**	Second template parameter (Alloc)
 			*/
-			typedef				Alloc										allocator_type;
+			typedef				Alloc											allocator_type;
 			/**
 			**	This types provide a reference to an element in the vector
 			**	The default one is `value_type&`
@@ -64,9 +68,11 @@ namespace ft {
 			 *	Can access memory in read
 			 */
 			typedef				ft::random_access_iterator<const value_type>	const_iterator;
-			
+
 
 			typedef typename	allocator_type::size_type						size_type;
+
+			typedef typename	ft::iterator_traits<iterator>::difference_type	difference_type;
 
 
 		/** ************************************************************************** */
@@ -105,17 +111,16 @@ namespace ft {
 			**	@param val	Value of each elements
 			**	@param alloc Allocator objects
 			*/
-			explicit vector (size_type n, const value_type& val = value_type(),
-				const allocator_type& alloc = allocator_type()) :
+			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
 				_alloc(alloc)
 			{
-				_start = _alloc.allocate(n);
-				_end_capacity = _start + n;
-				_end = _start;
+				this->_start = this->_alloc.allocate(n);
+				this->_end_capacity = this->_start + n;
+				this->_end = this->_start;
 				while(n--)
 				{
-					_alloc.construct(_end, val);
-					_end++;
+					this->_alloc.construct(this->_end, val);
+					this->_end++;
 				}
 			}
 
@@ -130,13 +135,36 @@ namespace ft {
 			**	@param	alloc	Allocator object
 			*/
 			template <class InputIterator>
-			vector (InputIterator first, InputIterator last,
-				const allocator_type& alloc = allocator_type()) :
+			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) :
 				_alloc(alloc)
 			{
 				/**
-				**	@todo Add function for insert or push back
+				**	@todo Check if this is a valid iterator (same type)
 				*/
+				difference_type n = ft::distance(first, last);
+
+				this->_start = this->_alloc.allocate(n);
+				this->_end_capacity = this->_start + n;
+				this->_end = this->_start;
+				while (n--)
+				{
+					this->_alloc.construct(this->_end, *first);
+					this->_end++;
+					first++;
+				}
+			}
+
+			/**
+			 * @brief Copy
+			 * Constructs a container with a copy of each of the elements in x, in the same order.
+			 *
+			 * @param x	Another vector object of the same type
+			 */
+			vector (const vector & x) :
+				_alloc(x.get_allocator())
+			{
+				//this->assign()
 			}
 
 			~vector ( void )
@@ -150,7 +178,7 @@ namespace ft {
 		/** ************************************************************************** */
 			/**
 			 * Returns an iterator pointing to the first element in the vector.
-			 * 
+			 *
 			 * @return An iterator to the beginning of the sequence container.
 			 */
 			iterator		begin ( void )
@@ -165,7 +193,7 @@ namespace ft {
 
 			/**
 			 * Returns an iterator pointing to the last element in the vector.
-			 * 
+			 *
 			 * @return An iterator to the end of the sequence container.
 			 */
 			iterator		end ( void )
@@ -185,22 +213,22 @@ namespace ft {
 			 * @brief Returns the number of elements in the vector.
 			 * This is the number of actual objects held in the vector,
 			 * which is not necessarily equal to its storage capacity.
-			 * 
+			 *
 			 * @return The number of elements in the container.
 			 */
 			size_type	size ( void ) const
 			{
 				return (this->_end - this->_start);
 			}
-			
+
 			/**
 			 * @brief Returns the maximum number of elements that the vector can hold.
-			 * This is the maximum potential size the container can reach due to known 
-			 * system or library implementation limitations, but the container is by no 
-			 * means guaranteed to be able to reach that size: it can still fail to allocate 
+			 * This is the maximum potential size the container can reach due to known
+			 * system or library implementation limitations, but the container is by no
+			 * means guaranteed to be able to reach that size: it can still fail to allocate
 			 * storage at any point before that size is reached.
-			 * 
-			 * @return The maximum number of elements a vector container can hold as content. 
+			 *
+			 * @return The maximum number of elements a vector container can hold as content.
 			 */
 			size_type	max_size ( void ) const
 			{
@@ -216,7 +244,7 @@ namespace ft {
 			 * the new elements are initialized as copies of val, otherwise, they are value-initialized.
 			 * If n is also greater than the current container capacity,
 			 * an automatic reallocation of the allocated storage space takes place.
-			 * 
+			 *
 			 * @param n New container size, expressed in number of elements.
 			 * @param val Object whose content is copied to the added elements in case that n is
 			 * greater than the current container size.
@@ -224,15 +252,15 @@ namespace ft {
 			void		resize ( size_type n, value_type val = value_type() )
 			{
 				if (n < this->size())
-					this->erase(this.begin() + n, this.end());
+					this->erase(this->begin() + n, this->end());
 				else
-					this->insert(this.end(), n - this->size(), val);
+					this->insert(this->end(), n - this->size(), val);
 			}
 
 			/**
 			 * @brief Returns the size of the storage space currently allocated for the vector,
 			 * expressed in terms of elements.
-			 * 
+			 *
 			 * @return The size of the currently allocated storage capacity in the vector,
 			 * measured in terms of the number elements it can hold.
 			 */
@@ -243,7 +271,7 @@ namespace ft {
 
 			/**
 			 * @brief Returns whether the vector is empty (i.e. whether its size is 0).
-			 * 
+			 *
 			 * @return True if empty, false overwise
 			 */
 			bool		empty( void ) const
@@ -255,26 +283,30 @@ namespace ft {
 			 * @brief Requests that the vector capacity be at least enough to contain n elements.
 			 * If n is greater than the current vector capacity, the function causes the container
 			 * to reallocate its storage increasing its capacity to n (or greater).
-			 * 
+			 *
 			 * @param n Minimum capacity for the vector.
 			 */
 			void		reserve ( size_type n )
 			{
 				if (n > this->max_size())
-					throw (std::length_error());
+					throw (std::length_error("vector::resize"));
 				if (n > this->capacity())
 				{
-					pointer	new_array;
-					
-					new_array = this->_alloc.allocate(n);
-					for (size_type i = 0; i < this->_end; i++)
+					pointer		old_start = this->_start;
+					pointer		old_end = this->_end;
+					size_type	old_size = this->size();
+					size_type	old_capacity = this->capacity();
+
+					this->_start = this->_alloc.allocate(n);
+					this->_end_capacity = this->_start + n;
+					this->_end = this->_start;
+					while (old_start != old_end)
 					{
-						this->_alloc.construct(&new_array[i], this->_start[i]);
-						this->_alloc.destroy(&this->_start[i]);
+						this->_alloc.construct(this->_end, *old_start);
+						this->_end++;
+						old_start++;
 					}
-					this->_alloc.deallocate(this->_start, this->_end_capacity);
-					this->_start = new_array;
-					this->_end_capacity= n;					
+					this->_alloc.deallocate(old_start - old_size, old_capacity);
 				}
 			}
 
@@ -283,14 +315,14 @@ namespace ft {
 		/** ************************************************************************** */
 			/**
 			 * @brief Returns a reference to the element at position n in the vector container.
-			 * 
+			 *
 			 * @param n Position of an element in the container.
-			 * 
+			 *
 			 * @return The element at the specified position in the vector.
 			 */
 			reference		operator[] ( size_type n )
 			{
-				return (*(this->_start + n));	
+				return (*(this->_start + n));
 			}
 
 			const_reference	operator[] ( size_type n ) const
@@ -300,28 +332,42 @@ namespace ft {
 
 			/**
 			 * @brief Returns a reference to the element at position n in the vector.
-			 * 
+			 *
 			 * @param n Position of an element in the container.
-			 * @return reference 
+			 * @return reference
 			 */
 			reference		at ( size_type n )
 			{
 				if (n >= this->size())
-					throw (std::out_of_range());
-				return (this->operator[](n));				
+				{
+					std::string error("vector::at: n (wich is ");
+					error += ft::to_string(n);
+					error += std::string(") >= this->size() (wich is ");
+					error += ft::to_string(this->size());
+					error += std::string(")");
+					throw (std::out_of_range(error));
+				}
+				return (this->operator[](n));
 			}
 
 			const_reference	at ( size_type n ) const
 			{
 				if (n >= this->size())
-					throw (std::out_of_range());
-				return (this->operator[](n));	
+				{
+					std::string error("vector::at: n (wich is ");
+					error += ft::to_string(n);
+					error += std::string(") >= this->size() (wich is ");
+					error += ft::to_string(this->size());
+					error += std::string(")");
+					throw (std::out_of_range(error));
+				}
+				return (this->operator[](n));
 			}
 
 			/**
 			 * @brief Returns a reference to the first element in the vector.
-			 * 
-			 * @return A reference to the first element in the vector container. 
+			 *
+			 * @return A reference to the first element in the vector container.
 			 */
 			reference		front ( void )
 			{
@@ -335,8 +381,8 @@ namespace ft {
 
 			/**
 			 * @brief Returns a reference to the last element in the vector.
-			 * 
-			 * @return A reference to the last element in the vector container. 
+			 *
+			 * @return A reference to the last element in the vector container.
 			 */
 			reference		back ( void )
 			{
@@ -355,7 +401,7 @@ namespace ft {
 			 * @brief Range.
 			 * The new contents are elements constructed from each of the elements in
 			 * the range between first and last, in the same order.
-			 * 
+			 *
 			 * @param first Input iterators to the initial position in a sequence
 			 * @param last Input iterators to the final position in a sequence
 			 */
@@ -363,37 +409,47 @@ namespace ft {
 			void		assign ( InputIterator first, InputIterator last )
 			{
 				/**
-				 * @todo
+				 * @todo Verify Iterator
 				 */
+				this->clear();
+				size_type	dist = ft::distance(first, last);
+				if (this->capacity() >= dist)
+				{
+					for (; first != last; first++, this->_end++)
+					{
+						this->_alloc.construct(this->_end, *first);
+					}
+
+				}
 			}
 
 			/**
 			 * @brief Fill.
 			 * The new contents are n elements, each initialized to a copy of val.
-			 * 
+			 *
 			 * @param n New size for the container.
 			 * @param val Value to fill the container with
 			 */
 			void		assign ( size_type n, const value_type& val )
 			{
-				
+
 			}
 
 			/**
 			 * @brief Adds a new element at the end of the vector,
 			 * after its current last element.
 			 * The content of val is copied (or moved) to the new element.
-			 * 
+			 *
 			 * @param val Value to be copied (or moved) to the new element.
 			 */
 			void		push_back ( const value_type& val )
 			{
 				if (this->_end == this->_end_capacity)
 				{
-					/**
-					 * @todo
-					 * 
-					 */
+					int	next_capacity;
+
+					next_capacity = static_cast<int>(this->size()) * 2;
+					this->reserve(next_capacity);
 				}
 				this->_alloc.construct (this->_end, val);
 				this->_end++;
@@ -406,7 +462,7 @@ namespace ft {
 			 */
 			void		pop_back( void )
 			{
-				this->_alloc.destroy(&(this->_end));
+				this->_alloc.destroy((this->_end));
 				this->_end--;
 			}
 
@@ -416,14 +472,48 @@ namespace ft {
 			 * before the element at the specified position,
 			 * effectively increasing the container size by the number
 			 * of elements inserted.
-			 * 
+			 *
 			 * @param position Position in the vector where the new elements are inserted.
 			 * @param val Value to be copied (or moved) to the inserted elements.
 			 * @return An iterator that points to the first of the newly inserted elements.
 			 */
 			iterator	insert ( iterator position, const value_type& val )
 			{
-				
+				size_type pos_len = &(*position) - _start;
+				if (size_type(_end_capacity - _end) >= this->size() + 1)
+				{
+					for (size_type i = 0; i < pos_len; i++)
+						_alloc.construct(_end - i, *(_end - i - 1));
+					_end++;
+					_alloc.construct(&(*position), val);
+				}
+				else
+				{
+					pointer new_start = pointer();
+					pointer new_end = pointer();
+					pointer new_end_capacity = pointer();
+
+					int next_capacity = (this->size() * 2 > 0) ? this->size() * 2 : 1;
+					new_start = _alloc.allocate( next_capacity );
+					new_end = new_start + this->size() + 1;
+					new_end_capacity = new_start + next_capacity;
+
+					for (size_type i = 0; i < pos_len; i++)
+						_alloc.construct(new_start + i, *(_start + i));
+					_alloc.construct(new_start + pos_len, val);
+					for (size_type j = 0; j < this->size() - pos_len; j++)
+						_alloc.construct(new_end - j - 1, *(_end - j - 1));
+
+					for (size_type l = 0; l < this->size(); l++)
+						_alloc.destroy(_start + l);
+					if (_start)
+						_alloc.deallocate(_start, this->capacity());
+
+					_start = new_start;
+					_end = new_end;
+					_end_capacity = new_end_capacity;
+				}
+				return (iterator(_start + pos_len));
 			}
 
 			/**
@@ -431,15 +521,15 @@ namespace ft {
 			 * The vector is extended by inserting new elements
 			 * before the element at the specified position,
 			 * effectively increasing the container size by the number
-			 * of elements inserted. 
-			 * 
+			 * of elements inserted.
+			 *
 			 * @param position Position in the vector where the new elements are inserted.
 			 * @param n Number of elements to insert.
 			 * @param val Value to be copied (or moved) to the inserted elements.
 			 */
 			void		insert ( iterator position, size_type n, const value_type& val )
 			{
-				
+
 			}
 
 			/**
@@ -448,7 +538,7 @@ namespace ft {
 			 * before the element at the specified position,
 			 * effectively increasing the container size by the number
 			 * of elements inserted.
-			 * 
+			 *
 			 * @param position Position in the vector where the new elements are inserted.
 			 * @param first Input iterators to the initial position in a sequence
 			 * @param last Input iterators to the final position in a sequence
@@ -456,42 +546,54 @@ namespace ft {
 			template <class InputIterator>
     		void		insert (iterator position, InputIterator first, InputIterator last)
 			{
-				
+
 			}
 
 			/**
 			 * @brief Removes from the vector a single element (position)
-			 * 
+			 *
 			 * @param position Iterator pointing to a single element to be removed from the vector.
 			 * @return An iterator pointing to the new location of the element that followed the
 			 * last element erased by the function call
 			 */
 			iterator	erase ( iterator position )
 			{
-				
+				return (erase(position, position + 1));
 			}
 
 			/**
 			 * @brief Removes from the vector a range of elements ([first,last))
-			 * 
+			 *
 			 * @param first Input iterators to the initial position in a sequence
 			 * @param last Input iterators to the final position in a sequence
-			 * 
+			 *
 			 * @return An iterator pointing to the new location of the element that followed the
 			 * last element erased by the function call
 			 */
 			iterator	erase (iterator first, iterator last)
 			{
 				size_type	count = last - first;
+				size_type	index = first.base() - this->_start;
+
 				if (count <= count)
 					return (last);
-				
+				for (size_type i = index; i < index + count; i++)
+				{
+					this->_alloc.destroy(&this->_start[i]);
+				}
+				for (size_type i = index + count; i <= this->size(); i++)
+				{
+					this->_alloc.construct(&this->_start[i - count], this->_start[i]);
+					this->_alloc.destroy(&this->_start[i]);
+				}
+				this->_end -= count;
+				return (first);
 			}
 
 			/**
 			 * @brief Exchanges the content of the container by the content of x,
 			 * which is another vector object of the same type. Sizes may differ.
-			 * 
+			 *
 			 * @param x Another vector container of the same type
 			 */
 			void	swap ( vector& x )
@@ -515,7 +617,7 @@ namespace ft {
 		/** ************************************************************************** */
 			/**
 			 * @brief Returns a copy of the allocator object associated with the vector.
-			 * 
+			 *
 			 * @return The allocator.
 			 */
 			allocator_type	get_allocator ( void ) const
@@ -523,7 +625,7 @@ namespace ft {
 				return (this->_alloc);
 			}
 	};
-	
+
 }
 
 #endif

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   random_access_iterator.hpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:20 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/03 16:59:24 by arthur           ###   ########.fr       */
+/*   Updated: 2022/03/04 14:07:15 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RANDOM_ACCESS_ITERATOR
-# define RANDOM_ACCESS_ITERATOR
+#ifndef RANDOM_ACCESS_ITERATOR_HPP
+# define RANDOM_ACCESS_ITERATOR_HPP
 
-# include "utils.hpp"
+# include "utils/utils.hpp"
 
 namespace ft
 {
@@ -286,10 +286,10 @@ namespace ft
 
 	/**
 	 * @brief Check if lhs is superior as rhs in memory
-	 * 
+	 *
 	 * @param lhs The random acces memmory to compare
 	 * @param rhs The random access with who check
-	 * 
+	 *
 	 * @return True if superior, false otherwise
 	 */
 	template <typename T>
@@ -309,10 +309,10 @@ namespace ft
 
 	/**
 	 * @brief Check if lhs is inferior as rhs in memory
-	 * 
+	 *
 	 * @param lhs The random acces memmory to compare
 	 * @param rhs The random access with who check
-	 * 
+	 *
 	 * @return True if inferior, false otherwise
 	 */
 	template <typename T>
@@ -321,7 +321,7 @@ namespace ft
 	{
 		return ( lhs.base() < rhs.base() );
 	}
-	
+
 	/* Same but for `random_access_iterator > const random_access_iterator` */
 	template <typename T_L, typename T_R>
 	inline bool operator<(	const ft::random_access_iterator<T_L> lhs,
@@ -332,10 +332,10 @@ namespace ft
 
 	/**
 	 * @brief Check if lhs is superior or equal as rhs in memory
-	 * 
+	 *
 	 * @param lhs The random acces memmory to compare
 	 * @param rhs The random access with who check
-	 * 
+	 *
 	 * @return True if superior or equal, false otherwise
 	 */
 	template <typename T>
@@ -355,10 +355,10 @@ namespace ft
 
 	/**
 	 * @brief Check if lhs is inferior or equal as rhs in memory
-	 * 
+	 *
 	 * @param lhs The random acces memmory to compare
 	 * @param rhs The random access with who check
-	 * 
+	 *
 	 * @return True if inferior or equal, false otherwise
 	 */
 	template <typename T>
@@ -367,7 +367,7 @@ namespace ft
 	{
 		return ( lhs.base() <= rhs.base() );
 	}
-	
+
 	/* Same but for `random_access_iterator > const random_access_iterator` */
 	template <typename T_L, typename T_R>
 	inline bool operator<=(	const ft::random_access_iterator<T_L> lhs,
@@ -383,7 +383,7 @@ namespace ft
 	{
 		return ( lhs.base() - rhs.base() );
 	}
-				
+
 
 } // namespace ft
 

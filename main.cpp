@@ -3,23 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:32:30 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/03 17:12:02 by arthur           ###   ########.fr       */
+/*   Updated: 2022/03/04 18:25:23 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# include "srcs/random_access_iterator.hpp"
+# include "srcs/utils/utils.hpp"
+# include "srcs/utils/iterator_traits.hpp"
 # include "srcs/vector.hpp"
 # include <vector>
+# include <iostream>
+# include <string>
+# include <iomanip>
 
 int	main(void)
 {
-	std::vector<int> test(10, 17);
-	std::vector<int>::iterator it(test.begin());
-	std::vector<int>::iterator ite(test.end());
+	int	n = 10;
+	std::string	val("je test");
+	int	i = 0;
 
-	test.erase(ite);
-	
+
+	ft::vector<std::string> test1(n, val);
+	ft::vector<std::string>	test2(test1);
+
+	test1.pop_back();
+
+	test1.insert(test1.begin() + 2, std::string("super"));
+	ft::vector<std::string>::iterator it(test1.begin());
+	while (it != test1.end())
+	{
+		std::cout << *it << std::endl;
+		i++;
+		++it;
+	}
+
+
 	return (0);
 }
