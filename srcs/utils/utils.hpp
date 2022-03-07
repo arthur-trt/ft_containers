@@ -29,13 +29,6 @@ namespace ft {
 		return (ss.str());
 	}
 
-
-	//class random_access_iterator_tag { };
-	//class bidirectional_iterator_tag { };
-	//class forward_iterator_tag { };
-	//class input_iterator_tag { };
-	//class output_iterator_tag { };
-
 	///  Marking input iterators.
 	struct input_iterator_tag {};
 	///  Marking output iterators.
