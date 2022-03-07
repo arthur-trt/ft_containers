@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:32:30 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/04 18:25:23 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/04 22:55:38 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	main(void)
 	ft::vector<std::string>	test2(test1);
 
 	test1.pop_back();
+	// test1.pop_back();
 
 	test1.insert(test1.begin() + 2, std::string("super"));
 	ft::vector<std::string>::iterator it(test1.begin());

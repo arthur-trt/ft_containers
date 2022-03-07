@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/04 18:24:44 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/05 18:39:29 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -489,29 +489,32 @@ namespace ft {
 				}
 				else
 				{
-					pointer new_start = pointer();
-					pointer new_end = pointer();
-					pointer new_end_capacity = pointer();
+					size_type n = ft::distance(this->begin(), position);
+					this->reserve(this->size() + 10);
+					this->insert(this->begin() + n, val);
+					// pointer new_start = pointer();
+					// pointer new_end = pointer();
+					// pointer new_end_capacity = pointer();
 
-					int next_capacity = (this->size() * 2 > 0) ? this->size() * 2 : 1;
-					new_start = _alloc.allocate( next_capacity );
-					new_end = new_start + this->size() + 1;
-					new_end_capacity = new_start + next_capacity;
+					// int next_capacity = (this->size() * 2 > 0) ? this->size() * 2 : 1;
+					// new_start = _alloc.allocate( next_capacity );
+					// new_end = new_start + this->size() + 1;
+					// new_end_capacity = new_start + next_capacity;
 
-					for (size_type i = 0; i < pos_len; i++)
-						_alloc.construct(new_start + i, *(_start + i));
-					_alloc.construct(new_start + pos_len, val);
-					for (size_type j = 0; j < this->size() - pos_len; j++)
-						_alloc.construct(new_end - j - 1, *(_end - j - 1));
+					// for (size_type i = 0; i < pos_len; i++)
+					// 	_alloc.construct(new_start + i, *(_start + i));
+					// _alloc.construct(new_start + pos_len, val);
+					// for (size_type j = 0; j < this->size() - pos_len; j++)
+					// 	_alloc.construct(new_end - j - 1, *(_end - j - 1));
 
-					for (size_type l = 0; l < this->size(); l++)
-						_alloc.destroy(_start + l);
-					if (_start)
-						_alloc.deallocate(_start, this->capacity());
+					// for (size_type l = 0; l < this->size(); l++)
+					// 	_alloc.destroy(_start + l);
+					// if (_start)
+					// 	_alloc.deallocate(_start, this->capacity());
 
-					_start = new_start;
-					_end = new_end;
-					_end_capacity = new_end_capacity;
+					// _start = new_start;
+					// _end = new_end;
+					// _end_capacity = new_end_capacity;
 				}
 				return (iterator(_start + pos_len));
 			}
