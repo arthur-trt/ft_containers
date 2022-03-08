@@ -2,17 +2,19 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: g++ build active file",
-            "command": "/usr/bin/g++",
+            "label": "Build project",
+            "command": "/usr/bin/c++",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                "main.cpp",
+                "tester.cpp",
+                "-Isrcs/",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "containers"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [
                 "$gcc"
