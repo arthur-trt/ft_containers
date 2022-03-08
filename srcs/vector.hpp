@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/07 14:07:48 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/07 17:12:38 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,12 +218,12 @@ namespace ft {
 			 */
 			reverse_iterator		rbegin( void )
 			{
-				return (this->_end);
+				return (reverse_iterator(this->_end));
 			}
 
 			const_reverse_iterator	rbegin( void ) const
 			{
-				return (this->_end);
+				return (reverse_iterator(this->_end));
 			}
 
 			/**
@@ -248,12 +248,12 @@ namespace ft {
 			 */
 			reverse_iterator		rend( void )
 			{
-				return (this->_start);
+				return (reverse_iterator(this->_start));
 			}
 
 			const_reverse_iterator	rend( void ) const
 			{
-				return (this->_start);
+				return (reverse_iterator(this->_start));
 			}
 
 
@@ -302,10 +302,20 @@ namespace ft {
 			 */
 			void		resize ( size_type n, value_type val = value_type() )
 			{
-				if (n < this->size())
-					this->erase(this->begin() + n, this->end());
+				if (n > max_size())
+					throw std::length_error("vector::resize");
+				else if (n < this->size())
+				{
+					while (this->size() > n)
+					{
+						--_end;
+						_alloc.destroy(_end);
+					}
+				}
 				else
 					this->insert(this->end(), n - this->size(), val);
+				// else
+				// 	this->insert(this->end(), n - this->size(), val);
 			}
 
 			/**
@@ -496,7 +506,8 @@ namespace ft {
 				{
 					while (n--)
 					{
-						this->_alloc.construct(val);
+						this->_alloc.construct(this->_end, val);
+						this->_end++;
 					}
 				}
 				else
@@ -561,11 +572,10 @@ namespace ft {
 				else
 				{
 					size_type n = ft::distance(this->begin(), position);
-					std::cout << "Reserve new size. Distance : " << n << std::endl;
 					this->reserve(this->size() + 10);
 					return (this->insert(this->begin() + n, val));
 				}
-				return (iterator(_start + pos_len));
+				return (iterator(this->_start + pos_len));
 			}
 
 			/**
@@ -599,7 +609,8 @@ namespace ft {
 			 * @param last Input iterators to the final position in a sequence
 			 */
 			template <class InputIterator>
-    		void		insert (iterator position, InputIterator first, InputIterator last)
+    		void		insert (iterator position, InputIterator first, InputIterator last,
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
 			{
 				while (first != last)
 				{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 11:19:54 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/07 14:30:12 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/07 16:52:57 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@
 
 namespace ft {
 	template <typename _Iterator>
-	class reverse_iterator :
-		public ft::iterator<typename ft::iterator_traits<_Iterator>::iterator_category,
-							typename ft::iterator_traits<_Iterator>::value_type,
-							typename ft::iterator_traits<_Iterator>::difference_type,
-							typename ft::iterator_traits<_Iterator>::pointer,
-							typename ft::iterator_traits<_Iterator>::reference>
+	class reverse_iterator 
+	// :
+	// 	public ft::iterator<typename ft::iterator_traits<_Iterator>::iterator_category,
+	// 						typename ft::iterator_traits<_Iterator>::value_type,
+	// 						typename ft::iterator_traits<_Iterator>::difference_type,
+	// 						typename ft::iterator_traits<_Iterator>::pointer,
+	// 						typename ft::iterator_traits<_Iterator>::reference>
 	{
 		public:
 		/** ************************************************************************** */
@@ -36,19 +37,21 @@ namespace ft {
 			/**
 			**	Iterator category
 			*/
-			typedef typename	ft::iterator_traits<iterator_type>::iterator_category	iterator_category;
+			typedef typename	ft::iterator_traits<_Iterator>::iterator_category	iterator_category;
 			/**
 			**	Difference type
 			*/
-			typedef typename	ft::iterator_traits<iterator_type>::difference_type		difference_type;
+			typedef typename	ft::iterator_traits<_Iterator>::difference_type		difference_type;
 			/**
 			**	Pointer
 			*/
-			typedef typename	ft::iterator_traits<iterator_type>::pointer				pointer;
+			typedef typename	ft::iterator_traits<_Iterator>::pointer				pointer;
 			/**
 			**	Reference
 			*/
-			typedef typename	ft::iterator_traits<iterator_type>::reference			reference;
+			typedef typename	ft::iterator_traits<_Iterator>::reference			reference;
+
+			typedef typename	ft::iterator_traits<_Iterator>::value_type			value_type;
 
 		/** ************************************************************************** */
 		/**                              PRIVATE MEMBERS                               */
@@ -86,7 +89,7 @@ namespace ft {
 			 *  A reverse_iterator across other types can be copied in the normal
 			 *  fashion.
 			 */
-			template<typename _Iter>
+			template<class _Iter>
 			reverse_iterator(const reverse_iterator<_Iter>& x) :
 				_curr(x.base())
 			{}
@@ -193,7 +196,7 @@ namespace ft {
 			**
 			**	@return The random access iterator who point at this + n
 			*/
-			iterator_type	operator-( difference_type n ) const
+			reverse_iterator	operator-( difference_type n ) const
 			{
 				return (reverse_iterator(this->_curr + n));
 			}
