@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 11:19:54 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/07 16:52:57 by arthur           ###   ########.fr       */
+/*   Updated: 2022/03/09 11:55:10 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSE_ITERATOR_HPP
 # define REVERSE_ITERATOR_HPP
 
-# include "utils/utils.hpp"
-# include "utils/iterator_traits.hpp"
+# include "utils.hpp"
+# include "iterator_traits.hpp"
 
 namespace ft {
 	template <typename _Iterator>
-	class reverse_iterator 
+	class reverse_iterator
 	// :
 	// 	public ft::iterator<typename ft::iterator_traits<_Iterator>::iterator_category,
 	// 						typename ft::iterator_traits<_Iterator>::value_type,
@@ -94,6 +94,13 @@ namespace ft {
 				_curr(x.base())
 			{}
 
+			reverse_iterator	&operator=( const reverse_iterator & src )
+			{
+				if (*this != src)
+					this->_curr = src.base();
+				return (*this);
+			}
+
 		/** ************************************************************************** */
 		/**                                  MEMBERS                                   */
 		/** ************************************************************************** */
@@ -136,7 +143,7 @@ namespace ft {
 			**
 			**	@return A reference to the next value
 			*/
-			iterator_type	&operator++( void )
+			reverse_iterator	&operator++( void )
 			{
 				--this->_curr;
 				return (*this);
@@ -147,10 +154,10 @@ namespace ft {
 			**
 			**	@return A reference to the current element
 			*/
-			iterator_type	operator++( int )
+			reverse_iterator	operator++( int )
 			{
-				iterator_type tmp(*this);
-				--this->_curr;
+				reverse_iterator tmp = *this;
+				++(*this);
 				return (tmp);
 			}
 
@@ -170,7 +177,7 @@ namespace ft {
 			**
 			**	@return A reference to the current element
 			*/
-			iterator_type	operator--( int )
+			reverse_iterator	operator--( int )
 			{
 				iterator_type tmp(*this);
 				++this->_curr;
@@ -184,7 +191,7 @@ namespace ft {
 			**
 			**	@return The random access iterator who point at this + n
 			*/
-			iterator_type	operator+( difference_type n ) const
+			reverse_iterator	operator+( difference_type n ) const
 			{
 				return (reverse_iterator(this->_curr - n));
 			}
@@ -209,7 +216,7 @@ namespace ft {
 			**
 			**	@return		Random access iterator to the new value
 			*/
-			iterator_type	&operator+=( difference_type n )
+			reverse_iterator	&operator+=( difference_type n )
 			{
 				this->_curr -= n;
 				return (*this);
@@ -223,7 +230,7 @@ namespace ft {
 			**
 			**	@return		Random access iterator to the new value
 			*/
-			iterator_type	&operator-=( difference_type n )
+			reverse_iterator	&operator-=( difference_type n )
 			{
 				this->_curr += n;
 				return (*this);

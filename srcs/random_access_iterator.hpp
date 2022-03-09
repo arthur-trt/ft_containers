@@ -6,14 +6,14 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:20 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/07 14:14:44 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/09 11:23:09 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RANDOM_ACCESS_ITERATOR_HPP
 # define RANDOM_ACCESS_ITERATOR_HPP
 
-# include "utils/utils.hpp"
+# include "utils.hpp"
 
 namespace ft
 {
@@ -279,7 +279,20 @@ namespace ft
 		return ( lhs.base() != rhs.base() );
 	}
 
-
+	/**
+	 * @brief Check if lhs is inferior as rhs in memory
+	 *
+	 * @param lhs The random acces memmory to compare
+	 * @param rhs The random access with who check
+	 *
+	 * @return True if inferior, false otherwise
+	 */
+	template <typename T_L, typename T_R>
+	inline bool operator>(	const ft::random_access_iterator<T_L> lhs,
+							const ft::random_access_iterator<T_R> rhs)
+	{
+		return ( lhs.base() > rhs.base() );
+	}
 
 	/**
 	 * @brief Check if lhs is inferior as rhs in memory
