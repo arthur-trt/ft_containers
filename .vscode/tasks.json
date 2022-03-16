@@ -6,6 +6,7 @@
             "command": "/usr/bin/c++",
             "args": [
                 "-fdiagnostics-color=always",
+                "-fsanitize=address",
                 "-g",
                 "main.cpp",
                 "tester.cpp",

@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/15 14:03:48 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/16 12:02:23 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,9 +346,6 @@ namespace ft {
 					this->reserve(n);
 					this->insert(this->end(), (n - this->size()), val);
 				}
-					//this->insert(this->end(), n - this->size(), val);
-				// else
-				// 	this->insert(this->end(), n - this->size(), val);
 			}
 
 			/**
@@ -380,34 +377,10 @@ namespace ft {
 			 *
 			 * @param n Minimum capacity for the vector.
 			 */
-			//void		reserve ( size_type n )
-			//{
-			//	if (n > this->max_size())
-			//		throw (std::length_error("vector::resize"));
-			//	if (n > this->capacity())
-			//	{
-			//		pointer		old_start = this->_start;
-			//		pointer		old_end = this->_end;
-			//		size_type	old_size = this->size();
-			//		size_type	old_capacity = this->capacity();
-
-			//		this->_start = this->_alloc.allocate(n, old_start);
-			//		this->_end_capacity = this->_start + n;
-			//		this->_end = this->_start;
-			//		while (old_start != old_end)
-			//		{
-			//			this->_alloc.construct(this->_end, *old_start);
-			//			this->_alloc.destroy(old_start);
-			//			this->_end++;
-			//			old_start++;
-			//		}
-			//		this->_alloc.deallocate(old_start - old_size, old_capacity);
-			//	}
-			//}
 			void		reserve( size_type n )
 			{
 				if (n > this->max_size())
-					throw (std::length_error("vector::resize"));
+					throw (std::length_error("vector::reserve"));
 				if (n > this->capacity())
 				{
 					try
@@ -430,8 +403,6 @@ namespace ft {
 					{
 						std::cerr << e.what() << '\n';
 					}
-
-
 				}
 			}
 
@@ -594,7 +565,8 @@ namespace ft {
 				{
 					int	next_capacity;
 
-					next_capacity = static_cast<int>(this->size()) + 10;
+					next_capacity = (this->size() == 0) ? 1 : static_cast<int>(this->size()) * 2;
+					//next_capacity = static_cast<int>(this->size()) + 1;
 					this->reserve(next_capacity);
 				}
 				this->_alloc.construct(this->_end, val);
@@ -626,47 +598,19 @@ namespace ft {
 			iterator	insert ( iterator position, const value_type& val )
 			{
 				size_type	insert_idx = ft::distance(this->begin(), position);
-				if (this->size() == this->capacity())
-				{
-					size_type	new_capa = computeCapacity(this->size(), 1);
-					pointer		new_start = this->_alloc.allocate(new_capa);
-					iterator	it = this->begin();
-					size_type	i = 0;
 
-					while (it != position)
-					{
-						this->_alloc.construct(new_start + i, this->_start[i]);
-						it++;
-						i++;
-					}
-					this->_alloc.construct(new_start + insert_idx, val);
-					i++;
-					while (i < this->size() + 1)
-					{
-						this->_alloc.construct(new_start + i, this->_start[i - 1]);
-						i++;
-					}
-					for (size_type i = 0; i < this->size(); i++)
-					{
-						this->_alloc.destroy(this->_start + i);
-					}
-					this->_alloc.deallocate(this->_start, this->capacity());
-					this->_start = new_start;
-					this->_end_capacity = this->_start + new_capa;
-				}
-				else
+				this->reserve(computeCapacity(this->size(), 1));
+				iterator new_pos = this->begin() + insert_idx;
+				iterator it = this->end();
+				size_type i = this->size();
+				while (it != new_pos)
 				{
-					iterator it = this->end();
-					size_type i = this->size();
-					while (it != position)
-					{
-						_alloc.construct(this->_start + i, this->_start[i - 1]);
-						_alloc.destroy(this->_start + i - 1);
-						i--;
-						it--;
-					}
-					_alloc.construct(this->_start + i, val);
+					_alloc.construct(this->_start + i, this->_start[i - 1]);
+					_alloc.destroy(this->_start + i - 1);
+					i--;
+					it--;
 				}
+				_alloc.construct(this->_start + i, val);
 				this->_end++;
 				return (iterator(this->_start + insert_idx));
 			}
@@ -707,63 +651,23 @@ namespace ft {
 				if (dist == 0)
 					return ;
 				size_type	new_size = this->size() + dist;
-				if (new_size >= this->capacity())
+				size_type	insert_idx	= ft::distance(this->begin(), position);
+				ptrdiff_t	i			= this->size();
+				InputIterator	tmp;
+				this->reserve(computeCapacity(this->size(), dist));
+				while (i >= static_cast<ptrdiff_t>(insert_idx))
 				{
-					size_type		new_capa = computeCapacity(this->size(), dist);
-					pointer			new_start = pointer();
-					size_type		i = 0;
-					size_type		j = 0;
-					iterator		it;
-					InputIterator	tmp;
-
-					new_start = this->_alloc.allocate(new_capa);
-					it = this->begin();
-					while (it != position)
-					{
-						this->_alloc.construct(new_start + i, this->_start[i]);
-						it++;
-						i++;
-					}
-					tmp = first;
-					while (tmp != last)
-					{
-						this->_alloc.construct(new_start + i + j, *tmp);
-						tmp++;
-						j++;
-					}
-					while (i + j < new_size)
-					{
-						this->_alloc.construct(new_start + i + j, this->_start[i]);
-						i++;
-					}
-					for (size_type i = 0; i < this->size(); i++)
-					{
-						this->_alloc.destroy(this->_start + i);
-					}
-					this->_alloc.deallocate(this->_start, this->capacity());
-					this->_start = new_start;
-					this->_end_capacity = this->_start + new_capa;
+					this->_alloc.construct(this->_start + dist + i, this->_start[i]);
+					this->_alloc.destroy(this->_start + i);
+					i--;
 				}
-				else
+				tmp = first;
+				i = 0;
+				while (tmp != last)
 				{
-					size_type	insert_idx	= ft::distance(this->begin(), position);
-					ptrdiff_t	i			= this->size();
-					InputIterator	tmp;
-
-					while (i >= static_cast<ptrdiff_t>(insert_idx))
-					{
-						this->_alloc.construct(this->_start + dist + i, this->_start[i]);
-						this->_alloc.destroy(this->_start + i);
-						i--;
-					}
-					tmp = first;
-					i = 0;
-					while (tmp != last)
-					{
-						this->_alloc.construct(this->_start + insert_idx + i, *tmp);
-						tmp++;
-						i++;
-					}
+					this->_alloc.construct(this->_start + insert_idx + i, *tmp);
+					tmp++;
+					i++;
 				}
 				this->_end = this->_start + new_size;
 			}
@@ -791,27 +695,12 @@ namespace ft {
 			 */
 			iterator	erase (iterator first, iterator last)
 			{
-				//size_type	count = last - first;
-				//size_type	index = first.base() - this->_start;
-
-				//if (count <= 0)
-				//	return (last);
-				//for (size_type i = index; i < index + count; i++)
-				//{
-				//	this->_alloc.destroy(&this->_start[i]);
-				//}
-				//for (size_type i = index + count; i <= this->size(); i++)
-				//{
-				//	this->_alloc.construct(&this->_start[i - count], this->_start[i]);
-				//	this->_alloc.destroy(&this->_start[i]);
-				//}
-				//this->_end -= count;
-				//return (first);
 				pointer p_first = &(*first);
 				for (; &(*first) != &(*last); first++)
 					_alloc.destroy(&(*first));
 				for (int i = 0; i < _end - &(*last); i++)
 				{
+					//std::cout << "lol" << std::endl;
 					_alloc.construct(p_first + i, *(&(*last) + i));
 					_alloc.destroy(&(*last) + i);
 				}

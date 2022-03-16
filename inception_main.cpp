@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   inception_main.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 13:07:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2022/03/16 12:04:02 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/16 12:03:29 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int main()
 
 	size_t	mike_resize = 9;
 	bob_resize = 0;
-
+	
 	BOB.resize(bob_resize);
 	cout << "BOB is empty now ? " << BOB.empty() << '\n';
 	MIKE.resize(mike_resize, test);
@@ -369,7 +369,7 @@ int main()
 			cout << MIKE[i][j] << ' ';
 	cout << std::endl;
 	}
-
+	
 	//RELATIONAL OPERATORS
 	cout << "\nRELATIONAL OPERATORS\n";
 	vector<vector<int> > MIKE_2(MIKE);
