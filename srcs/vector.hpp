@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/16 12:02:23 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/21 13:51:06 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -537,18 +537,13 @@ namespace ft {
 				this->clear();
 				if (n == 0)
 					return ;
-				else if (this->capacity() >= n)
+				this->reserve(n);
+				std::cout << "sizeof val : " << sizeof(val) << "\nsizeof n : "<< sizeof(n) << std::endl;
+
+				while (n--)
 				{
-					while (n--)
-					{
-						this->_alloc.construct(this->_end, val);
-						this->_end++;
-					}
-				}
-				else
-				{
-					this->reserve(n);
-					this->assign(n, val);
+					this->_alloc.construct(this->_end, val);
+					this->_end++;
 				}
 			}
 
