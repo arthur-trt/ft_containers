@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 11:19:54 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/09 11:55:10 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/22 14:09:47 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@
 namespace ft {
 	template <typename _Iterator>
 	class reverse_iterator
-	// :
-	// 	public ft::iterator<typename ft::iterator_traits<_Iterator>::iterator_category,
-	// 						typename ft::iterator_traits<_Iterator>::value_type,
-	// 						typename ft::iterator_traits<_Iterator>::difference_type,
-	// 						typename ft::iterator_traits<_Iterator>::pointer,
-	// 						typename ft::iterator_traits<_Iterator>::reference>
+	 :
+	 	public ft::iterator<typename ft::iterator_traits<_Iterator>::iterator_category,
+	 						typename ft::iterator_traits<_Iterator>::value_type,
+	 						typename ft::iterator_traits<_Iterator>::difference_type,
+	 						typename ft::iterator_traits<_Iterator>::pointer,
+	 						typename ft::iterator_traits<_Iterator>::reference>
 	{
 		public:
 		/** ************************************************************************** */
@@ -278,7 +278,7 @@ namespace ft {
 	inline bool operator<(	const ft::reverse_iterator<T_L> lhs,
 							const ft::reverse_iterator<T_R> rhs)
 	{
-		return ( lhs.base() < rhs.base() );
+		return ( rhs.base() < lhs.base() );
 	}
 
 	/**
@@ -308,7 +308,7 @@ namespace ft {
 	inline bool	operator>(	const ft::reverse_iterator<T_L> lhs,
 							const ft::reverse_iterator<T_R> rhs)
 	{
-		return ( lhs.base() < rhs.base() );
+		return ( rhs < lhs );
 	}
 
 	/**
@@ -323,7 +323,7 @@ namespace ft {
 	inline bool operator<=(	const ft::reverse_iterator<T_L> lhs,
 							const ft::reverse_iterator<T_R> rhs)
 	{
-		return ( lhs.base() <= rhs.base() );
+		return ( !(rhs < lhs) );
 	}
 
 	/**
@@ -338,7 +338,7 @@ namespace ft {
 	inline bool	operator>=(	const ft::reverse_iterator<T_L> lhs,
 							const ft::reverse_iterator<T_R> rhs)
 	{
-		return ( lhs.base() >= rhs.base() );
+		return ( !(lhs < rhs) );
 	}
 
 	/**
@@ -353,7 +353,7 @@ namespace ft {
 	operator-(	const ft::reverse_iterator<T_L> lhs,
 				const ft::reverse_iterator<T_R> rhs)
 	{
-		return ( lhs.base() - rhs.base() );
+		return ( rhs.base() - lhs.base() );
 	}
 
 	template<typename _Iterator>
