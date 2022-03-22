@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/22 16:10:19 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/22 18:41:15 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,18 +101,14 @@ namespace ft {
 			pointer			_end;
 			pointer			_end_capacity;
 
-			size_type		computeCapacity( size_type old_size, size_type min_to_add )
+			const size_type	computeCapacity( size_type __n )
 			{
-				size_type	new_size;
-
-				if (this->capacity() > (this->size() + min_to_add))
-					return (old_size);
-				new_size = old_size * 2;
-				if (new_size < min_to_add)
-					new_size = old_size + min_to_add;
-				new_size = (new_size > this->max_size()) ? this->max_size() : new_size;
-				return (new_size);
+				if (this->capacity() > (this->size() + __n))
+					return (this->capacity());
+				const size_type __len = size() + std::max(size(), __n);
+				return (__len < size() || __len > max_size()) ? max_size() : __len;
 			}
+			
 
 		public:
 		/** ************************************************************************** */
@@ -194,8 +190,8 @@ namespace ft {
 			vector (const vector & x) :
 				_alloc(x.get_allocator())
 			{
-				this->_start = this->_alloc.allocate(x.capacity());
-				this->_end_capacity = this->_start + x.capacity();
+				this->_start = this->_alloc.allocate(x.size());
+				this->_end_capacity = this->_start + x.size();
 				this->_end = this->_start;
 				this->assign(x.begin(), x.end());
 			}
@@ -388,7 +384,7 @@ namespace ft {
 				if (n > this->capacity())
 				{
 					pointer	new_start = NULL;
-					new_start = this->_alloc.allocate(n, this->_start);
+					new_start = this->_alloc.allocate(n);
 					pointer	new_end = new_start;
 					for (size_type i = 0; i < this->size(); i++)
 					{
@@ -552,11 +548,7 @@ namespace ft {
 			{
 				if (this->_end == this->_end_capacity)
 				{
-					int	next_capacity;
-
-					next_capacity = (this->size() == 0) ? 1 : static_cast<int>(this->size()) * 2;
-					//next_capacity = static_cast<int>(this->size()) + 1;
-					this->reserve(next_capacity);
+					this->reserve(computeCapacity(1));
 				}
 				this->_alloc.construct(this->_end, val);
 				this->_end++;
@@ -588,7 +580,7 @@ namespace ft {
 			{
 				size_type	insert_idx = ft::distance(this->begin(), position);
 
-				this->reserve(computeCapacity(this->size(), 1));
+				this->reserve(computeCapacity(1));
 				iterator new_pos = this->begin() + insert_idx;
 				iterator it = this->end();
 				size_type i = this->size();
@@ -623,7 +615,7 @@ namespace ft {
 				size_type	insert_idx	= ft::distance(this->begin(), position);
 				ptrdiff_t	i			= this->size() - 1;
 				size_type	j;
-				this->reserve(computeCapacity(this->size(), n));
+				this->reserve(computeCapacity(n));
 				while (i >= static_cast<ptrdiff_t>(insert_idx))
 				{
 					this->_alloc.construct(this->_start + n + i, this->_start[i]);
@@ -661,7 +653,7 @@ namespace ft {
 				size_type	insert_idx	= ft::distance(this->begin(), position);
 				ptrdiff_t	i			= this->size() - 1;
 				InputIterator	tmp;
-				this->reserve(computeCapacity(this->size(), dist));
+				this->reserve(computeCapacity(dist));
 				while (i >= static_cast<ptrdiff_t>(insert_idx))
 				{
 					this->_alloc.construct(this->_start + dist + i, this->_start[i]);
@@ -724,7 +716,7 @@ namespace ft {
 			{
 				std::swap(this->_start, x._start);
 				std::swap(this->_end, x._end);
-				std::swap(this->_end_capacity, this->_end_capacity);
+				std::swap(this->_end_capacity, x._end_capacity);
 			}
 
 			/**
