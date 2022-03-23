@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 11:19:54 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/22 14:09:47 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/23 14:15:39 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@
 
 namespace ft {
 	template <typename _Iterator>
-	class reverse_iterator
-	 :
+	class reverse_iterator :
 	 	public ft::iterator<typename ft::iterator_traits<_Iterator>::iterator_category,
 	 						typename ft::iterator_traits<_Iterator>::value_type,
 	 						typename ft::iterator_traits<_Iterator>::difference_type,
@@ -166,7 +165,7 @@ namespace ft {
 			**
 			**	@return A reference to the previous value
 			*/
-			iterator_type	&operator--( void )
+			reverse_iterator	&operator--( void )
 			{
 				this->_curr++;
 				return (*this);
@@ -179,7 +178,7 @@ namespace ft {
 			*/
 			reverse_iterator	operator--( int )
 			{
-				iterator_type tmp(*this);
+				reverse_iterator tmp(*this);
 				++this->_curr;
 				return (tmp);
 			}

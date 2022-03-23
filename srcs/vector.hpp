@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/23 10:08:03 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/23 14:12:12 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,9 +165,6 @@ namespace ft {
 			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) :
 				_alloc(alloc)
 			{
-				/**
-				**	@todo Check if this is a valid iterator (same type)
-				*/
 				difference_type n = ft::distance(first, last);
 
 				this->_start = this->_alloc.allocate(n);
@@ -497,9 +494,6 @@ namespace ft {
 			void		assign ( InputIterator first, InputIterator last,
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0 )
 			{
-				/**
-				 * @todo Verify Iterator
-				 */
 				size_type	dist = ft::distance(first, last);
 				this->clear();
 				if (this->capacity() >= dist)
