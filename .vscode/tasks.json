@@ -8,8 +8,7 @@
                 "-fdiagnostics-color=always",
                 "-fsanitize=address",
                 "-g",
-                "mazoise_main.cpp",
-                "tester.cpp",
+                "main.cpp",
                 "-Isrcs/",
                 "-o",
                 "containers"
