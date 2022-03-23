@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/22 18:41:15 by arthur           ###   ########.fr       */
+/*   Updated: 2022/03/23 10:08:03 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ namespace ft {
 				const size_type __len = size() + std::max(size(), __n);
 				return (__len < size() || __len > max_size()) ? max_size() : __len;
 			}
-			
+
 
 		public:
 		/** ************************************************************************** */
@@ -207,7 +207,6 @@ namespace ft {
 				if (*this != x)
 				{
 					this->clear();
-					//this->insert(this->begin(), x.begin(), x.end());
 					this->assign(x.begin(), x.end());
 				}
 				return (*this);

@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 13:43:37 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/04 17:33:54 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/23 10:58:19 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,19 @@ namespace ft {
 	typename ft::iterator_traits<Iterator>::difference_type
 	distance (Iterator first, Iterator last)
 	{
-		return (distance(first, last, typename ft::iterator_traits<Iterator>::iterator_category()));
+		return (__distance(first, last, typename ft::iterator_traits<Iterator>::iterator_category()));
 	}
 
 	template <typename RandomAccessIterator>
 	typename ft::iterator_traits<RandomAccessIterator>::difference_type
-	distance (RandomAccessIterator first, RandomAccessIterator last, ft::random_access_iterator_tag)
+	__distance (RandomAccessIterator first, RandomAccessIterator last, ft::random_access_iterator_tag)
 	{
 		return (last - first);
 	}
 
 	template <typename InputIterator>
 	typename ft::iterator_traits<InputIterator>::difference_type
-	distance (InputIterator first, InputIterator last, ft::input_iterator_tag)
+	__distance (InputIterator first, InputIterator last, ft::input_iterator_tag)
 	{
 		typename ft::iterator_traits<InputIterator>::difference_type	diff;
 		for (diff = 0; first != last; ++first, ++diff) {

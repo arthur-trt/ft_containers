@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:20 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/09 11:23:09 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/23 11:41:00 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ namespace ft
 			*/
 			pointer		operator->( void ) const
 			{
-				return (&(this->_elem));
+				return (this->_elem);
 			}
 
 			/**
@@ -347,6 +347,13 @@ namespace ft
 		return ( lhs.base() - rhs.base() );
 	}
 
+	template <typename T>
+	inline typename ft::random_access_iterator<T>
+	operator+(	typename ft::random_access_iterator<T>::difference_type n,
+				const ft::random_access_iterator<T> rhs)
+	{
+		return ( ft::random_access_iterator<T>( rhs.base() + n) );
+	}
 
 } // namespace ft
 
