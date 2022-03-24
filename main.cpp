@@ -1,4 +1,5 @@
 #include "vector.hpp"
+#include "pair.hpp"
 #include <vector>
 #include <iostream>
 #include <fstream>

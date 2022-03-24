@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/23 18:47:18 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/24 21:20:28 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,9 @@ namespace ft {
 				this->_end = this->_start;
 				while (n--)
 				{
-					this->push_back(*first++);
+					this->_alloc.construct(this->_end, *first);
+					first++;
+					this->_end++;
 				}
 			}
 
