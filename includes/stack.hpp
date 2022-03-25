@@ -6,9 +6,12 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 14:46:31 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/23 17:13:23 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/25 13:36:48 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef STACK_HPP
+# define STACK_HPP
 
 # include <memory>
 # include "vector.hpp"
@@ -197,3 +200,5 @@ namespace ft {
 		return !(__x < __y);
 	}
 }
+
+#endif

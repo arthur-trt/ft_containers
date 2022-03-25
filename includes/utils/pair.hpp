@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pair.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 21:41:51 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/24 22:22:31 by arthur           ###   ########.fr       */
+/*   Updated: 2022/03/25 10:17:07 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ namespace ft
 		 * @brief Copy
 		 * The object is initialized with the contents of the pr pair object.
 		 * The corresponding member of pr is passed to the constructor of each of its members.
-		 * 
+		 *
 		 * @param pr Another pair object.
 		 */
 		template <class U, class V>
@@ -60,7 +60,7 @@ namespace ft
 		 * Constructs members first and second in place,
 		 * passing the elements of first_args as arguments to the constructor of first,
 		 * and the elements of second_args to the constructor of second.
-		 * 
+		 *
 		 * @param a An object of the type of first, or some other type implicitly convertible to it.
 		 * @param b An object of the type of second, or some other type implicitly convertible to it.
 		 */
@@ -75,7 +75,7 @@ namespace ft
 		/**
 		 * @brief Assigns pr as the new content for the pair object.
 		 * Member first is assigned pr.first, and member second is assigned pr.second.
-		 * 
+		 *
 		 * @param pr Another pair object.
 		 */
 		pair	&operator= ( const pair& pr )
@@ -92,7 +92,7 @@ namespace ft
 	/** ************************************************************************** */
 	/**                           COMPARAISON OPERATORS                            */
 	/** ************************************************************************** */
-	
+
 	template <class T1, class T2>
 	bool operator== ( const pair<T1, T2>& lhs, const pair<T1, T2>& rhs )
 	{
@@ -127,6 +127,21 @@ namespace ft
 	bool operator>= ( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 	{
 		return !(lhs < rhs);
+	}
+
+	/**
+	 * @brief Constructs a pair object with its first element set to x and its second element set to y.
+	 * The template types can be implicitly deduced from the arguments passed to make_pair.
+	 * pair objects can be constructed from other pair objects containing different types, if the respective types are implicitly convertible.
+	 *
+	 * @param x Values for the members first of the pair object being constructed.
+	 * @param y Values for the members second of the pair object being constructed.
+	 * @return pair<T1, T2> A pair object whose elements first and second are set to x and y respectivelly.
+	 */
+	template <class T1, class T2>
+	pair<T1, T2> make_pair ( T1 x, T2 y )
+	{
+		return (pair<T1, T2>(x, y));
 	}
 } // namespace ft
 

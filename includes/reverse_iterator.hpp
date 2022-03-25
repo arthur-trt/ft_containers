@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 11:19:54 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/23 14:15:39 by arthur           ###   ########.fr       */
+/*   Updated: 2022/03/25 13:26:28 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSE_ITERATOR_HPP
 # define REVERSE_ITERATOR_HPP
 
-# include "utils.hpp"
-# include "iterator_traits.hpp"
+# include "utils/utils.hpp"
+# include "utils/iterator_traits.hpp"
 
 namespace ft {
 	template <typename _Iterator>

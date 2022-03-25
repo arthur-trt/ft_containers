@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   random_access_iterator.hpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:20 by arthur            #+#    #+#             */
-/*   Updated: 2022/03/23 14:13:18 by arthur           ###   ########.fr       */
+/*   Updated: 2022/03/25 13:26:20 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RANDOM_ACCESS_ITERATOR_HPP
 # define RANDOM_ACCESS_ITERATOR_HPP
 
-# include "utils.hpp"
+# include "utils/utils.hpp"
 
 namespace ft
 {
@@ -116,7 +116,7 @@ namespace ft
 					this->_elem = rhs.base();
 				return (*this);
 			}
-			
+
 			/**
 			**	@brief Dereference the rvalue
 			**
