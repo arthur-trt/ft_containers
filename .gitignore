@@ -1,5 +1,9 @@
-.vscode
+*
+.vscode/*
 obj/*
-*.o
 *.d
-containers
+*.o
+!srcs/*
+!includes/*
+!Makefile
+!source.mk
