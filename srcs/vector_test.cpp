@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:36:20 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/25 15:52:47 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/03/25 15:56:43 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	vec_operatorequal_test(std::vector<T>	vec)
 template <typename T>
 void	vec_iterator_test(std::vector<T> vec)
 {
-	TEST("Iterator begin");
+	TEST("Iterators");
 	std::vector<T>		std_vec(vec.begin(), vec.end());
 	ft::vector<T>		ft_vec(vec.begin(), vec.end());
 	display_vec(std_vec, ft_vec);
@@ -104,7 +104,8 @@ void	vec_iterator_test(std::vector<T> vec)
 
 void	vec_capacity_test(void)
 {
-	
+	TEST("size");
+
 }
 
 int	main_vector(void)
