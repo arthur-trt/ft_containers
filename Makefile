@@ -1,43 +1,31 @@
-# Generated with GenMake
-# Arthur-TRT - https://github.com/arthur-trt/genMake
-# genmake vv1.1.4
-
-#Compiler and Linker
-CC					:= clang
 CXX					:= c++
-ifeq ($(shell uname -s),Darwin)
-	CC				:= gcc
+ifeq ($(shell uname -s), Darwin)
 	CXX				:= g++
 endif
 
-#The Target Binary Program
-TARGET				:= containers
-TARGET_BONUS		:= containers-bonus
+VECTOR_TARGET		:= _vector
 
 BUILD				:= release
 
 include sources.mk
 
-#The Directories, Source, Includes, Objects, Binary and Resources
 SRCDIR				:= srcs
 INCDIR				:= includes
-BUILDDIR			:= obj
+BUILDDIR			:= objs_
 TARGETDIR			:= .
 SRCEXT				:= cpp
 DEPEXT				:= d
 OBJEXT				:= o
 
-OBJECTS				:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
-OBJECTS_BONUS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES_BONUS:.$(SRCEXT)=.$(OBJEXT)))
+VECTOR_OBJECTS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)$(VERSION)/%,$(VECTOR_SOURCES:.$(SRCEXT)=.$(OBJEXT)))
 
-#Flags, Libraries and Includes
 cflags.release		:= -Wall -Werror -Wextra
 cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -ggdb
 cflags.debug		:= -Wall -Werror -Wextra -DDEBUG -ggdb -fsanitize=address -fno-omit-frame-pointer
 CFLAGS				:= $(cflags.$(BUILD))
-CPPFLAGS			:= $(cflags.$(BUILD)) -std=c++98
+CPPFLAGS			:= $(cflags.$(BUILD)) -DNS=$(VERSION) -std=c++98
 
-lib.release			:= 
+lib.release			:=
 lib.valgrind		:= $(lib.release)
 lib.debug			:= $(lib.release) -fsanitize=address -fno-omit-frame-pointer
 LIB					:= $(lib.$(BUILD))
@@ -57,69 +45,35 @@ ECHO				:= echo
 ES_ERASE			:= "\033[1A\033[2K\033[1A"
 ERASE				:= $(ECHO) $(ES_ERASE)
 
-GREP				:= grep --color=auto --exclude-dir=.git
-NORMINETTE			:= norminette `ls`
+all: vector.ft vector.std
 
-# Default Make
-all: $(TARGETDIR)/$(TARGET)
-	@$(ERASE)
-	@$(ECHO) "$(TARGET)\t\t[$(C_SUCCESS)✅$(C_RESET)]"
-	@$(ECHO) "$(C_SUCCESS)All done, compilation successful! 👌 $(C_RESET)"
+vector.%:
+	$(MAKE) VERSION=$* $(TARGETDIR)/$*$(VECTOR_TARGET)
 
-# Bonus rule
-bonus: CPPFLAGS += -DBONUS
-bonus: $(TARGETDIR)/$(TARGET_BONUS)
-	@$(ERASE)
-	@$(ECHO) "$(TARGET)\t\t[$(C_SUCCESS)✅$(C_RESET)]"
-	@$(ECHO) "$(C_SUCCESS)All done, compilation successful with bonus! 👌 $(C_RESET)"
-
-# Remake
-re: fclean all
-
-# Clean only Objects
 clean:
-	@$(RM) -f *.d *.o
-	@$(RM) -rf $(BUILDDIR)
+	@$(RM) -rf $(TARGETDIR)/ft$(VECTOR_TARGET)
+	@$(RM) -rf $(TARGETDIR)/std$(VECTOR_TARGET)
 
-
-# Full Clean, Objects and Binaries
 fclean: clean
-	@$(RM) -rf $(TARGET)
+	@$(RM) -f *.d *.o
+	@$(RM) -rf $(BUILDDIR)ft
+	@$(RM) -rf $(BUILDDIR)std
+
+-include $(VECTOR_OBJECTS:.$(OBJEXT)=.$(DEPEXT))
 
 
-# Pull in dependency info for *existing* .o files
--include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT))
-
-# Link
-$(TARGETDIR)/$(TARGET): $(OBJECTS)
+$(TARGETDIR)/%$(VECTOR_TARGET): $(VECTOR_OBJECTS)
 	@mkdir -p $(TARGETDIR)
-	$(CXX) -o $(TARGETDIR)/$(TARGET) $^ $(LIB)
+	$(CXX) -o $(TARGETDIR)/$(VERSION)$(VECTOR_TARGET) $^ $(LIB)
 
-# Link Bonus
-$(TARGETDIR)/$(TARGET_BONUS): $(OBJECTS_BONUS)
-	@mkdir -p $(TARGETDIR)
-	$(CXX) -o $(TARGETDIR)/$(TARGET) $^ $(LIB)
-
-$(BUILDIR):
-	@mkdir -p $@
-
-# Compile
-$(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
+$(BUILDDIR)$(VERSION)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
 	@$(ECHO) "$(TARGET)\t\t[$(C_PENDING)⏳$(C_RESET)]"
 	$(CXX) $(CPPFLAGS) $(INC) -c -o $@ $<
-	@$(CXX) $(CPPFLAGS) $(INCDEP) -MM $(SRCDIR)/$*.$(SRCEXT) > $(BUILDDIR)/$*.$(DEPEXT)
+	@$(CXX) $(CPPFLAGS) $(INCDEP) -MM $(SRCDIR)/$*.$(SRCEXT) > $(BUILDDIR)$(VERSION)/$*.$(DEPEXT)
 	@$(ERASE)
 	@$(ERASE)
-	@cp -f $(BUILDDIR)/$*.$(DEPEXT) $(BUILDDIR)/$*.$(DEPEXT).tmp
-	@sed -e 's|.*:|$(BUILDDIR)/$*.$(OBJEXT):|' < $(BUILDDIR)/$*.$(DEPEXT).tmp > $(BUILDDIR)/$*.$(DEPEXT)
-	@sed -e 's/.*://' -e 's/\\$$//' < $(BUILDDIR)/$*.$(DEPEXT).tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(BUILDDIR)/$*.$(DEPEXT)
-	@rm -f $(BUILDDIR)/$*.$(DEPEXT).tmp
-
-
-
-norm:
-	@$(NORMINETTE) | $(GREP) -v "Not a valid file" | $(GREP) "Error\|Warning" -B 1 || true
-
-# Non-File Targets
-.PHONY: all re clean fclean norm bonus
+	@cp -f $(BUILDDIR)$(VERSION)/$*.$(DEPEXT) $(BUILDDIR)$(VERSION)/$*.$(DEPEXT).tmp
+	@sed -e 's|.*:|$(BUILDDIR)$(VERSION)/$*.$(OBJEXT):|' < $(BUILDDIR)$(VERSION)/$*.$(DEPEXT).tmp > $(BUILDDIR)$(VERSION)/$*.$(DEPEXT)
+	@sed -e 's/.*://' -e 's/\\$$//' < $(BUILDDIR)$(VERSION)/$*.$(DEPEXT).tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(BUILDDIR)$(VERSION)/$*.$(DEPEXT)
+	@rm -f $(VERSION)$(BUILDDIR)/$*.$(DEPEXT).tmp
