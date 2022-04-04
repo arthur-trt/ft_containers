@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bst.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 21:38:55 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/04 14:46:38 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/04 16:29:51 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,12 +130,19 @@ namespace ft
 	class BST
 	{
 		public:
-			typedef	BST		self;
-			typedef	BST&	self_reference;
-			typedef	T		value_type;
-			typedef	Node*	node_pointer;
-			typedef	N_Alloc	node_allocator;
-			typedef	size_t	size_type;
+			typedef	BST			self;
+			typedef	BST&		self_reference;
+			typedef	T			value_type;
+			typedef	Node*		node_pointer;
+			typedef	N_Alloc		node_allocator;
+			typedef	size_t		size_type;
+
+		private:
+			node_pointer		root;
+
+		public:
+
+					
 	};
 
 } // namespace ft
