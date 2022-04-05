@@ -6,11 +6,12 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:52:42 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/28 11:05:44 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:02:11 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/utils.hpp"
+#include "tester/tester_out.hpp"
 #include "tester/tester.hpp"
 #include <vector>
 
@@ -28,11 +29,11 @@ std::string str_center(int width, const std::string& str) {
 	return std::string(pad1, ' ') + str + std::string(pad2, ' ');
 }
 
-
 // Allow for std::endl to be used with a my_out
 my_out& operator<<(my_out& mo, std::ostream&(*f)(std::ostream&))
 {
 	mo.out1_ << f;
 	mo.out2_ << f;
+
 	return mo;
 }

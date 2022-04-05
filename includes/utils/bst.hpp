@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bst.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 21:38:55 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/04 16:29:51 by arthur           ###   ########.fr       */
+/*   Updated: 2022/04/05 14:32:09 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <functional>
 # include <memory>
+# include "bst_iterators.hpp"
 
 namespace ft
 {
@@ -130,19 +131,33 @@ namespace ft
 	class BST
 	{
 		public:
-			typedef	BST			self;
-			typedef	BST&		self_reference;
-			typedef	T			value_type;
-			typedef	Node*		node_pointer;
-			typedef	N_Alloc		node_allocator;
-			typedef	size_t		size_type;
+			typedef	BST											self;
+			typedef	BST&										self_reference;
+			typedef	T											value_type;
+			typedef	Node*										node_pointer;
+			typedef	N_Alloc										node_allocator;
+			typedef ft::BST_iterator<Node, Compare>				iterator;
+			typedef ft::BST_iterator<const Node, Compare>		const_iterator
+			typedef	size_t										size_type;
+
 
 		private:
-			node_pointer		root;
+			node_pointer		_root;
+			node_allocator		_node_alloc;
 
 		public:
+			BST	(const node_allocator& node_alloc = node_alloc()) :
+				_node_alloc(node_alloc)
+			{
+				_root = _node_alloc.allocate(1);
+				_node_alloc.construct(_root, Node(_root, _root, _root));
+			}
 
-					
+			~BST (void)
+			{
+				_node_alloc.destroy(_root);
+				_node_alloc.deallocate(_root, 1);
+			}my_out
 	};
 
 } // namespace ft
