@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:01:10 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/05 16:01:44 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/06 11:47:17 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <iostream>
 
 // The class
+
+
 struct my_out
 {
 	my_out(std::ostream& out1, std::ostream& out2) : out1_(out1), out2_(out2) {}
@@ -33,5 +35,7 @@ my_out& operator<<(my_out& mo, T const& t)
 	mo.out2_ << t;
 	return mo;
 }
+
+my_out& operator<<(my_out& mo, std::ostream&(*f)(std::ostream&));
 
 #endif

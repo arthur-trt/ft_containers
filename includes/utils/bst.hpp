@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 21:38:55 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/05 14:32:09 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/06 11:08:53 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ namespace ft
 			{
 				_node_alloc.destroy(_root);
 				_node_alloc.deallocate(_root, 1);
-			}my_out
+			}
 	};
 
 } // namespace ft

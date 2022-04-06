@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:36:20 by atrouill          #+#    #+#             */
-/*   Updated: 2022/03/28 14:49:55 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/06 11:41:14 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # include "tester/tester_out.hpp"
 # include "vector.hpp"
 # include <vector>
+# include <fstream>
 # include <list>
 
 
@@ -123,11 +124,11 @@ void	vec_capacity_test(T val, std::vector<T> vec, my_out output)
 	}
 }
 
-template <typename T>
-void	element_access_test(T val, vector<T> vec)
-{
-	
-}
+//template <typename T>
+//void	element_access_test(T val, vector<T> vec)
+//{
+
+//}
 
 int	main(void)
 {
