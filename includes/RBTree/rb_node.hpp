@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rb_node.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:37:35 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/08 13:02:11 by arthur           ###   ########.fr       */
+/*   Updated: 2022/04/11 11:40:27 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ namespace ft
 			 * @param parent Parent node
 			 * @param color Node's color
 			 */
-			RB_node ( RB_node *left = 0, RB_node *right = 0, RB_node *parent = 0, int color = BLACK ) :
+			RB_node ( RB_node *parent = 0, RB_node *left = 0, RB_node *right = 0, int color = BLACK ) :
 				data(T()),
 				parent(parent),
 				left(left),
@@ -160,7 +160,7 @@ namespace ft
 			{
 				return (this->data);
 			}
-			
+
 		/** ************************************************************************** */
 		/**                                  SETTERS                                   */
 		/** ************************************************************************** */
