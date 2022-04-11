@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rb_node.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:37:35 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/06 18:01:24 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/08 13:02:11 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ namespace ft
 			 * @param parent Parent node
 			 * @param color Node's color
 			 */
-			RB_node ( RB_node *left = 0, RB_node *right = 0, RB_node *parent = 0, int color = BLACK ),
+			RB_node ( RB_node *left = 0, RB_node *right = 0, RB_node *parent = 0, int color = BLACK ) :
 				data(T()),
 				parent(parent),
 				left(left),
@@ -80,8 +80,8 @@ namespace ft
 			 * @param parent Parent node
 			 * @param color Node's color
 			 */
-			RB_node ( const valut_type &val = T(), RB_node *left = 0, RB_node *right = 0,
-				RB_node *parent = 0, int color = BLACK ),
+			RB_node ( const value_type &val = T(), RB_node *left = 0, RB_node *right = 0,
+				RB_node *parent = 0, int color = BLACK ) :
 				data(val),
 				parent(parent),
 				left(left),
@@ -132,7 +132,76 @@ namespace ft
 			{
 				return (this->data == rhs.data);
 			}
-	}
+
+		/** ************************************************************************** */
+		/**                                  GETTERS                                   */
+		/** ************************************************************************** */
+			RB_node		*getParent( void ) const
+			{
+				return (this->parent);
+			}
+
+			RB_node		*getLeft( void ) const
+			{
+				return (this->left);
+			}
+
+			RB_node		*getRight( void ) const
+			{
+				return (this->right);
+			}
+
+			int			getColor( void ) const
+			{
+				return (this->color);
+			}
+
+			value_type	&getData( void ) const
+			{
+				return (this->data);
+			}
+			
+		/** ************************************************************************** */
+		/**                                  SETTERS                                   */
+		/** ************************************************************************** */
+			void		setParent ( RB_node* node )
+			{
+				this->parent = node;
+			}
+
+			void		setRight ( RB_node* node )
+			{
+				this->right = node;
+			}
+
+			void		setLeft ( RB_node* node )
+			{
+				this->left = node;
+			}
+
+			void		setColor ( const int color )
+			{
+				this->color = color;
+			}
+
+			void		setData ( const value_type val )
+			{
+				this->data = val;
+			}
+
+		/** ************************************************************************** */
+		/**                              MEMBER FUNCTIONS                              */
+		/** ************************************************************************** */
+			void		swapColor ( void )
+			{
+				this->color = color ? RED : BLACK;
+			}
+
+			bool		isLeftChild ( void )
+			{
+				return (this == parent->getLeft());
+			}
+	};
 }
 
 #endif

@@ -1,6 +1,7 @@
 // Implementing Red-Black Tree in C++
 
 #include <iostream>
+#include <cstddef>
 using namespace std;
 
 struct Node {
@@ -21,8 +22,8 @@ class RedBlackTree {
   void initializeNULLNode(NodePtr node, NodePtr parent) {
 	node->data = 0;
 	node->parent = parent;
-	node->left = nullptr;
-	node->right = nullptr;
+	node->left = NULL;
+	node->right = NULL;
 	node->color = 0;
   }
 
@@ -126,7 +127,7 @@ class RedBlackTree {
   }
 
   void rbTransplant(NodePtr u, NodePtr v) {
-	if (u->parent == nullptr) {
+	if (u->parent == NULL) {
 	  root = v;
 	} else if (u == u->parent->left) {
 	  u->parent->left = v;
@@ -244,7 +245,7 @@ class RedBlackTree {
 	  }
 
 	  string sColor = root->color ? "RED" : "BLACK";
-	  cout << root->data << "(" << sColor << ")" << endl;
+	  cout << "(" << root->data << ") (" << sColor << ")" << endl;
 	  printHelper(root->left, indent, false);
 	  printHelper(root->right, indent, true);
 	}
@@ -254,8 +255,8 @@ class RedBlackTree {
   RedBlackTree() {
 	TNULL = new Node;
 	TNULL->color = 0;
-	TNULL->left = nullptr;
-	TNULL->right = nullptr;
+	TNULL->left = NULL;
+	TNULL->right = NULL;
 	root = TNULL;
   }
 
@@ -323,7 +324,7 @@ class RedBlackTree {
 	  y->left->parent = x;
 	}
 	y->parent = x->parent;
-	if (x->parent == nullptr) {
+	if (x->parent == NULL) {
 	  this->root = y;
 	} else if (x == x->parent->left) {
 	  x->parent->left = y;
@@ -341,7 +342,7 @@ class RedBlackTree {
 	  y->right->parent = x;
 	}
 	y->parent = x->parent;
-	if (x->parent == nullptr) {
+	if (x->parent == NULL) {
 	  this->root = y;
 	} else if (x == x->parent->right) {
 	  x->parent->right = y;
@@ -355,13 +356,13 @@ class RedBlackTree {
   // Inserting a node
   void insert(int key) {
 	NodePtr node = new Node;
-	node->parent = nullptr;
+	node->parent = NULL;
 	node->data = key;
 	node->left = TNULL;
 	node->right = TNULL;
 	node->color = 1;
 
-	NodePtr y = nullptr;
+	NodePtr y = NULL;
 	NodePtr x = this->root;
 
 	while (x != TNULL) {
@@ -374,7 +375,7 @@ class RedBlackTree {
 	}
 
 	node->parent = y;
-	if (y == nullptr) {
+	if (y == NULL) {
 	  root = node;
 	} else if (node->data < y->data) {
 	  y->left = node;
@@ -382,12 +383,12 @@ class RedBlackTree {
 	  y->right = node;
 	}
 
-	if (node->parent == nullptr) {
+	if (node->parent == NULL) {
 	  node->color = 0;
 	  return;
 	}
 
-	if (node->parent->parent == nullptr) {
+	if (node->parent->parent == NULL) {
 	  return;
 	}
 
@@ -417,10 +418,15 @@ int main() {
   bst.insert(60);
   bst.insert(75);
   bst.insert(57);
+  bst.insert(18);
+  bst.insert(-2);
+  bst.insert(103);
 
   bst.printTree();
   cout << endl
 	 << "After deleting" << endl;
   bst.deleteNode(40);
   bst.printTree();
+
+  std::cout << bst.searchTree(103)->color << std::endl; ;
 }
