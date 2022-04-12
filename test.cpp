@@ -138,11 +138,11 @@ class RedBlackTree {
   }
 
   void deleteNodeHelper(NodePtr node, int key) {
-	NodePtr z = TNULL;
-	NodePtr x, y;
+	NodePtr to_delete = TNULL;
+	NodePtr new_root, y;
 	while (node != TNULL) {
 	  if (node->data == key) {
-		z = node;
+		to_delete = node;
 	  }
 
 	  if (node->data <= key) {
@@ -152,39 +152,39 @@ class RedBlackTree {
 	  }
 	}
 
-	if (z == TNULL) {
+	if (to_delete == TNULL) {
 	  cout << "Key not found in the tree" << endl;
 	  return;
 	}
 
-	y = z;
+	y = to_delete;
 	int y_original_color = y->color;
-	if (z->left == TNULL) {
-	  x = z->right;
-	  rbTransplant(z, z->right);
-	} else if (z->right == TNULL) {
-	  x = z->left;
-	  rbTransplant(z, z->left);
+	if (to_delete->left == TNULL) {
+		new_root = to_delete->right;
+		rbTransplant(to_delete, to_delete->right);
+	} else if (to_delete->right == TNULL) {
+		new_root = to_delete->left;
+		rbTransplant(to_delete, to_delete->left);
 	} else {
-	  y = minimum(z->right);
-	  y_original_color = y->color;
-	  x = y->right;
-	  if (y->parent == z) {
-		x->parent = y;
-	  } else {
-		rbTransplant(y, y->right);
-		y->right = z->right;
-		y->right->parent = y;
-	  }
+		y = minimum(to_delete->right);
+		y_original_color = y->color;
+		new_root = y->right;
+		if (y->parent == to_delete) {
+			new_root->parent = y;
+		} else {
+			rbTransplant(y, y->right);
+			y->right = to_delete->right;
+			y->right->parent = y;
+		}
 
-	  rbTransplant(z, y);
-	  y->left = z->left;
-	  y->left->parent = y;
-	  y->color = z->color;
+		rbTransplant(to_delete, y);
+		y->left = to_delete->left;
+		y->left->parent = y;
+		y->color = to_delete->color;
 	}
-	delete z;
+	delete to_delete;
 	if (y_original_color == 0) {
-	  deleteFix(x);
+	  deleteFix(new_root);
 	}
   }
 
@@ -415,7 +415,8 @@ int main() {
   bst.insert(1);
   bst.insert(2);
   bst.insert(3);
-  bst.insert(60);
+  bst.insert(3);
+//   bst.insert(60);
 //  bst.insert(75);
 //  bst.insert(57);
 //  bst.insert(18);
@@ -425,7 +426,7 @@ int main() {
 //  bst.printTree();
 //  cout << endl
 //	 << "After deleting" << endl;
-//  bst.deleteNode(40);
+ bst.deleteNode(2);
 //  bst.printTree();
 
 //  std::cout << bst.searchTree(103)->color << std::endl; ;
