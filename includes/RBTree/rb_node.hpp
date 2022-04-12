@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:37:35 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/11 11:40:27 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/12 13:33:22 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ namespace ft
 	template <typename T>
 	struct RB_node
 	{
-		private:
+		public:
 		/** ************************************************************************** */
 		/**                                MEMBER TYPE                                 */
 		/** ************************************************************************** */
@@ -37,7 +37,6 @@ namespace ft
 			RB_node			*right;
 			int				color;
 
-		public:
 		/** ************************************************************************** */
 		/**                                CONSTRUCTORS                                */
 		/** ************************************************************************** */
@@ -62,7 +61,7 @@ namespace ft
 			 * @param parent Parent node
 			 * @param color Node's color
 			 */
-			RB_node ( RB_node *parent = 0, RB_node *left = 0, RB_node *right = 0, int color = BLACK ) :
+			RB_node ( RB_node *parent, RB_node *left = 0, RB_node *right = 0, int color = BLACK ) :
 				data(T()),
 				parent(parent),
 				left(left),
@@ -80,8 +79,8 @@ namespace ft
 			 * @param parent Parent node
 			 * @param color Node's color
 			 */
-			RB_node ( const value_type &val = T(), RB_node *left = 0, RB_node *right = 0,
-				RB_node *parent = 0, int color = BLACK ) :
+			RB_node ( const value_type &val, RB_node *parent = 0, RB_node *left = 0, RB_node *right = 0,
+				int color = BLACK ) :
 				data(val),
 				parent(parent),
 				left(left),
@@ -130,7 +129,17 @@ namespace ft
 
 			bool		operator== ( const RB_node &rhs )
 			{
-				return (this->data == rhs.data);
+				return (this->data == rhs.data && this->parent == rhs.parent);
+			}
+
+			bool		operator!= ( const RB_node &rhs )
+			{
+				return (!(this == rhs));
+			}
+
+			operator RB_node<const T> () const
+			{
+				return (RB_node<const T>(this));
 			}
 
 		/** ************************************************************************** */

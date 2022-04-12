@@ -412,21 +412,21 @@ class RedBlackTree {
 
 int main() {
   RedBlackTree bst;
-  bst.insert(55);
-  bst.insert(40);
-  bst.insert(65);
+  bst.insert(1);
+  bst.insert(2);
+  bst.insert(3);
   bst.insert(60);
-  bst.insert(75);
-  bst.insert(57);
-  bst.insert(18);
-  bst.insert(-2);
-  bst.insert(103);
+//  bst.insert(75);
+//  bst.insert(57);
+//  bst.insert(18);
+//  bst.insert(-2);
+//  bst.insert(103);
 
-  bst.printTree();
-  cout << endl
-	 << "After deleting" << endl;
-  bst.deleteNode(40);
-  bst.printTree();
+//  bst.printTree();
+//  cout << endl
+//	 << "After deleting" << endl;
+//  bst.deleteNode(40);
+//  bst.printTree();
 
-  std::cout << bst.searchTree(103)->color << std::endl; ;
+//  std::cout << bst.searchTree(103)->color << std::endl; ;
 }
