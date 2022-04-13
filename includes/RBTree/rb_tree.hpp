@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rb_tree.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/13 12:08:27 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/13 15:23:10 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ namespace ft
 
 			node_pointer	maximum ( node_pointer node )
 			{
-				while (node->right != NULL)
+				while (node->right != this->_empty)
 				{
 					node = node->right;
 				}
@@ -269,7 +269,7 @@ namespace ft
 
 			node_pointer	minimum ( node_pointer node )
 			{
-				while (node->left != NULL)
+				while (node->left != this->_empty)
 				{
 					node = node->left;
 				}
@@ -333,7 +333,7 @@ namespace ft
 				while (x != NULL && x != this->_empty)
 				{
 					y = x;
-					if (new_one.data < x->data)
+					if (new_one < x)
 					{
 						x = x->left;
 					}
@@ -350,7 +350,7 @@ namespace ft
 					this->_root = _node_alloc.allocate(1);
 					insert_pos = this->_root;
 				}
-				else if (new_one.data < y->data)
+				else if (new_one < y)
 				{
 					y->left = _node_alloc.allocate(1);
 					insert_pos = y->left;
@@ -374,31 +374,11 @@ namespace ft
 				insert_fix(insert_pos);
 			}
 
-			void	deleteNode ( value_type data )
+			void	deleteNode ( node_pointer to_delete )
 			{
-				node_pointer	tmp(this->_root);
+				node_pointer	tmp;
 				node_pointer	new_root;
-				node_pointer	to_delete = NULL;
 				int				original_color;
-
-				while (tmp != this->_empty  && to_delete == NULL)
-				{
-					if (tmp->data == data)
-					{
-						to_delete = tmp;
-					}
-					if (tmp->data <= data)
-					{
-						tmp = tmp->right;
-					}
-					else
-					{
-						tmp = tmp->left;
-					}
-				}
-
-				if (to_delete == NULL)
-					return;
 
 				tmp = to_delete;
 				original_color = tmp->color;
@@ -437,6 +417,27 @@ namespace ft
 				if (original_color == BLACK)
 				{
 					delete_fix(new_root);
+				}
+			}
+
+			void	deleteNode ( value_type data )
+			{
+				node_pointer	tmp(this->_root);
+
+				while (tmp != this->_empty  && to_delete == NULL)
+				{
+					if (*tmp == data)
+					{
+						deleteNode(tmp);
+					}
+					if (*tmp <= data)
+					{
+						tmp = tmp->right;
+					}
+					else
+					{
+						tmp = tmp->left;
+					}
 				}
 			}
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rb_node.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:37:35 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/12 13:33:22 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/13 15:13:13 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ namespace ft
 		/**                                MEMBER TYPE                                 */
 		/** ************************************************************************** */
 			typedef	T	value_type;
+			typedef	T&	reference;
+			typedef T*	pointer;
 
 		/** ************************************************************************** */
 		/**                             MEMBER VARIABLES                               */
@@ -127,14 +129,69 @@ namespace ft
 				return (*this);
 			}
 
-			bool		operator== ( const RB_node &rhs )
+			reference	operator* ( void ) const
+			{
+				return (*this->data);
+			}
+
+			bool		operator== ( const RB_node &rhs ) const
 			{
 				return (this->data == rhs.data && this->parent == rhs.parent);
 			}
 
-			bool		operator!= ( const RB_node &rhs )
+			bool		operator== ( const value_type &rhs ) const
+			{
+				return (this->data == rhs);
+			}
+
+			bool		operator!= ( const RB_node &rhs ) const
 			{
 				return (!(this == rhs));
+			}
+
+			bool		operator!= ( const value_type &rhs ) const
+			{
+				return (!(this == rhs));
+			}
+
+			bool		operator< ( const RB_node &rhs ) const
+			{
+				return (this->data < rhs.data);
+			}
+
+			bool		operator< ( const value_type &rhs ) const
+			{
+				return (this->data < rhs);
+			}
+
+			bool		operator> ( const RB_node &rhs ) const
+			{
+				return (this->data > rhs.data);
+			}
+
+			bool		operator> ( const value_type &rhs ) const
+			{
+				return (this->data > rhs);
+			}
+
+			bool		operator<= ( const RB_node &rhs ) const
+			{
+				return (this->data <= rhs.data);
+			}
+
+			bool		operator<= ( const value_type &rhs ) const
+			{
+				return (this->data <= rhs);
+			}
+
+			bool		operator>= ( const RB_node &rhs ) const
+			{
+				return (this->data >= rhs.data);
+			}
+
+			bool		operator>= ( const value_type &rhs ) const
+			{
+				return (this->data >= rhs);
 			}
 
 			operator RB_node<const T> () const

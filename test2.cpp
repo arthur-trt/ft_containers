@@ -12,7 +12,7 @@ int main(void)
 
 	test.printTree();
 
-	test.deleteNode(1);
+	test.deleteNode(2);
 
 	test.printTree();
 
