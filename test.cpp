@@ -415,7 +415,7 @@ int main() {
   bst.insert(1);
   bst.insert(2);
   bst.insert(3);
-  bst.insert(3);
+  bst.insert(4);
 //   bst.insert(60);
 //  bst.insert(75);
 //  bst.insert(57);
@@ -426,8 +426,8 @@ int main() {
 //  bst.printTree();
 //  cout << endl
 //	 << "After deleting" << endl;
- bst.deleteNode(2);
-//  bst.printTree();
+ bst.deleteNode(4);
+bst.printTree();
 
 //  std::cout << bst.searchTree(103)->color << std::endl; ;
 }

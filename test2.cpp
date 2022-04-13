@@ -10,7 +10,11 @@ int main(void)
 	test.insert(3);
 	test.insert(4);
 
-	test.deleteNode(4);
+	test.printTree();
+
+	test.deleteNode(1);
+
+	test.printTree();
 
 	std::cout << "test";
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rb_tree.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/12 18:50:16 by arthur           ###   ########.fr       */
+/*   Updated: 2022/04/13 12:08:27 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <memory>
 #include <functional>
 #include <cstddef>
+#include <iostream>
+#include <string>
 
 namespace ft
 {
@@ -157,7 +159,7 @@ namespace ft
 			void	delete_fix ( node_pointer node )
 			{
 				node_pointer	tmp;
-				
+
 				while (node != this->_root && node->color == BLACK)
 				{
 					if (node == node->parent->left)
@@ -175,7 +177,8 @@ namespace ft
 							tmp->color = RED;
 							node = node->parent;
 						}
-						else {
+						else
+						{
 							if (tmp->right->color == BLACK)
 							{
 								tmp->left->color = BLACK;
@@ -231,8 +234,11 @@ namespace ft
 					delete_tree(root->left);
 					delete_tree(root->right);
 				}
-				this->_node_alloc.destroy(root);
-				this->_node_alloc.deallocate(root, 1);
+				if (root != this->_empty)
+				{
+					this->_node_alloc.destroy(root);
+					this->_node_alloc.deallocate(root, 1);
+				}
 			}
 
 			void	rbTransplant ( node_pointer x, node_pointer y )
@@ -270,6 +276,29 @@ namespace ft
 				return (node);
 			}
 
+			void	printTreeHelper ( node_pointer node, std::string indent, bool side )
+			{
+				if (node != this->_empty)
+				{
+					std::cout << indent;
+					if (side)
+					{
+						std::cout << "R----";
+						indent += "   ";
+					}
+					else
+					{
+						std::cout << "L----";
+						indent += "   ";
+					}
+
+					std::string sColor = node->color ? "RED" : "BLACK";
+					std::cout << "(" << node->data << ") (" << sColor << ")" << std::endl;
+					printTreeHelper(node->left, indent, false);
+					printTreeHelper(node->right, indent, true);
+				}
+			}
+
 		public:
 		/** ************************************************************************** */
 		/**                                CONSTRUCTORS                                */
@@ -286,9 +315,9 @@ namespace ft
 
 			~RedBlackTree ( void )
 			{
+				delete_tree(this->_root);
 				_node_alloc.destroy(this->_empty);
 				_node_alloc.deallocate(this->_empty, 1);
-				delete_tree(this->_root);
 			}
 
 		/** ************************************************************************** */
@@ -296,7 +325,7 @@ namespace ft
 		/** ************************************************************************** */
 			void	insert ( value_type	to_insert )
 			{
-				Node			new_one(to_insert);
+				Node			new_one(to_insert, NULL, this->_empty, this->_empty, RED);
 				node_pointer	y = NULL;
 				node_pointer	x = this->_root;
 				node_pointer	insert_pos = NULL;
@@ -333,45 +362,52 @@ namespace ft
 				}
 				this->_node_alloc.construct(insert_pos, new_one);
 
-				if (new_one.parent == NULL || new_one.parent->parent == NULL)
+				if (insert_pos->parent == NULL)
+				{
+					insert_pos->color = BLACK;
 					return ;
+				}
+				if (insert_pos->parent->parent == NULL)
+				{
+					return ;
+				}
 				insert_fix(insert_pos);
 			}
 
 			void	deleteNode ( value_type data )
 			{
 				node_pointer	tmp(this->_root);
+				node_pointer	new_root;
 				node_pointer	to_delete = NULL;
-				node_pointer	new_root = NULL;
 				int				original_color;
-				
-				while (this->_root != NULL /* && to_delete == NULL */)
+
+				while (tmp != this->_empty  && to_delete == NULL)
 				{
-					if (this->_root->data == data)
+					if (tmp->data == data)
 					{
-						to_delete = this->_root;
+						to_delete = tmp;
 					}
-					if (this->_root->data <= data)
+					if (tmp->data <= data)
 					{
-						this->_root = this->_root->right;
+						tmp = tmp->right;
 					}
 					else
 					{
-						this->_root = this->_root->left;
+						tmp = tmp->left;
 					}
 				}
 
 				if (to_delete == NULL)
 					return;
-				
+
 				tmp = to_delete;
 				original_color = tmp->color;
-				if (to_delete->left == NULL)
+				if (to_delete->left == this->_empty)
 				{
 					new_root = to_delete->right;
 					rbTransplant(to_delete, to_delete->right);
 				}
-				else if (to_delete->right == NULL)
+				else if (to_delete->right == this->_empty)
 				{
 					new_root = to_delete->left;
 					rbTransplant(to_delete, to_delete->left);
@@ -381,7 +417,7 @@ namespace ft
 					tmp = minimum(to_delete->right);
 					original_color = tmp->color;
 					new_root = tmp->right;
-					if (new_root && tmp->parent == to_delete)
+					if (tmp->parent == to_delete)
 					{
 						new_root->parent = tmp;
 					}
@@ -401,6 +437,14 @@ namespace ft
 				if (original_color == BLACK)
 				{
 					delete_fix(new_root);
+				}
+			}
+
+			void	printTree ( void )
+			{
+				if (this->_root != NULL)
+				{
+					printTreeHelper(this->_root, "", true);
 				}
 			}
 	};
