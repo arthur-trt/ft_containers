@@ -6,13 +6,14 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 21:41:51 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/04 10:11:46 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/14 15:27:01 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PAIR_HPP
 # define PAIR_HPP
 
+# include <iostream>
 namespace ft
 {
 	template <class T1, class T2>
@@ -142,6 +143,14 @@ namespace ft
 	pair<T1, T2> make_pair ( T1 x, T2 y )
 	{
 		return (pair<T1, T2>(x, y));
+	}
+
+
+	template <typename T1, typename T2>
+	std::ostream& operator<<(std::ostream& os, const ft::pair<T1,T2>& p)
+	{
+		os << p.first << ": \"" << p.second << "\"";
+		return os;
 	}
 } // namespace ft
 

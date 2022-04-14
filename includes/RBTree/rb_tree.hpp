@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rb_tree.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/13 15:23:10 by arthur           ###   ########.fr       */
+/*   Updated: 2022/04/14 15:47:43 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,21 @@
 #include <cstddef>
 #include <iostream>
 #include <string>
+# include "../utils/pair.hpp"
 
 namespace ft
 {
-	template <class T, class Compare = std::less<T>, class Node = ft::RB_node<T>, class Alloc = std::allocator<T> >
+	template <class _Key, class T, class Compare = std::less<_Key>, class Alloc = std::allocator<T> >
 	class RedBlackTree
 	{
-		public:
+			public:
 		/** ************************************************************************** */
 		/**                                MEMBER TYPE                                 */
 		/** ************************************************************************** */
+			typedef				_Key								key_type;
 			typedef				T									value_type;
 			typedef 			Alloc								allocator_type;
+			typedef				ft::RB_node<T>						Node;
 
 			typedef typename	allocator_type::template
 								rebind<Node>::other	node_allocator;
@@ -45,6 +48,11 @@ namespace ft
 			node_pointer	_root;
 			node_pointer	_empty;
 			node_allocator	_node_alloc;
+
+			bool _comp(value_type a, value_type b, Compare u = Compare())
+			{
+				return u(a.first, b.first);
+			}
 
 			void	leftRotate ( node_pointer node )
 			{
@@ -234,7 +242,7 @@ namespace ft
 					delete_tree(root->left);
 					delete_tree(root->right);
 				}
-				if (root != this->_empty)
+				if (root != this->_empty && root != NULL)
 				{
 					this->_node_alloc.destroy(root);
 					this->_node_alloc.deallocate(root, 1);
@@ -276,7 +284,7 @@ namespace ft
 				return (node);
 			}
 
-			void	printTreeHelper ( node_pointer node, std::string indent, bool side )
+			void	printTreeHelper ( node_pointer node, std::string indent, bool side ) const
 			{
 				if (node != this->_empty)
 				{
@@ -292,11 +300,25 @@ namespace ft
 						indent += "   ";
 					}
 
-					std::string sColor = node->color ? "RED" : "BLACK";
+					std::string sColor = node->color ? "🔴" : "⚫";
 					std::cout << "(" << node->data << ") (" << sColor << ")" << std::endl;
 					printTreeHelper(node->left, indent, false);
 					printTreeHelper(node->right, indent, true);
 				}
+			}
+
+			void	searchTreeHelper ( node_pointer node, value_type data ) const
+			{
+				if (node == this->_empty || *node == data)
+				{
+					return (node);
+				}
+
+				if (_comp(data, node->data))
+				{
+					return (searchTreeHelper(node, data));
+				}
+				return (searchTreeHelper(node, data));
 			}
 
 		public:
@@ -333,7 +355,7 @@ namespace ft
 				while (x != NULL && x != this->_empty)
 				{
 					y = x;
-					if (new_one < x)
+					if (_comp(new_one.data, x->data))
 					{
 						x = x->left;
 					}
@@ -350,7 +372,7 @@ namespace ft
 					this->_root = _node_alloc.allocate(1);
 					insert_pos = this->_root;
 				}
-				else if (new_one < y)
+				else if (_comp(new_one.data, y->data))
 				{
 					y->left = _node_alloc.allocate(1);
 					insert_pos = y->left;
@@ -424,11 +446,11 @@ namespace ft
 			{
 				node_pointer	tmp(this->_root);
 
-				while (tmp != this->_empty  && to_delete == NULL)
+				while (tmp != this->_empty)
 				{
 					if (*tmp == data)
 					{
-						deleteNode(tmp);
+						return (deleteNode(tmp));
 					}
 					if (*tmp <= data)
 					{
@@ -441,12 +463,25 @@ namespace ft
 				}
 			}
 
-			void	printTree ( void )
+			node_pointer	searchTree ( value_type data )
+			{
+				if (this->_root != NULL)
+				{
+					searchTreeHelper(this->_root, data);
+				}
+			}
+
+			void	printTree ( void ) const
 			{
 				if (this->_root != NULL)
 				{
 					printTreeHelper(this->_root, "", true);
 				}
+			}
+
+			node_pointer	getRoot ( void ) const
+			{
+				return (this->_root);
 			}
 	};
 }

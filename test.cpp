@@ -65,7 +65,6 @@ class RedBlackTree {
 	return searchTreeHelper(node->right, key);
   }
 
-  // For balancing the tree after deletion
   void deleteFix(NodePtr x) {
 	NodePtr s;
 	while (x != root && x->color == 0) {
