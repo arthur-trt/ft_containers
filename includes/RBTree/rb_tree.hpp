@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/19 14:56:07 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/20 17:26:11 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,7 @@ namespace ft
 				}
 				if (root != NULL)
 				{
+					// std::cout << "Deallocate node (" << root << ") for data : " << root->data.first << "/" << root->data.second << std::endl;
 					this->_node_alloc.destroy(root);
 					this->_node_alloc.deallocate(root, 1);
 				}
@@ -259,6 +260,7 @@ namespace ft
 				{
 					if (isLeaf(x->parent->left))
 					{
+						// std::cout << "Deallocate node (" << x->parent->left << ") for data : " << x->parent->left->data.first << "/" << x->parent->left->data.second << std::endl;
 						this->_node_alloc.destroy(x->parent->left);
 						this->_node_alloc.deallocate(x->parent->left, 1);
 					}
@@ -268,6 +270,7 @@ namespace ft
 				{
 					if (isLeaf(x->parent->right))
 					{
+						// std::cout << "Deallocate node (" << x->parent->right << ") for data : " << x->parent->right->data.first << "/" << x->parent->right->data.second << std::endl;
 						this->_node_alloc.destroy(x->parent->right);
 						this->_node_alloc.deallocate(x->parent->right, 1);
 					}
@@ -366,15 +369,17 @@ namespace ft
 				Node			leaf_l(pos);
 				
 				
+				// std::cout << "Allocated node (" << pos << ")for data : " << node.data.first << "/" << node.data.second << std::endl;
 				// Right leaf node
 				leaf_r_addr = this->_node_alloc.allocate(1);
 				this->_node_alloc.construct(leaf_r_addr, leaf_r);
+				// std::cout << "\tAllocate 'leaf_r' (" << leaf_r_addr << ") for " << node.data.first << std::endl;
 				node.right = leaf_r_addr;
 				// Left leaf node
 				leaf_l_addr = this->_node_alloc.allocate(1);
 				this->_node_alloc.construct(leaf_l_addr, leaf_l);
 				node.left = leaf_l_addr;
-
+				// std::cout << "\tAllocate 'leaf_l' (" << leaf_l_addr << ") for " << node.data.first << std::endl;
 				// leaf_r.parent = pos;
 				this->_node_alloc.construct(pos, node);
 			}
@@ -433,6 +438,7 @@ namespace ft
 				}
 				else if (key_compare()(new_one.data.first, y->data.first))
 				{
+					// std::cout << "Deallocate node (" << y->left << ") for data : " << y->left->data.first << "/" << y->left->data.second << std::endl;
 					this->_node_alloc.destroy(y->left);
 					this->_node_alloc.deallocate(y->left, 1);
 					y->left = _node_alloc.allocate(1);
@@ -440,6 +446,7 @@ namespace ft
 				}
 				else
 				{
+					// std::cout << "Deallocate node (" << y->right << ") for data : " << y->right->data.first << "/" << y->right->data.second << std::endl;
 					this->_node_alloc.destroy(y->right);
 					this->_node_alloc.deallocate(y->right, 1);
 					y->right = _node_alloc.allocate(1);
@@ -498,10 +505,23 @@ namespace ft
 						tmp->right->parent = tmp;
 					}
 					rbTransplant(to_delete, tmp);
+					if (isLeaf(tmp->left))
+					{
+						// std::cout << "Deallocate node (" << tmp->left << ") for data : " << tmp->left->data.first << "/" << tmp->left->data.second << std::endl;
+						this->_node_alloc.destroy(tmp->left);
+						this->_node_alloc.deallocate(tmp->left, 1);
+					}
 					tmp->left = to_delete->left;
 					tmp->left->parent = tmp;
 					tmp->color = to_delete->color;
 				}
+				if (isLeaf(to_delete->left) && isLeaf(to_delete->right))
+				{
+					// std::cout << "Deallocate node (" << to_delete->left << ") for data : " << to_delete->left->data.first << "/" << to_delete->left->data.second << std::endl;
+					this->_node_alloc.destroy(to_delete->left);
+					this->_node_alloc.deallocate(to_delete->left, 1);
+				}
+				// std::cout << "Deallocate node (" << to_delete << ") for data : " << to_delete->data.first << "/" << to_delete->data.second << std::endl;
 				this->_node_alloc.destroy(to_delete);
 				this->_node_alloc.deallocate(to_delete, 1);
 				if (original_color == BLACK)
@@ -575,12 +595,10 @@ namespace ft
 			{
 				node_pointer	tmp(this->_root);
 
-				while (/*!isLeaf(tmp->right) &&*/ tmp->right != NULL)
+				while (!isLeaf(tmp->right) && tmp->right != NULL)
 				{
 					tmp = tmp->right;
 				}
-				// if (tmp->right == this->_empty)
-					// tmp = tmp->right;
 				return (iterator(tmp));
 			}
 
@@ -597,7 +615,13 @@ namespace ft
 
 			iterator		end ( void ) const
 			{
-				return (iterator(NULL));
+				node_pointer	tmp(this->_root);
+
+				while (tmp->right != NULL)
+				{
+					tmp = tmp->right;
+				}
+				return (iterator(tmp));
 			}
 	};
 }
