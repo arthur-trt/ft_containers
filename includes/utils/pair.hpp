@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 21:41:51 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/14 15:27:01 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/18 11:23:54 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ namespace ft
 		 */
 		pair	&operator= ( const pair& pr )
 		{
-			if (this != &pr)
+			if (*this != pr)
 			{
 				this->first = pr.first;
 				this->second = pr.second;

@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/14 15:47:43 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/19 14:56:07 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,15 @@
 #include <iostream>
 #include <string>
 # include "../utils/pair.hpp"
+# include "rb_tree_iterator.hpp"
+# include "../reverse_iterator.hpp"
 
 namespace ft
 {
 	template <class _Key, class T, class Compare = std::less<_Key>, class Alloc = std::allocator<T> >
 	class RedBlackTree
 	{
-			public:
+		public:
 		/** ************************************************************************** */
 		/**                                MEMBER TYPE                                 */
 		/** ************************************************************************** */
@@ -34,12 +36,15 @@ namespace ft
 			typedef				T									value_type;
 			typedef 			Alloc								allocator_type;
 			typedef				ft::RB_node<T>						Node;
+			typedef				Compare								key_compare;
 
 			typedef typename	allocator_type::template
-								rebind<Node>::other	node_allocator;
+								rebind<Node>::other					node_allocator;
 
 			typedef typename	node_allocator::pointer				node_pointer;
 			typedef typename	node_allocator::reference			node_reference;
+
+			typedef				ft::rb_tree_iterator<T>				iterator;
 
 		private:
 		/** ************************************************************************** */
@@ -48,23 +53,18 @@ namespace ft
 			node_pointer	_root;
 			node_pointer	_empty;
 			node_allocator	_node_alloc;
-
-			bool _comp(value_type a, value_type b, Compare u = Compare())
-			{
-				return u(a.first, b.first);
-			}
-
+			
 			void	leftRotate ( node_pointer node )
 			{
 				node_pointer	tmp = node->right;
 
 				node->right = tmp->left;
-				if (tmp->left != NULL && tmp->left != this->_empty)
+				if (tmp->left != NULL && !isLeaf(node->left))
 				{
 					tmp->left->parent = node;
 				}
 				tmp->parent = node->parent;
-				if (node->parent == NULL || node->parent == this->_empty)
+				if (node->parent == NULL || isLeaf(node->parent))
 				{
 					this->_root = tmp;
 				}
@@ -85,12 +85,12 @@ namespace ft
 				node_pointer tmp = node->left;
 
 				node->left = tmp->right;
-				if (tmp->right != NULL && tmp->right != this->_empty)
+				if (tmp->right != NULL && !isLeaf(node->right))
 				{
 					tmp->right->parent = node;
 				}
 				tmp->parent = node->parent;
-				if (node->parent == NULL || node->parent == this->_empty)
+				if (node->parent == NULL || isLeaf(node->parent))
 				{
 					this->_root = tmp;
 				}
@@ -242,7 +242,7 @@ namespace ft
 					delete_tree(root->left);
 					delete_tree(root->right);
 				}
-				if (root != this->_empty && root != NULL)
+				if (root != NULL)
 				{
 					this->_node_alloc.destroy(root);
 					this->_node_alloc.deallocate(root, 1);
@@ -257,27 +257,37 @@ namespace ft
 				}
 				else if (x == x->parent->left)
 				{
+					if (isLeaf(x->parent->left))
+					{
+						this->_node_alloc.destroy(x->parent->left);
+						this->_node_alloc.deallocate(x->parent->left, 1);
+					}
 					x->parent->left = y;
 				}
 				else
 				{
+					if (isLeaf(x->parent->right))
+					{
+						this->_node_alloc.destroy(x->parent->right);
+						this->_node_alloc.deallocate(x->parent->right, 1);
+					}
 					x->parent->right = y;
 				}
 				y->parent = x->parent;
 			}
 
-			node_pointer	maximum ( node_pointer node )
+			node_pointer	maximum ( node_pointer node ) const
 			{
-				while (node->right != this->_empty)
+				while (!isLeaf(node->right) && node->right != NULL)
 				{
 					node = node->right;
 				}
 				return (node);
 			}
 
-			node_pointer	minimum ( node_pointer node )
+			node_pointer	minimum ( node_pointer node ) const
 			{
-				while (node->left != this->_empty)
+				while (!isLeaf(node->left) && node->left != NULL)
 				{
 					node = node->left;
 				}
@@ -286,7 +296,7 @@ namespace ft
 
 			void	printTreeHelper ( node_pointer node, std::string indent, bool side ) const
 			{
-				if (node != this->_empty)
+				if (!isLeaf(node))
 				{
 					std::cout << indent;
 					if (side)
@@ -307,19 +317,68 @@ namespace ft
 				}
 			}
 
-			void	searchTreeHelper ( node_pointer node, value_type data ) const
+			node_pointer	searchTreeHelper ( node_pointer node, value_type data) const
 			{
-				if (node == this->_empty || *node == data)
+				if (isLeaf(node) || node == NULL)
+				{
+					return (NULL);
+				}
+				if (!key_compare()(node->data.first, data.first) && !key_compare()(data.first, node->data.first))
 				{
 					return (node);
 				}
-
-				if (_comp(data, node->data))
+				if (key_compare()(data.first, node->data.first))
 				{
-					return (searchTreeHelper(node, data));
+					return (searchTreeHelper(node->left, data));
 				}
-				return (searchTreeHelper(node, data));
+				return (searchTreeHelper(node->right, data));
 			}
+
+			node_pointer	searchKeyHelper ( node_pointer node, key_type key) const
+			{
+				if (isLeaf(node) || node == NULL)
+				{
+					return (NULL);
+				}
+				if (!key_compare()(node->data.first, key) && !key_compare()(key, node->data.first))
+				{
+					return (node);
+				}
+				if (key_compare()(key, node->data.first))
+				{
+					return (searchKeyHelper(node->left, key));
+				}
+				return (searchKeyHelper(node->right, key));
+			}
+
+			bool			isLeaf( node_pointer node ) const
+			{
+				if (node->data == T() && node->left == NULL && node->right == NULL)
+					return (true);
+				return (false);
+			}
+
+			void		construct_node ( node_pointer pos, Node node )
+			{
+				node_pointer	leaf_r_addr;
+				Node			leaf_r(pos);
+				node_pointer	leaf_l_addr;
+				Node			leaf_l(pos);
+				
+				
+				// Right leaf node
+				leaf_r_addr = this->_node_alloc.allocate(1);
+				this->_node_alloc.construct(leaf_r_addr, leaf_r);
+				node.right = leaf_r_addr;
+				// Left leaf node
+				leaf_l_addr = this->_node_alloc.allocate(1);
+				this->_node_alloc.construct(leaf_l_addr, leaf_l);
+				node.left = leaf_l_addr;
+
+				// leaf_r.parent = pos;
+				this->_node_alloc.construct(pos, node);
+			}
+	
 
 		public:
 		/** ************************************************************************** */
@@ -345,17 +404,17 @@ namespace ft
 		/** ************************************************************************** */
 		/**                             MEMBER FUNCTIONS                               */
 		/** ************************************************************************** */
-			void	insert ( value_type	to_insert )
+			node_pointer	insert ( value_type	to_insert )
 			{
-				Node			new_one(to_insert, NULL, this->_empty, this->_empty, RED);
+				Node			new_one(to_insert, NULL, NULL, NULL, RED);
 				node_pointer	y = NULL;
 				node_pointer	x = this->_root;
 				node_pointer	insert_pos = NULL;
 
-				while (x != NULL && x != this->_empty)
+				while (x != NULL && !isLeaf(x))
 				{
 					y = x;
-					if (_comp(new_one.data, x->data))
+					if (key_compare()(new_one.data.first, x->data.first))
 					{
 						x = x->left;
 					}
@@ -372,44 +431,50 @@ namespace ft
 					this->_root = _node_alloc.allocate(1);
 					insert_pos = this->_root;
 				}
-				else if (_comp(new_one.data, y->data))
+				else if (key_compare()(new_one.data.first, y->data.first))
 				{
+					this->_node_alloc.destroy(y->left);
+					this->_node_alloc.deallocate(y->left, 1);
 					y->left = _node_alloc.allocate(1);
 					insert_pos = y->left;
 				}
 				else
 				{
+					this->_node_alloc.destroy(y->right);
+					this->_node_alloc.deallocate(y->right, 1);
 					y->right = _node_alloc.allocate(1);
 					insert_pos = y->right;
 				}
-				this->_node_alloc.construct(insert_pos, new_one);
+				construct_node(insert_pos, new_one);
 
 				if (insert_pos->parent == NULL)
 				{
 					insert_pos->color = BLACK;
-					return ;
+					return (insert_pos);
 				}
 				if (insert_pos->parent->parent == NULL)
 				{
-					return ;
+					return (insert_pos);
 				}
 				insert_fix(insert_pos);
+				return (insert_pos);
 			}
 
 			void	deleteNode ( node_pointer to_delete )
 			{
 				node_pointer	tmp;
 				node_pointer	new_root;
+				node_pointer	new_leaf(this->_empty);
 				int				original_color;
 
 				tmp = to_delete;
 				original_color = tmp->color;
-				if (to_delete->left == this->_empty)
+				if (isLeaf(to_delete->left))
 				{
 					new_root = to_delete->right;
 					rbTransplant(to_delete, to_delete->right);
 				}
-				else if (to_delete->right == this->_empty)
+				else if (isLeaf(to_delete->right))
 				{
 					new_root = to_delete->left;
 					rbTransplant(to_delete, to_delete->left);
@@ -418,7 +483,10 @@ namespace ft
 				{
 					tmp = minimum(to_delete->right);
 					original_color = tmp->color;
-					new_root = tmp->right;
+					// if (tmp->right != NULL)
+						new_root = tmp->right;
+					// else
+						// new_root = new_leaf;
 					if (tmp->parent == to_delete)
 					{
 						new_root->parent = tmp;
@@ -446,13 +514,13 @@ namespace ft
 			{
 				node_pointer	tmp(this->_root);
 
-				while (tmp != this->_empty)
+				while (!isLeaf(tmp) && tmp != this->_empty)
 				{
 					if (*tmp == data)
 					{
 						return (deleteNode(tmp));
 					}
-					if (*tmp <= data)
+					if (key_compare()(tmp->data.first, tmp->data.first))
 					{
 						tmp = tmp->right;
 					}
@@ -463,12 +531,31 @@ namespace ft
 				}
 			}
 
-			node_pointer	searchTree ( value_type data )
+			void	deleteNode ( key_type key )
+			{
+				node_pointer	tmp;
+
+				tmp = search(key);
+				if (tmp != NULL)
+					deleteNode(tmp);
+			}
+
+			node_pointer	search ( key_type key ) const
 			{
 				if (this->_root != NULL)
 				{
-					searchTreeHelper(this->_root, data);
+					return (searchKeyHelper(this->_root, key));
 				}
+				return (NULL);
+			}
+
+			node_pointer	search ( value_type data ) const
+			{
+				if (this->_root != NULL)
+				{
+					return (searchTreeHelper(this->_root, data));
+				}
+				return (NULL);
 			}
 
 			void	printTree ( void ) const
@@ -482,6 +569,35 @@ namespace ft
 			node_pointer	getRoot ( void ) const
 			{
 				return (this->_root);
+			}
+
+			iterator		maximum ( void ) const
+			{
+				node_pointer	tmp(this->_root);
+
+				while (/*!isLeaf(tmp->right) &&*/ tmp->right != NULL)
+				{
+					tmp = tmp->right;
+				}
+				// if (tmp->right == this->_empty)
+					// tmp = tmp->right;
+				return (iterator(tmp));
+			}
+
+			iterator		minimum ( void ) const
+			{
+				node_pointer	tmp(this->_root);
+
+				while (!isLeaf(tmp->left) && tmp->left != NULL)
+				{
+					tmp = tmp->left;
+				}
+				return (iterator(tmp));
+			}
+
+			iterator		end ( void ) const
+			{
+				return (iterator(NULL));
 			}
 	};
 }
