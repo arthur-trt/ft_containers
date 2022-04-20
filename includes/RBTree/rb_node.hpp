@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:37:35 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/18 12:54:03 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/20 11:32:48 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,15 +146,15 @@ namespace ft
 				return (*this);
 			}
 
-			bool		operator== ( const RB_node &rhs ) const
-			{
-				return (this->data == rhs.data && this->parent == rhs.parent);
-			}
+			//bool		operator== ( const RB_node &rhs ) const
+			//{
+			//	return (this->data == rhs.data && this->parent == rhs.parent);
+			//}
 
-			bool		operator!= ( const RB_node &rhs ) const
-			{
-				return (!(*this == rhs));
-			}
+			//bool		operator!= ( const RB_node &rhs ) const
+			//{
+			//	return (!(*this == rhs));
+			//}
 
 	};
 }
