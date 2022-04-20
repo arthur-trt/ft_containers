@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/19 14:56:07 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/20 12:05:03 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ namespace ft
 			node_pointer	_root;
 			node_pointer	_empty;
 			node_allocator	_node_alloc;
-			
+
 			void	leftRotate ( node_pointer node )
 			{
 				node_pointer	tmp = node->right;
@@ -364,8 +364,8 @@ namespace ft
 				Node			leaf_r(pos);
 				node_pointer	leaf_l_addr;
 				Node			leaf_l(pos);
-				
-				
+
+
 				// Right leaf node
 				leaf_r_addr = this->_node_alloc.allocate(1);
 				this->_node_alloc.construct(leaf_r_addr, leaf_r);
@@ -378,7 +378,7 @@ namespace ft
 				// leaf_r.parent = pos;
 				this->_node_alloc.construct(pos, node);
 			}
-	
+
 
 		public:
 		/** ************************************************************************** */
@@ -464,7 +464,7 @@ namespace ft
 			{
 				node_pointer	tmp;
 				node_pointer	new_root;
-				node_pointer	new_leaf(this->_empty);
+				//node_pointer	new_leaf(this->_empty);
 				int				original_color;
 
 				tmp = to_delete;
