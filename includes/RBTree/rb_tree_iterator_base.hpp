@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 11:54:57 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/16 13:34:21 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:15:04 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,82 +24,87 @@ namespace ft
 			return (true);
 		return (false);
 	}
-	
+
 	template <typename T>
-	static	ft::RB_node<T>*		_local_rb_tree_increment ( ft::RB_node<T>* __x ) throw()
+	static	ft::RB_node<T>*		_local_rb_tree_increment ( ft::RB_node<T>* __x, ft::RB_node<T>* __header ) throw()
 	{
-		if (!__is_leaf(__x->right)) // If data is NULL, it's a leaf node	
+		if (__x->right != 0)
 		{
 			__x = __x->right;
-			while (!__is_leaf(__x->left))
+			while (__x->left != 0 && !__is_leaf(__x->left))
 				__x = __x->left;
 		}
 		else
 		{
 			ft::RB_node<T>*	__y = __x->parent;
-			while (__y && __x == __y->right)
+			while (__x == __y->right)
 			{
 				__x = __y;
 				__y = __y->parent;
 			}
 			if (__x->right != __y)
 				__x = __y;
-			
+
 		}
+		if (__is_leaf(__x) && __x != __header->right)
+			return (_local_rb_tree_increment(__x, __header));
 		return (__x);
-	}	
-
-	template <typename T>
-	ft::RB_node<T>*			_rb_tree_increment ( ft::RB_node<T>* __x ) throw()
-	{
-		return (_local_rb_tree_increment(__x));
 	}
 
 	template <typename T>
-	const ft::RB_node<T>*	_rb_tree_increment ( const ft::RB_node<T>* __x ) throw()
+	ft::RB_node<T>*			_rb_tree_increment ( ft::RB_node<T>* __x, ft::RB_node<T>* __header ) throw()
 	{
-		return (_local_rb_tree_increment(const_cast<ft::RB_node<T>*>(__x)));
+		return (_local_rb_tree_increment(__x, __header));
 	}
 
 	template <typename T>
-	static ft::RB_node<T>*	_local_rb_tree_decrement ( ft::RB_node<T>* __x ) throw()
+	const ft::RB_node<T>*	_rb_tree_increment ( const ft::RB_node<T>* __x, ft::RB_node<T>* __header ) throw()
+	{
+		return (_local_rb_tree_increment(const_cast<ft::RB_node<T>*>(__x), const_cast<ft::RB_node<T>*>(__header)));
+	}
+
+	template <typename T>
+	static ft::RB_node<T>*	_local_rb_tree_decrement ( ft::RB_node<T>* __x, ft::RB_node<T>* __header ) throw()
 	{
 		if (__x->color == RED && __x->parent->parent == __x)
 		{
 			__x = __x->right;
 		}
-		else if (!__is_leaf(__x->left))
+		else if (__x->left != 0)
 		{
 			ft::RB_node<T>* __y = __x->left;
-			while (!__is_leaf(__x->right))
+			while (__y->right != 0 && !__is_leaf(__y->right))
 			{
 				__y = __y->right;
-				__x = __y;
+
 			}
+			__x = __y;
 		}
 		else
 		{
 			ft::RB_node<T>*	__y = __x->parent;
-			while (__y &&__x == __y->left)
+			while (__x == __y->left)
 			{
 				__x = __y;
 				__y = __y->parent;
 			}
 			__x = __y;
 		}
+		if (__is_leaf(__x) && __x != __header->left)
+			return (_local_rb_tree_decrement(__x, __header));
 		return (__x);
 	}
 
 	template <typename T>
-	ft::RB_node<T>*			_rb_tree_decrement ( ft::RB_node<T>* __x ) throw()
+	ft::RB_node<T>*			_rb_tree_decrement ( ft::RB_node<T>* __x, ft::RB_node<T>* __header ) throw()
 	{
-		return (_local_rb_tree_decrement(__x));
+		return (_local_rb_tree_decrement(__x, __header));
 	}
-	
+
 	template <typename T>
-	const ft::RB_node<T>*	_rb_tree_decrement ( const ft::RB_node<T>* __x ) throw()
+	const ft::RB_node<T>*	_rb_tree_decrement ( const ft::RB_node<T>* __x, ft::RB_node<T>* __header ) throw()
 	{
-		return (_local_rb_tree_decrement(const_cast<ft::RB_node<T>*>(__x)));
+		return (_local_rb_tree_decrement(const_cast<ft::RB_node<T>*>(__x), const_cast<ft::RB_node<T>*>(__header)));
 	}
 }
 

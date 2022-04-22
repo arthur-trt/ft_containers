@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/21 15:58:06 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:12:16 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ namespace ft
 		/** ************************************************************************** */
 			node_pointer	_root;
 			node_pointer	_empty;
+			node_pointer	_header;
 			node_allocator	_node_alloc;
 			size_t			_node_count;
 
@@ -162,6 +163,7 @@ namespace ft
 						break;
 					}
 				}
+				setHeader();
 				this->_root->color = 0;
 			}
 
@@ -233,6 +235,7 @@ namespace ft
 						}
 					}
 				}
+				setHeader();
 				node->color = BLACK;
 			}
 
@@ -368,8 +371,8 @@ namespace ft
 				Node			leaf_r(pos);
 				node_pointer	leaf_l_addr;
 				Node			leaf_l(pos);
-				
-				
+
+
 				// Right leaf node
 				leaf_r_addr = this->_node_alloc.allocate(1);
 				this->_node_alloc.construct(leaf_r_addr, leaf_r);
@@ -384,6 +387,13 @@ namespace ft
 				this->_node_alloc.construct(pos, node);
 			}
 
+			void		setHeader ( void )
+			{
+				this->_header->parent = this->_root;
+				this->_header->left = this->minimum(this->_root)->left;
+				this->_header->right = this->maximum(this->_root)->right;
+			}
+
 
 		public:
 		/** ************************************************************************** */
@@ -396,6 +406,8 @@ namespace ft
 
 				this->_empty = _node_alloc.allocate(1);
 				_node_alloc.construct(this->_empty, tmp);
+				this->_header = _node_alloc.allocate(1);
+				_node_alloc.construct(this->_header, tmp);
 				this->_root = NULL;
 				this->_node_count = 0;
 			}
@@ -405,6 +417,8 @@ namespace ft
 				delete_tree(this->_root);
 				_node_alloc.destroy(this->_empty);
 				_node_alloc.deallocate(this->_empty, 1);
+				_node_alloc.destroy(this->_header);
+				_node_alloc.deallocate(this->_header, 1);
 			}
 
 		/** ************************************************************************** */
@@ -441,6 +455,7 @@ namespace ft
 				}
 				construct_node(insert_pos, new_one);
 				this->_node_count++;
+				setHeader();
 				if (insert_pos->parent == NULL)
 				{
 					insert_pos->color = BLACK;
@@ -453,7 +468,7 @@ namespace ft
 				insert_fix(insert_pos);
 				return (insert_pos);
 			}
-			
+
 			node_pointer	insert ( value_type	to_insert )
 			{
 				Node			new_one(to_insert, NULL, NULL, NULL, RED);
@@ -527,6 +542,7 @@ namespace ft
 				this->_node_alloc.destroy(to_delete);
 				this->_node_alloc.deallocate(to_delete, 1);
 				this->_node_count--;
+				setHeader();
 				if (original_color == BLACK)
 				{
 					delete_fix(new_root);
@@ -602,7 +618,7 @@ namespace ft
 				{
 					tmp = tmp->right;
 				}
-				return (iterator(tmp));
+				return (iterator(tmp, this->_header));
 			}
 
 			iterator		minimum ( void ) const
@@ -613,7 +629,7 @@ namespace ft
 				{
 					tmp = tmp->left;
 				}
-				return (iterator(tmp));
+				return (iterator(tmp, this->_header));
 			}
 
 			iterator		end ( void ) const
@@ -624,7 +640,7 @@ namespace ft
 				{
 					tmp = tmp->right;
 				}
-				return (iterator(tmp));
+				return (iterator(tmp, this->_header));
 			}
 
 			size_t			max_size ( void )

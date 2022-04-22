@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/21 12:29:22 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:11:49 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ namespace ft
 			 */
 			typedef typename	ft::iterator_traits<iterator>::difference_type		difference_type;
 			/**
-			 * The node_pointer type 
+			 * The node_pointer type
 			 */
 			typedef	typename	ft::RedBlackTree<const key_type, value_type,
 												_Compare, _Alloc>::node_pointer		node_pointer;
@@ -137,7 +137,7 @@ namespace ft
 			 * @brief Range constructor
 			 * Constructs a container with as many elements as the range [first,last),
 			 * with each element constructed from its corresponding element in that range.
-			 * 
+			 *
 			 * @param first Input iterators to the initial position in a range.
 			 * @param last Input iterators to the final position in a range.
 			 * @param comp Binary predicate that, taking two element keys as argument,
@@ -159,7 +159,7 @@ namespace ft
 			/**
 			 * @brief Copy constructor
 			 * Constructs a container with a copy of each of the elements in x.
-			 * 
+			 *
 			 * @param x Another map object of the same type
 			 * (with the same class template arguments Key, T, Compare and Alloc),
 			 */
@@ -221,7 +221,7 @@ namespace ft
 			{
 				return (_rb_tree.end());
 			}
-			
+
 			const_iterator			end ( void ) const
 			{
 				return (_rb_tree.end());
@@ -256,16 +256,16 @@ namespace ft
 			{
 				return (reverse_iterator(this->begin()));
 			}
-		
+
 		/** ************************************************************************** */
 		/**                                  CAPACITY                                  */
 		/** ************************************************************************** */
-			
+
 			/**
 			 * @brief Test whether container is empty
-			 * 
-			 * @return true 
-			 * @return false 
+			 *
+			 * @return true
+			 * @return false
 			 */
 			bool 		empty ( void ) const
 			{
@@ -275,8 +275,8 @@ namespace ft
 			/**
 			 * @brief Return container size
 			 * Returns the number of elements in the map container.
-			 * 
-			 * @return The number of elements in the container. 
+			 *
+			 * @return The number of elements in the container.
 			 */
 			size_type	size ( void ) const
 			{
@@ -286,8 +286,8 @@ namespace ft
 			/**
 			 * @brief Return maximum size
 			 * Returns the maximum number of elements that the map container can hold.
-			 * 
-			 * @return The maximum number of elements a map container can hold as content. 
+			 *
+			 * @return The maximum number of elements a map container can hold as content.
 			 */
 			size_type	max_size ( void ) const
 			{
@@ -302,7 +302,7 @@ namespace ft
 			 * If k matches the key of an element in the container, the function returns a reference to its mapped value.
 			 * If k does not match the key of any element in the container,
 			 * the function inserts a new element with that key and returns a reference to its mapped value.
-			 * 
+			 *
 			 * @param key Key value of the element whose mapped value is accessed.
 			 * @return mapped_type& A reference to the mapped value of the element with a key value equivalent to k.
 			 */
@@ -320,7 +320,7 @@ namespace ft
 			 * @brief Insert elements (single elements)
 			 * Extends the container by inserting new elements,
 			 * effectively increasing the container size by the number of elements inserted.
-			 * 
+			 *
 			 * @param val Value to be copied to (or moved as) the inserted element.
 			 * @return eturn a pair, with its member pair::first set to an iterator pointing to either the newly inserted element
 			 * or to the element with an equivalent key in the map.
@@ -345,11 +345,11 @@ namespace ft
 			 * @brief Insert elements
 			 * Extends the container by inserting new elements,
 			 * effectively increasing the container size by the number of elements inserted.
-			 * 
+			 *
 			 * @param position Hint for the position where the element can be inserted.
 			 * @param val Value to be copied to (or moved as) the inserted element.
 			 * @return an iterator pointing to either the newly inserted element or to the element
-			 * that already had an equivalent key in the map. 
+			 * that already had an equivalent key in the map.
 			 */
 			iterator	insert ( iterator position, const value_type& val )
 			{
@@ -365,8 +365,8 @@ namespace ft
 			/**
 			 * @brief Insert elements
 			 * Extends the container by inserting new elements,
-			 * effectively increasing the container size by the number of elements inserted. 
-			 * 
+			 * effectively increasing the container size by the number of elements inserted.
+			 *
 			 * @param first An iterator to first element
 			 * @param last An iterator to last element
 			 */
@@ -384,7 +384,7 @@ namespace ft
 			/**
 			 * @brief Erase elements
 			 * Removes from the map container either a single element or a range of elements ([first,last)).
-			 * 
+			 *
 			 * @param pos Iterator pointing to a single element to be removed from the map.
 			 */
 			void		erase ( iterator pos )
@@ -395,9 +395,9 @@ namespace ft
 			/**
 			 * @brief Erase elements
 			 * Removes from the map container either a single element or a range of elements ([first,last)).
-			 * 
+			 *
 			 * @param _key Key of the element to be removed from the map.
-			 * @return the number of elements erased. 
+			 * @return the number of elements erased.
 			 */
 			size_type	erase ( const key_type& _key )
 			{
@@ -416,9 +416,9 @@ namespace ft
 			/**
 			 * @brief Erase elements
 			 * Removes from the map container either a single element or a range of elements ([first,last)).
-			 * 
+			 *
 			 * @param first An iterator to first element
-			 * @param last An iterator to last element 
+			 * @param last An iterator to last element
 			 */
 			void		erase ( iterator first, iterator last )
 			{
@@ -437,7 +437,7 @@ namespace ft
 					low++;
 				return (low);
 			}
-			     
+
 	};
 }
 
