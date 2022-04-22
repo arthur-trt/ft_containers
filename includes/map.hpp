@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/22 14:29:18 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 15:58:29 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -460,7 +460,7 @@ namespace ft
 			 */
 			void		swap ( map & rhs )
 			{
-				this->_rb_tree.swap(rhs);
+				this->_rb_tree.swap(rhs._rb_tree);
 			}
 
 			/**
@@ -615,7 +615,64 @@ namespace ft
 				return (this->_alloc);
 			}
 
+			template<typename _K1, typename _T1, typename _C1, typename _A1>
+			friend bool	operator== (	const map<_K1, _T1, _C1, _A1>&,
+										const map<_K1, _T1, _C1, _A1>& );
+
+			template<typename _K1, typename _T1, typename _C1, typename _A1>
+			friend bool	operator< (	const map<_K1, _T1, _C1, _A1>&,
+									const map<_K1, _T1, _C1, _A1>& );
+
 	};
+
+	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	inline bool	operator== (	const map<_Key, _Tp, _Compare, _Alloc>& __x,
+								const map<_Key, _Tp, _Compare, _Alloc>& __y )
+	{
+		return (__x._rb_tree == __y._rb_tree);
+	}
+
+	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	inline bool	operator< (	const map<_Key, _Tp, _Compare, _Alloc>& __x,
+							const map<_Key, _Tp, _Compare, _Alloc>& __y )
+	{
+		return (__x._rb_tree < __y._rb_tree);
+	}
+
+	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	inline bool	operator!= (	const map<_Key, _Tp, _Compare, _Alloc>& __x,
+								const map<_Key, _Tp, _Compare, _Alloc>& __y )
+	{
+		return (!(__x == __y));
+	}
+
+	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	inline bool	operator> (	const map<_Key, _Tp, _Compare, _Alloc>& __x,
+							const map<_Key, _Tp, _Compare, _Alloc>& __y )
+	{
+		return (__y < __x);
+	}
+
+	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	inline bool	operator<= (	const map<_Key, _Tp, _Compare, _Alloc>& __x,
+								const map<_Key, _Tp, _Compare, _Alloc>& __y )
+	{
+		return (!(__y < __x));
+	}
+
+	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	inline bool	operator>= (	const map<_Key, _Tp, _Compare, _Alloc>& __x,
+								const map<_Key, _Tp, _Compare, _Alloc>& __y )
+	{
+		return (!(__x < __y));
+	}
+
+	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	inline void	swap (	map<_Key, _Tp, _Compare, _Alloc>& __x,
+						map<_Key, _Tp, _Compare, _Alloc>& __y)
+	{
+		__x.swap(__y);
+	}
 }
 
 #endif

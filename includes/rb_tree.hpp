@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 15:23:51 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 16:03:03 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -647,43 +647,43 @@ namespace ft
 				return (iterator(tmp, this->_header));
 			}
 
-			size_t			max_size ( void )
+			size_t			max_size ( void ) const
 			{
 				return (node_allocator().max_size());
 			}
 
-			RedBlackTree	swap ( RedBlackTree &__rhs )
+			void		swap ( RedBlackTree &__rhs )
 			{
 				if (this->_root == NULL)
 				{
-					if (__rhs->_root != NULL)
+					if (__rhs._root != NULL)
 					{
-						this->_root = __rhs->_root;
-						this->_header = __rhs->__header;
-						this->_node_count = __rhs->_node_count;
+						this->_root = __rhs._root;
+						this->_header = __rhs._header;
+						this->_node_count = __rhs._node_count;
 
-						__rhs->_root = NULL;
-						__rhs->_node_count = 0;
+						__rhs._root = NULL;
+						__rhs._node_count = 0;
 					}
 				}
-				else if (__rhs->_root == NULL)
+				else if (__rhs._root == NULL)
 				{
-					__rhs->_root = this->_root;
-					__rhs->_node_count = this->_node_count;
-					__rhs->_header = this->_header;
+					__rhs._root = this->_root;
+					__rhs._node_count = this->_node_count;
+					__rhs._header = this->_header;
 
 					this->_root = NULL;
 					this->_node_count = 0;
 				}
 				else
 				{
-					std::swap(this->_root, __rhs->_root);
-					std::swap(this->_header->left, __rhs->_header->left);
-					std::swap(this->_header->right, __rhs->_header->right);
-					std::swap(this->_header, __rhs->_header);
-					std::swap(this->_node_count, __rhs->_node_count);
+					std::swap(this->_root, __rhs._root);
+					std::swap(this->_header->left, __rhs._header->left);
+					std::swap(this->_header->right, __rhs._header->right);
+					std::swap(this->_header, __rhs._header);
+					std::swap(this->_node_count, __rhs._node_count);
 				}
-				std::swap(this->_node_alloc, __rhs->_node_alloc);
+				std::swap(this->_node_alloc, __rhs._node_alloc);
 			}
 
 			size_t			getSize ( void ) const
@@ -691,10 +691,13 @@ namespace ft
 				return (this->_node_count);
 			}
 
-			//iterator	lower_bound ( const key_type & _key )
-			//{
+			template <class T1, class T2, class T3, class T4>
+			friend inline bool	operator== (	const RedBlackTree<T1, T2, T3, T4> &__lhs,
+												const RedBlackTree<T1, T2, T3, T4> &__rhs );
 
-			//}
+			template <class T1, class T2, class T3, class T4>
+			friend inline bool	operator< (	const RedBlackTree<T1, T2, T3, T4> & __rhs,
+											const RedBlackTree<T1, T2, T3, T4> & __lhs );
 	};
 
 	template <class _Key, class T, class Compare, class Alloc>
@@ -718,7 +721,7 @@ namespace ft
 	{
 		return (ft::lexicographical_compare(__rhs.minimum(), __rhs.end(), __lhs.minimum(), __lhs.end()));
 	}
-	
+
 	template <class _Key, class T, class Compare, class Alloc>
 	inline bool	operator> (	const RedBlackTree<_Key, T, Compare, Alloc> & __rhs,
 							const RedBlackTree<_Key, T, Compare, Alloc> & __lhs )
@@ -746,7 +749,7 @@ namespace ft
 	{
 		__rhs.swap(__lhs);
 	}
-	
+
 }
 
 
