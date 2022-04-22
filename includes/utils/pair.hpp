@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 21:41:51 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/18 11:23:54 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/21 12:26:37 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,13 @@ namespace ft
 
 	template <typename T1, typename T2>
 	std::ostream& operator<<(std::ostream& os, const ft::pair<T1,T2>& p)
+	{
+		os << p.first << ": \"" << p.second << "\"";
+		return os;
+	}
+
+	template <typename T1, typename T2>
+	std::ostream& operator<<(std::ostream& os, const std::pair<T1,T2>& p)
 	{
 		os << p.first << ": \"" << p.second << "\"";
 		return os;

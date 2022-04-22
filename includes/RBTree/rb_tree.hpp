@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/20 17:36:44 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/21 15:58:06 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ namespace ft
 			node_pointer	_root;
 			node_pointer	_empty;
 			node_allocator	_node_alloc;
+			size_t			_node_count;
 
 			void	leftRotate ( node_pointer node )
 			{
@@ -369,17 +370,16 @@ namespace ft
 				Node			leaf_l(pos);
 				
 				
-				// std::cout << "Allocated node (" << pos << ")for data : " << node.data.first << "/" << node.data.second << std::endl;
 				// Right leaf node
 				leaf_r_addr = this->_node_alloc.allocate(1);
 				this->_node_alloc.construct(leaf_r_addr, leaf_r);
-				// std::cout << "\tAllocate 'leaf_r' (" << leaf_r_addr << ") for " << node.data.first << std::endl;
 				node.right = leaf_r_addr;
+				// node.right = NULL;
 				// Left leaf node
 				leaf_l_addr = this->_node_alloc.allocate(1);
 				this->_node_alloc.construct(leaf_l_addr, leaf_l);
 				node.left = leaf_l_addr;
-				// std::cout << "\tAllocate 'leaf_l' (" << leaf_l_addr << ") for " << node.data.first << std::endl;
+				// node.left = NULL;
 				// leaf_r.parent = pos;
 				this->_node_alloc.construct(pos, node);
 			}
@@ -397,6 +397,7 @@ namespace ft
 				this->_empty = _node_alloc.allocate(1);
 				_node_alloc.construct(this->_empty, tmp);
 				this->_root = NULL;
+				this->_node_count = 0;
 			}
 
 			~RedBlackTree ( void )
@@ -409,6 +410,50 @@ namespace ft
 		/** ************************************************************************** */
 		/**                             MEMBER FUNCTIONS                               */
 		/** ************************************************************************** */
+			node_pointer	insert ( node_pointer position, value_type to_insert )
+			{
+				Node			new_one(to_insert, NULL, NULL, NULL, RED);
+				node_pointer	x = this->_root;
+				node_pointer	insert_pos = NULL;
+
+				new_one.parent = position;
+				new_one.color = (new_one.parent == NULL) ? BLACK : RED;
+				if (position == NULL)
+				{
+					this->_root = _node_alloc.allocate(1);
+					insert_pos = this->_root;
+				}
+				else if (key_compare()(new_one.data.first, position->data.first))
+				{
+					// std::cout << "Deallocate node (" << y->left << ") for data : " << y->left->data.first << "/" << y->left->data.second << std::endl;
+					this->_node_alloc.destroy(position->left);
+					this->_node_alloc.deallocate(position->left, 1);
+					position->left = _node_alloc.allocate(1);
+					insert_pos = position->left;
+				}
+				else
+				{
+					// std::cout << "Deallocate node (" << y->right << ") for data : " << y->right->data.first << "/" << y->right->data.second << std::endl;
+					this->_node_alloc.destroy(position->right);
+					this->_node_alloc.deallocate(position->right, 1);
+					position->right = _node_alloc.allocate(1);
+					insert_pos = position->right;
+				}
+				construct_node(insert_pos, new_one);
+				this->_node_count++;
+				if (insert_pos->parent == NULL)
+				{
+					insert_pos->color = BLACK;
+					return (insert_pos);
+				}
+				if (insert_pos->parent->parent == NULL)
+				{
+					return (insert_pos);
+				}
+				insert_fix(insert_pos);
+				return (insert_pos);
+			}
+			
 			node_pointer	insert ( value_type	to_insert )
 			{
 				Node			new_one(to_insert, NULL, NULL, NULL, RED);
@@ -428,50 +473,13 @@ namespace ft
 						x = x->right;
 					}
 				}
-
-				new_one.parent = y;
-				new_one.color = (new_one.parent == NULL) ? BLACK : RED;
-				if (y == NULL)
-				{
-					this->_root = _node_alloc.allocate(1);
-					insert_pos = this->_root;
-				}
-				else if (key_compare()(new_one.data.first, y->data.first))
-				{
-					// std::cout << "Deallocate node (" << y->left << ") for data : " << y->left->data.first << "/" << y->left->data.second << std::endl;
-					this->_node_alloc.destroy(y->left);
-					this->_node_alloc.deallocate(y->left, 1);
-					y->left = _node_alloc.allocate(1);
-					insert_pos = y->left;
-				}
-				else
-				{
-					// std::cout << "Deallocate node (" << y->right << ") for data : " << y->right->data.first << "/" << y->right->data.second << std::endl;
-					this->_node_alloc.destroy(y->right);
-					this->_node_alloc.deallocate(y->right, 1);
-					y->right = _node_alloc.allocate(1);
-					insert_pos = y->right;
-				}
-				construct_node(insert_pos, new_one);
-
-				if (insert_pos->parent == NULL)
-				{
-					insert_pos->color = BLACK;
-					return (insert_pos);
-				}
-				if (insert_pos->parent->parent == NULL)
-				{
-					return (insert_pos);
-				}
-				insert_fix(insert_pos);
-				return (insert_pos);
+				return (insert(y, to_insert));
 			}
 
 			void	deleteNode ( node_pointer to_delete )
 			{
 				node_pointer	tmp;
 				node_pointer	new_root;
-				//node_pointer	new_leaf(this->_empty);
 				int				original_color;
 
 				tmp = to_delete;
@@ -490,10 +498,7 @@ namespace ft
 				{
 					tmp = minimum(to_delete->right);
 					original_color = tmp->color;
-					// if (tmp->right != NULL)
-						new_root = tmp->right;
-					// else
-						// new_root = new_leaf;
+					new_root = tmp->right;
 					if (tmp->parent == to_delete)
 					{
 						new_root->parent = tmp;
@@ -507,7 +512,6 @@ namespace ft
 					rbTransplant(to_delete, tmp);
 					if (isLeaf(tmp->left))
 					{
-						// std::cout << "Deallocate node (" << tmp->left << ") for data : " << tmp->left->data.first << "/" << tmp->left->data.second << std::endl;
 						this->_node_alloc.destroy(tmp->left);
 						this->_node_alloc.deallocate(tmp->left, 1);
 					}
@@ -517,13 +521,12 @@ namespace ft
 				}
 				if (isLeaf(to_delete->left) && isLeaf(to_delete->right))
 				{
-					// std::cout << "Deallocate node (" << to_delete->left << ") for data : " << to_delete->left->data.first << "/" << to_delete->left->data.second << std::endl;
 					this->_node_alloc.destroy(to_delete->left);
 					this->_node_alloc.deallocate(to_delete->left, 1);
 				}
-				// std::cout << "Deallocate node (" << to_delete << ") for data : " << to_delete->data.first << "/" << to_delete->data.second << std::endl;
 				this->_node_alloc.destroy(to_delete);
 				this->_node_alloc.deallocate(to_delete, 1);
+				this->_node_count--;
 				if (original_color == BLACK)
 				{
 					delete_fix(new_root);
@@ -623,6 +626,35 @@ namespace ft
 				}
 				return (iterator(tmp));
 			}
+
+			size_t			max_size ( void )
+			{
+				return (node_allocator().max_size());
+			}
+
+			RedBlackTree	swap ( RedBlackTree &__rhs )
+			{
+				if (this->_root == NULL)
+				{
+					if (__rhs->_root != NULL)
+					{
+						this->_root = __rhs._root;
+						this->_node_alloc = __rhs._node_alloc;
+					}
+				}
+			}
+
+			size_t			getSize ( void ) const
+			{
+				return (this->_node_count);
+			}
+
+			// iterator		lower_bound ( const key_type& _key )
+			// {
+			// 	node_pointer	tmp(this->_root);
+
+			// 	while (!key_compare())
+			// }
 	};
 }
 
