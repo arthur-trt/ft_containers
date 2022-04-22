@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 14:50:19 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 15:23:51 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include "pair.hpp"
 # include "rb_tree_iterator.hpp"
 # include "reverse_iterator.hpp"
+# include "equal.hpp"
+# include "lexicographical_compare.hpp"
 
 namespace ft
 {
@@ -696,7 +698,7 @@ namespace ft
 	};
 
 	template <class _Key, class T, class Compare, class Alloc>
-	inline bool operator== (	const RedBlackTree<_Key, T, Compare, Alloc> &__lhs,
+	inline bool	operator== (	const RedBlackTree<_Key, T, Compare, Alloc> &__lhs,
 								const RedBlackTree<_Key, T, Compare, Alloc> &__rhs )
 	{
 		return (	__lhs._node_count == __rhs._node_count &&
@@ -704,12 +706,46 @@ namespace ft
 	}
 
 	template <class _Key, class T, class Compare, class Alloc>
-	inline bool operator!= (	const RedBlackTree<_Key, T, Compare, Alloc> &__lhs,
+	inline bool	operator!= (	const RedBlackTree<_Key, T, Compare, Alloc> &__lhs,
 								const RedBlackTree<_Key, T, Compare, Alloc> &__rhs )
 	{
 		return (!(__lhs == __rhs));
 	}
 
+	template <class _Key, class T, class Compare, class Alloc>
+	inline bool	operator< (	const RedBlackTree<_Key, T, Compare, Alloc> & __rhs,
+							const RedBlackTree<_Key, T, Compare, Alloc> & __lhs )
+	{
+		return (ft::lexicographical_compare(__rhs.minimum(), __rhs.end(), __lhs.minimum(), __lhs.end()));
+	}
+	
+	template <class _Key, class T, class Compare, class Alloc>
+	inline bool	operator> (	const RedBlackTree<_Key, T, Compare, Alloc> & __rhs,
+							const RedBlackTree<_Key, T, Compare, Alloc> & __lhs )
+	{
+		return (__lhs < __rhs);
+	}
+
+	template <class _Key, class T, class Compare, class Alloc>
+	inline bool	operator<=	(	const RedBlackTree<_Key, T, Compare, Alloc> & __rhs,
+								const RedBlackTree<_Key, T, Compare, Alloc> & __lhs )
+	{
+		return (!(__lhs < __rhs));
+	}
+
+	template <class _Key, class T, class Compare, class Alloc>
+	inline bool	operator>=	(	const RedBlackTree<_Key, T, Compare, Alloc> & __rhs,
+								const RedBlackTree<_Key, T, Compare, Alloc> & __lhs )
+	{
+		return (!(__rhs < __lhs));
+	}
+
+	template <class _Key, class T, class Compare, class Alloc>
+	inline void	swap		(	const RedBlackTree<_Key, T, Compare, Alloc> & __rhs,
+								const RedBlackTree<_Key, T, Compare, Alloc> & __lhs )
+	{
+		__rhs.swap(__lhs);
+	}
 	
 }
 
