@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/22 15:58:29 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 18:19:32 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,9 +330,10 @@ namespace ft
 			 */
 			mapped_type&	operator[] ( const key_type & key )
 			{
-				iterator	tmp = lower_bound(key);
-				tmp = insert(tmp, value_type(key, mapped_type()));
-				return ((*tmp).second);
+				iterator					pos = lower_bound(key);
+
+				pos = insert(pos, value_type(key, mapped_type()));
+				return ((*pos).second);
 			}
 
 		/** ************************************************************************** */
@@ -446,6 +447,7 @@ namespace ft
 			{
 				while (first != last)
 				{
+					std::cout << "Erasing : " << (*first) << std::endl;
 					erase (first);
 					first++;
 				}
@@ -470,7 +472,7 @@ namespace ft
 			 */
 			void		clear ( void )
 			{
-				this->erase(this->begin(), this->end());
+				this->_rb_tree.delete_tree(this->_rb_tree.getRoot());
 			}
 
 		/** ************************************************************************** */
@@ -571,8 +573,12 @@ namespace ft
 			{
 				iterator	upp = this->begin();
 
-				while (upp != this->end() && key_compare()(_key, upp->first))
+				while (upp != this->end())
+				{
+					if (upp->first != _key && !key_compare()(upp->first, _key))
+						return (upp);
 					upp++;
+				}
 				return (upp);
 			}
 

@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 16:03:03 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 18:10:48 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,6 @@ namespace ft
 						break;
 					}
 				}
-				setHeader();
 				this->_root->color = 0;
 			}
 
@@ -237,24 +236,24 @@ namespace ft
 						}
 					}
 				}
-				setHeader();
 				node->color = BLACK;
 			}
 
-			void	delete_tree ( node_pointer root )
-			{
-				if (root != NULL)
-				{
-					delete_tree(root->left);
-					delete_tree(root->right);
-				}
-				if (root != NULL)
-				{
-					// std::cout << "Deallocate node (" << root << ") for data : " << root->data.first << "/" << root->data.second << std::endl;
-					this->_node_alloc.destroy(root);
-					this->_node_alloc.deallocate(root, 1);
-				}
-			}
+			// void	delete_tree ( node_pointer root )
+			// {
+			// 	if (root != NULL)
+			// 	{
+			// 		delete_tree(root->left);
+			// 		delete_tree(root->right);
+			// 	}
+			// 	if (root != NULL)
+			// 	{
+			// 		// std::cout << "Deallocate node (" << root << ") for data : " << root->data.first << "/" << root->data.second << std::endl;
+			// 		this->_node_alloc.destroy(root);
+			// 		this->_node_alloc.deallocate(root, 1);
+			// 		this->_root = NULL;
+			// 	}
+			// }
 
 			void	rbTransplant ( node_pointer x, node_pointer y )
 			{
@@ -287,7 +286,7 @@ namespace ft
 
 			node_pointer	maximum ( node_pointer node ) const
 			{
-				while (!isLeaf(node->right) && node->right != NULL)
+				while (node && node->right != NULL && !isLeaf(node->right))
 				{
 					node = node->right;
 				}
@@ -296,7 +295,7 @@ namespace ft
 
 			node_pointer	minimum ( node_pointer node ) const
 			{
-				while (!isLeaf(node->left) && node->left != NULL)
+				while (node && node->left != NULL && !isLeaf(node->left))
 				{
 					node = node->left;
 				}
@@ -376,6 +375,7 @@ namespace ft
 
 
 				// Right leaf node
+				// std::cout << "Allocate node "
 				leaf_r_addr = this->_node_alloc.allocate(1);
 				this->_node_alloc.construct(leaf_r_addr, leaf_r);
 				node.right = leaf_r_addr;
@@ -426,7 +426,7 @@ namespace ft
 		/** ************************************************************************** */
 		/**                             MEMBER FUNCTIONS                               */
 		/** ************************************************************************** */
-			node_pointer	insert ( node_pointer position, value_type to_insert )
+			iterator	insert ( node_pointer position, value_type to_insert )
 			{
 				Node			new_one(to_insert, NULL, NULL, NULL, RED);
 				node_pointer	x = this->_root;
@@ -457,21 +457,24 @@ namespace ft
 				}
 				construct_node(insert_pos, new_one);
 				this->_node_count++;
-				setHeader();
+				
 				if (insert_pos->parent == NULL)
 				{
+					setHeader();
 					insert_pos->color = BLACK;
-					return (insert_pos);
+					return (iterator(insert_pos, this->_header));
 				}
 				if (insert_pos->parent->parent == NULL)
 				{
-					return (insert_pos);
+					setHeader();
+					return (iterator(insert_pos, this->_header));
 				}
 				insert_fix(insert_pos);
-				return (insert_pos);
+				setHeader();
+				return (iterator(insert_pos, this->_header));
 			}
 
-			node_pointer	insert ( value_type	to_insert )
+			iterator	insert ( value_type	to_insert )
 			{
 				Node			new_one(to_insert, NULL, NULL, NULL, RED);
 				node_pointer	y = NULL;
@@ -544,11 +547,12 @@ namespace ft
 				this->_node_alloc.destroy(to_delete);
 				this->_node_alloc.deallocate(to_delete, 1);
 				this->_node_count--;
-				setHeader();
+				
 				if (original_color == BLACK)
 				{
 					delete_fix(new_root);
 				}
+				setHeader();
 			}
 
 			void	deleteNode ( value_type data )
@@ -587,7 +591,7 @@ namespace ft
 				{
 					return (searchKeyHelper(this->_root, key));
 				}
-				return (NULL);
+				return (this->end());
 			}
 
 			iterator	search ( const value_type & data ) const
@@ -616,7 +620,7 @@ namespace ft
 			{
 				node_pointer	tmp(this->_root);
 
-				while (!isLeaf(tmp->right) && tmp->right != NULL)
+				while (tmp && !isLeaf(tmp->right) && tmp->right != NULL)
 				{
 					tmp = tmp->right;
 				}
@@ -627,7 +631,7 @@ namespace ft
 			{
 				node_pointer	tmp(this->_root);
 
-				while (!isLeaf(tmp->left) && tmp->left != NULL)
+				while (tmp && !isLeaf(tmp->left) && tmp->left != NULL)
 				{
 					tmp = tmp->left;
 				}
@@ -689,6 +693,23 @@ namespace ft
 			size_t			getSize ( void ) const
 			{
 				return (this->_node_count);
+			}
+
+			void	delete_tree ( node_pointer root )
+			{
+				if (root != NULL)
+				{
+					delete_tree(root->left);
+					delete_tree(root->right);
+				}
+				if (root != NULL)
+				{
+					// std::cout << "Deallocate node (" << root << ") for data : " << root->data.first << "/" << root->data.second << std::endl;
+					this->_node_alloc.destroy(root);
+					this->_node_alloc.deallocate(root, 1);
+					this->_root = NULL;
+				}
+				this->_node_count = 0;
 			}
 
 			template <class T1, class T2, class T3, class T4>
