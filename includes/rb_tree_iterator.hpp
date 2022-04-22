@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 13:42:42 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 11:10:11 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 14:02:08 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "rb_node.hpp"
 # include "rb_tree_iterator_base.hpp"
-# include "../utils/iterator_traits.hpp"
+# include "iterator_traits.hpp"
 
 namespace ft
 {
@@ -35,7 +35,7 @@ namespace ft
 		_node_pointer	_node_;
 		_node_pointer	_header;
 
-		rb_tree_iterator ( _node_pointer header ) :
+		rb_tree_iterator ( _node_pointer header = 0 ) :
 			_header(header),
 			_node_(0)
 		{}
@@ -110,7 +110,7 @@ namespace ft
 		_node_pointer	_node_;
 		_node_pointer	_header;
 
-		rb_tree_const_iterator ( _node_pointer header ) :
+		rb_tree_const_iterator ( _node_pointer header = 0 ) :
 			_node_(0),
 			_header(header)
 		{}
@@ -127,7 +127,7 @@ namespace ft
 
 		iterator	_const_cast( void ) const
 		{
-			return (iterator(const_cast<typename iterator::_node_pointer>(_node_)));
+			return (iterator(const_cast<typename iterator::_node_pointer>(_node_, _header)));
 		}
 
 		reference	operator* ( void ) const
@@ -142,27 +142,27 @@ namespace ft
 
 		_Self&		operator++ ( void )
 		{
-			_node_ = ft::_rb_tree_increment(_node_);
+			_node_ = ft::_rb_tree_increment(_node_, _header);
 			return (*this);
 		}
 
 		_Self		operator++ ( int )
 		{
 			_Self	__tmp = *this;
-			_node_ = ft::_rb_tree_increment(_node_);
+			_node_ = ft::_rb_tree_increment(_node_, _header);
 			return (__tmp);
 		}
 
 		_Self&		operator-- ( void )
 		{
-			_node_ = ft::_rb_tree_decrement(_node_);
+			_node_ = ft::_rb_tree_decrement(_node_, _header);
 			return (*this);
 		}
 
 		_Self		operator-- ( int )
 		{
 			_Self	__tmp = *this;
-			_node_ = ft::_rb_tree_decrement(_node_);
+			_node_ = ft::_rb_tree_decrement(_node_, _header);
 			return (__tmp);
 		}
 

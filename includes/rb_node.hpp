@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:37:35 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/21 12:39:34 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 13:48:53 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define RB_NODE_HPP
 
 # include <memory>
-# include "../utils/utils.hpp"
+# include "utils.hpp"
 # define BLACK	0
 # define RED	1
 

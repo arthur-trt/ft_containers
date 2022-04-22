@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <memory>
 #include <algorithm>    // For std::shuffle
-#include <random>
+//#include <random>
 
 
 int main(void)
@@ -40,11 +40,22 @@ int main(void)
 
 	//test.printTree();
 	ft::map<int, int>::reverse_iterator	it2 = test.rbegin();
+	ft::map<int, int>::iterator			it3;
 	while (it2 != test.rend())
 	{
 		std::cout << *it2 << std::endl;
 		it2++;
 	}
+
+	std::cout << *(test.lower_bound(384)) << std::endl;
+
+	//for (size_t i = 0; i < 100; i++)
+	//{
+	//	it3 = test.find(i);
+	//	if (it3 != test.end())
+	//		std::cout << *(test.find(i)) << std::endl;
+	//}
+
 
 
 	//(rand() % vec.size());

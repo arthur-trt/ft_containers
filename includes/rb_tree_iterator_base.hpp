@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 11:54:57 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 11:15:04 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 14:03:41 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ namespace ft
 	}
 
 	template <typename T>
-	const ft::RB_node<T>*	_rb_tree_increment ( const ft::RB_node<T>* __x, ft::RB_node<T>* __header ) throw()
+	const ft::RB_node<T>*	_rb_tree_increment ( const ft::RB_node<T>* __x, const ft::RB_node<T>* __header ) throw()
 	{
 		return (_local_rb_tree_increment(const_cast<ft::RB_node<T>*>(__x), const_cast<ft::RB_node<T>*>(__header)));
 	}
@@ -102,7 +102,7 @@ namespace ft
 	}
 
 	template <typename T>
-	const ft::RB_node<T>*	_rb_tree_decrement ( const ft::RB_node<T>* __x, ft::RB_node<T>* __header ) throw()
+	const ft::RB_node<T>*	_rb_tree_decrement ( const ft::RB_node<T>* __x, const ft::RB_node<T>* __header ) throw()
 	{
 		return (_local_rb_tree_decrement(const_cast<ft::RB_node<T>*>(__x), const_cast<ft::RB_node<T>*>(__header)));
 	}

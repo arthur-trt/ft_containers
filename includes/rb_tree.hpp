@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 11:12:16 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 14:50:19 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 #include <cstddef>
 #include <iostream>
 #include <string>
-# include "../utils/pair.hpp"
+# include "pair.hpp"
 # include "rb_tree_iterator.hpp"
-# include "../reverse_iterator.hpp"
+# include "reverse_iterator.hpp"
 
 namespace ft
 {
@@ -324,15 +324,15 @@ namespace ft
 				}
 			}
 
-			node_pointer	searchTreeHelper ( node_pointer node, value_type data) const
+			iterator		searchTreeHelper ( node_pointer node, value_type data) const
 			{
 				if (isLeaf(node) || node == NULL)
 				{
-					return (NULL);
+					return (this->end());
 				}
 				if (!key_compare()(node->data.first, data.first) && !key_compare()(data.first, node->data.first))
 				{
-					return (node);
+					return (iterator(node, this->_header));
 				}
 				if (key_compare()(data.first, node->data.first))
 				{
@@ -341,15 +341,15 @@ namespace ft
 				return (searchTreeHelper(node->right, data));
 			}
 
-			node_pointer	searchKeyHelper ( node_pointer node, key_type key) const
+			iterator		searchKeyHelper ( node_pointer node, key_type key) const
 			{
 				if (isLeaf(node) || node == NULL)
 				{
-					return (NULL);
+					return (this->end());
 				}
 				if (!key_compare()(node->data.first, key) && !key_compare()(key, node->data.first))
 				{
-					return (node);
+					return (iterator(node, this->_header));
 				}
 				if (key_compare()(key, node->data.first))
 				{
@@ -555,7 +555,7 @@ namespace ft
 
 				while (!isLeaf(tmp) && tmp != this->_empty)
 				{
-					if (*tmp == data)
+					if ((*tmp).data == data)
 					{
 						return (deleteNode(tmp));
 					}
@@ -579,7 +579,7 @@ namespace ft
 					deleteNode(tmp);
 			}
 
-			node_pointer	search ( key_type key ) const
+			iterator	search ( const key_type & key ) const
 			{
 				if (this->_root != NULL)
 				{
@@ -588,7 +588,7 @@ namespace ft
 				return (NULL);
 			}
 
-			node_pointer	search ( value_type data ) const
+			iterator	search ( const value_type & data ) const
 			{
 				if (this->_root != NULL)
 				{
@@ -636,6 +636,8 @@ namespace ft
 			{
 				node_pointer	tmp(this->_root);
 
+				if (tmp == NULL)
+					return (iterator(NULL, this->_header));
 				while (tmp->right != NULL)
 				{
 					tmp = tmp->right;
@@ -654,10 +656,32 @@ namespace ft
 				{
 					if (__rhs->_root != NULL)
 					{
-						this->_root = __rhs._root;
-						this->_node_alloc = __rhs._node_alloc;
+						this->_root = __rhs->_root;
+						this->_header = __rhs->__header;
+						this->_node_count = __rhs->_node_count;
+
+						__rhs->_root = NULL;
+						__rhs->_node_count = 0;
 					}
 				}
+				else if (__rhs->_root == NULL)
+				{
+					__rhs->_root = this->_root;
+					__rhs->_node_count = this->_node_count;
+					__rhs->_header = this->_header;
+
+					this->_root = NULL;
+					this->_node_count = 0;
+				}
+				else
+				{
+					std::swap(this->_root, __rhs->_root);
+					std::swap(this->_header->left, __rhs->_header->left);
+					std::swap(this->_header->right, __rhs->_header->right);
+					std::swap(this->_header, __rhs->_header);
+					std::swap(this->_node_count, __rhs->_node_count);
+				}
+				std::swap(this->_node_alloc, __rhs->_node_alloc);
 			}
 
 			size_t			getSize ( void ) const
@@ -665,13 +689,28 @@ namespace ft
 				return (this->_node_count);
 			}
 
-			// iterator		lower_bound ( const key_type& _key )
-			// {
-			// 	node_pointer	tmp(this->_root);
+			//iterator	lower_bound ( const key_type & _key )
+			//{
 
-			// 	while (!key_compare())
-			// }
+			//}
 	};
+
+	template <class _Key, class T, class Compare, class Alloc>
+	inline bool operator== (	const RedBlackTree<_Key, T, Compare, Alloc> &__lhs,
+								const RedBlackTree<_Key, T, Compare, Alloc> &__rhs )
+	{
+		return (	__lhs._node_count == __rhs._node_count &&
+					ft::equal(__lhs.minimum(), __lhs.end(), __rhs.minimum()));
+	}
+
+	template <class _Key, class T, class Compare, class Alloc>
+	inline bool operator!= (	const RedBlackTree<_Key, T, Compare, Alloc> &__lhs,
+								const RedBlackTree<_Key, T, Compare, Alloc> &__rhs )
+	{
+		return (!(__lhs == __rhs));
+	}
+
+	
 }
 
 

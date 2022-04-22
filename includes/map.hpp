@@ -6,16 +6,16 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/22 11:11:49 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 14:29:18 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
 
-# include "RBTree/rb_tree.hpp"
-# include "utils/enable_if.hpp"
-# include "utils/is_integral.hpp"
+# include "rb_tree.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
 # include <memory>
 
 namespace ft
@@ -104,6 +104,24 @@ namespace ft
 			typedef	typename	ft::RedBlackTree<const key_type, value_type,
 												_Compare, _Alloc>::node_pointer		node_pointer;
 
+			class value_compare : std::binary_function<value_type, value_type, bool>
+			{
+				friend class ft::map<key_type, mapped_type, key_compare, _Alloc>;
+
+				protected:
+					_Compare		comp;
+					value_compare (_Compare c) : comp(c) {}
+				public:
+					typedef bool			result_type;
+					typedef value_type		first_argument_type;
+					typedef value_type		second_argument_type;
+
+					bool operator() ( const value_type& x, const value_type& y ) const
+					{
+						return comp(x.first, y.first);
+					}
+			};
+
 
 		/** ************************************************************************** */
 		/**                              PRIVATE MEMBERS                               */
@@ -153,7 +171,11 @@ namespace ft
 				_comp(comp),
 				_rb_tree()
 			{
-				// Insert geos here
+				while (first != last)
+				{
+					this->insert(*first);
+					first++;
+				}
 			}
 
 			/**
@@ -329,15 +351,15 @@ namespace ft
 			 */
 			ft::pair<iterator,bool> insert (const value_type& val)
 			{
-				node_pointer	tmp;
+				iterator	tmp;
 
 				tmp = this->_rb_tree.search(val);
-				if (tmp != NULL)
-					return (ft::make_pair<iterator, bool>(iterator(tmp), false));
+				if (tmp != this->end())
+					return (ft::make_pair<iterator, bool>(tmp, false));
 				else
 				{
 					tmp = this->_rb_tree.insert(val);
-					return (ft::make_pair<iterator, bool>(iterator(tmp), true));
+					return (ft::make_pair<iterator, bool>(tmp, true));
 				}
 			}
 
@@ -353,13 +375,13 @@ namespace ft
 			 */
 			iterator	insert ( iterator position, const value_type& val )
 			{
-				node_pointer	tmp;
+				iterator	tmp;
 
 				(void)position;
 				tmp = this->_rb_tree.search(val);
-				if (tmp == NULL)
+				if (tmp == this->end())
 					tmp = this->_rb_tree.insert(val);
-				return (iterator(tmp));
+				return (tmp);
 			}
 
 			/**
@@ -408,7 +430,7 @@ namespace ft
 				}
 				else
 				{
-					erease(tmp);
+					erase(tmp);
 					return (1);
 				}
 			}
@@ -424,11 +446,104 @@ namespace ft
 			{
 				while (first != last)
 				{
-					erase (*first);
+					erase (first);
 					first++;
 				}
 			}
 
+			/**
+			 * @brief Swap content
+			 * Exchanges the content of the container by the content of x,
+			 * which is another map of the same type. Sizes may differ.
+			 *
+			 * @param rhs Another map container of the same type as this
+			 */
+			void		swap ( map & rhs )
+			{
+				this->_rb_tree.swap(rhs);
+			}
+
+			/**
+			 * @brief Clear content
+			 * Removes all elements from the map container (which are destroyed),
+			 * leaving the container with a size of 0.
+			 */
+			void		clear ( void )
+			{
+				this->erase(this->begin(), this->end());
+			}
+
+		/** ************************************************************************** */
+		/**                                  OBSERVERS                                 */
+		/** ************************************************************************** */
+			/**
+			 * @brief Return key comparison object
+			 * Returns a copy of the comparison object used by the container to compare keys.
+			 *
+			 * @return The comparison object.
+			 */
+			key_compare		key_comp ( void ) const
+			{
+				return (key_compare());
+			}
+
+			/**
+			 * @brief Return value comparison object
+			 * Returns a comparison object that can be used to compare two elements to get
+			 * whether the key of the first one goes before the second.
+			 *
+			 * @return The comparison object for element values.
+			 */
+			value_compare	value_comp ( void ) const
+			{
+				return (value_compare(key_comp()));
+			}
+
+		/** ************************************************************************** */
+		/**                                 OPERATIONS                                 */
+		/** ************************************************************************** */
+
+			/**
+			 * @brief Get iterator to element
+			 * Searches the container for an element with a key equivalent to k and returns an iterator to it if found,
+			 * otherwise it returns an iterator to map::end.
+			 *
+			 * @param _key Key to be searched for.
+			 * @return An iterator to the element, if an element with specified key is found, or map::end otherwise.
+			 */
+			iterator		find ( const key_type & _key )
+			{
+				return (this->_rb_tree.search(_key));
+			}
+
+			const_iterator	find ( const key_type & _key ) const
+			{
+				return (this->_rb_tree.search(_key));
+			}
+
+			/**
+			 * @brief Count elements with a specific key
+			 * Searches the container for elements with a key equivalent to k and returns the number of matches.
+			 *
+			 * @param _key Key to search for.
+			 * @return 1 if the container contains an element whose key is equivalent to k, or zero otherwise.
+			 */
+			size_type		count ( const key_type & _key ) const
+			{
+				if (this->find(_key) == this->end())
+					return (0);
+				return (1);
+			}
+
+			/**
+			 * @brief Return iterator to lower bound
+			 * Returns an iterator pointing to the first element in the container whose key
+			 * is not considered to go before k (i.e., either it is equivalent or goes after).
+			 *
+			 * @param _key Key to search for.
+			 * @return An iterator to the the first element in the container whose key is not considered to go before k,
+			 * or map::end if all keys are considered to go before k.
+			 */
 			iterator	lower_bound ( const key_type& _key )
 			{
 				iterator	low = this->begin();
@@ -436,6 +551,68 @@ namespace ft
 				while (low != this->end() && key_compare()(low->first, _key))
 					low++;
 				return (low);
+			}
+
+			const_iterator	lower_bound ( const key_type& _key ) const
+			{
+				return (const_iterator(this->lower_bound(_key)));
+			}
+
+			/**
+			 * @brief Return iterator to upper bound
+			 * Returns an iterator pointing to the first element in the container whose key
+			 * is considered to go after k.
+			 *
+			 * @param _key Key to search for.
+			 * @return An iterator to the the first element in the container whose key is considered to go after k,
+			 * or map::end if no keys are considered to go after k.
+			 */
+			iterator	upper_bound ( const key_type& _key )
+			{
+				iterator	upp = this->begin();
+
+				while (upp != this->end() && key_compare()(_key, upp->first))
+					upp++;
+				return (upp);
+			}
+
+			const_iterator	upper_bound ( const key_type& _key ) const
+			{
+				return (const_iterator(this->upper_bound(_key)));
+			}
+
+			/**
+			 * @brief Get range of equal elements
+			 * Returns the bounds of a range that includes all the elements in the container
+			 * which have a key equivalent to k.
+			 *
+			 * @param _key Key to search for.
+			 * @return The function returns a pair, whose member pair::first is the lower bound of the range
+			 * (the same as lower_bound), and pair::second is the upper bound (the same as upper_bound).
+			 */
+			ft::pair<iterator, iterator>				equal_range ( const key_type &_key )
+			{
+				return (ft::make_pair<iterator, iterator>(lower_bound(_key), upper_bound(_key)));
+			}
+
+			ft::pair<const iterator, const iterator>	equal_range ( const key_type &_key ) const
+			{
+				return (ft::make_pair<const iterator, const iterator>(lower_bound(_key), upper_bound(_key)));
+			}
+
+		/** ************************************************************************** */
+		/**                                  ALLOCATOR                                 */
+		/** ************************************************************************** */
+
+			/**
+			 * @brief Get allocator
+			 * Returns a copy of the allocator object associated with the map.
+			 *
+			 * @return The allocator.
+			 */
+			allocator_type	getAllocator ( void ) const
+			{
+				return (this->_alloc);
 			}
 
 	};
