@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 13:42:42 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 14:02:08 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 21:43:02 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ namespace ft
 		typedef				rb_tree_iterator<T>					_Self;
 		typedef	typename	RB_node<T>::node_pointer			_node_pointer;
 
-		_node_pointer	_node_;
 		_node_pointer	_header;
+		_node_pointer	_node_;
 
 		rb_tree_iterator ( _node_pointer header = 0 ) :
 			_header(header),
@@ -57,6 +57,7 @@ namespace ft
 
 		_Self&		operator++ ( void )
 		{
+			// std::cout << "\t(it++) : Header->right: " << this->_header->right << std::endl;
 			_node_ = ft::_rb_tree_increment(_node_, _header);
 			return (*this);
 		}
@@ -107,22 +108,22 @@ namespace ft
 		typedef				rb_tree_const_iterator<T>			_Self;
 		typedef	typename	RB_node<T>::const_node_pointer		_node_pointer;
 
-		_node_pointer	_node_;
 		_node_pointer	_header;
+		_node_pointer	_node_;
 
 		rb_tree_const_iterator ( _node_pointer header = 0 ) :
-			_node_(0),
-			_header(header)
+			_header(header),
+			_node_(0)
 		{}
 
 		explicit rb_tree_const_iterator ( _node_pointer __x, _node_pointer header ) :
-			_node_(__x),
-			_header(header)
+			_header(header),
+			_node_(__x)
 		{}
 
 		rb_tree_const_iterator ( const iterator & it ) :
-			_node_(it._node_),
-			_header(it._header)
+			_header(it._header),
+			_node_(it._node_)
 		{}
 
 		iterator	_const_cast( void ) const

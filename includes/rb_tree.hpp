@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 18:10:48 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 22:23:23 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,7 +361,7 @@ namespace ft
 
 			bool			isLeaf( node_pointer node ) const
 			{
-				if (node->data == T() && node->left == NULL && node->right == NULL)
+				if (/*node->data == T() &&*/ node->left == NULL && node->right == NULL)
 					return (true);
 				return (false);
 			}
@@ -389,11 +389,55 @@ namespace ft
 				this->_node_alloc.construct(pos, node);
 			}
 
+			void		setLeafHelper ( node_pointer node )
+			{
+				if (node->left == NULL)
+				{
+					Node			leaf(node);
+					node_pointer	leaf_ptr;
+
+					leaf_ptr = this->_node_alloc.allocate(1);
+					this->_node_alloc.construct(leaf_ptr, leaf);
+					node->left = leaf_ptr;
+				}
+				if (node->right == NULL)
+				{
+					Node			leaf(node);
+					node_pointer	leaf_ptr;
+
+					leaf_ptr = this->_node_alloc.allocate(1);
+					this->_node_alloc.construct(leaf_ptr, leaf);
+					node->right = leaf_ptr;
+				}
+				if (!isLeaf(node->left))
+				{
+					setLeafHelper(node->left);
+				}
+				if (!isLeaf(node->right))
+				{
+					setLeafHelper(node->right);
+				}
+				if (isLeaf(node->left)) 
+				{
+					node->left->parent = node;
+				}
+				if (isLeaf(node->right)) 
+				{
+					node->right->parent = node;
+				}
+			}
+
+			void		setLeaf( void )
+			{
+				setLeafHelper(this->_root);
+			}
+
 			void		setHeader ( void )
 			{
 				this->_header->parent = this->_root;
 				this->_header->left = this->minimum(this->_root)->left;
 				this->_header->right = this->maximum(this->_root)->right;
+				// std::cout << "\t(setH) : Header->right: " << this->_header->right << std::endl;
 			}
 
 
@@ -405,6 +449,21 @@ namespace ft
 				_node_alloc(node_alloc)
 			{
 				Node	tmp;
+				
+
+				this->_empty = _node_alloc.allocate(1);
+				_node_alloc.construct(this->_empty, tmp);
+				this->_header = _node_alloc.allocate(1);
+				_node_alloc.construct(this->_header, tmp);
+				// std::cout << "Header (" << this->_header << ")" << std::endl;
+				this->_root = NULL;
+				this->_node_count = 0;
+			}
+
+			RedBlackTree ( const RedBlackTree & src )
+			{
+				Node		tmp;
+				iterator	it;
 
 				this->_empty = _node_alloc.allocate(1);
 				_node_alloc.construct(this->_empty, tmp);
@@ -412,6 +471,14 @@ namespace ft
 				_node_alloc.construct(this->_header, tmp);
 				this->_root = NULL;
 				this->_node_count = 0;
+
+				it = src.minimum();
+				while (it != src.end())
+				{
+					insert(*it);
+					it++;
+				}
+				
 			}
 
 			~RedBlackTree ( void )
@@ -429,7 +496,7 @@ namespace ft
 			iterator	insert ( node_pointer position, value_type to_insert )
 			{
 				Node			new_one(to_insert, NULL, NULL, NULL, RED);
-				node_pointer	x = this->_root;
+				// node_pointer	x = this->_root;
 				node_pointer	insert_pos = NULL;
 
 				new_one.parent = position;
@@ -479,7 +546,6 @@ namespace ft
 				Node			new_one(to_insert, NULL, NULL, NULL, RED);
 				node_pointer	y = NULL;
 				node_pointer	x = this->_root;
-				node_pointer	insert_pos = NULL;
 
 				while (x != NULL && !isLeaf(x))
 				{
@@ -502,6 +568,7 @@ namespace ft
 				node_pointer	new_root;
 				int				original_color;
 
+				// this->printTree();
 				tmp = to_delete;
 				original_color = tmp->color;
 				if (isLeaf(to_delete->left))
@@ -534,6 +601,7 @@ namespace ft
 					{
 						this->_node_alloc.destroy(tmp->left);
 						this->_node_alloc.deallocate(tmp->left, 1);
+						tmp->left = NULL;
 					}
 					tmp->left = to_delete->left;
 					tmp->left->parent = tmp;
@@ -543,29 +611,43 @@ namespace ft
 				{
 					this->_node_alloc.destroy(to_delete->left);
 					this->_node_alloc.deallocate(to_delete->left, 1);
+					to_delete->left = NULL;
+					// to_delete->right->parent 
 				}
 				this->_node_alloc.destroy(to_delete);
 				this->_node_alloc.deallocate(to_delete, 1);
+				to_delete = NULL;
 				this->_node_count--;
 				
 				if (original_color == BLACK)
 				{
 					delete_fix(new_root);
 				}
-				setHeader();
+				if (new_root != this->_root)
+					setLeaf();
+				if (!isLeaf(this->_root))
+					setHeader();
+				else
+				{
+					this->_node_alloc.destroy(this->_root);
+					this->_node_alloc.deallocate(this->_root, 1);
+					this->_root = NULL;
+				}
+				// this->printTree();
+				// std::cout << std::endl << std::endl;
 			}
 
 			void	deleteNode ( value_type data )
 			{
 				node_pointer	tmp(this->_root);
 
-				while (!isLeaf(tmp) && tmp != this->_empty)
+				while (!isLeaf(tmp))
 				{
 					if ((*tmp).data == data)
 					{
 						return (deleteNode(tmp));
 					}
-					if (key_compare()(tmp->data.first, tmp->data.first))
+					if (key_compare()(tmp->data.first, data.first))
 					{
 						tmp = tmp->right;
 					}
@@ -600,7 +682,7 @@ namespace ft
 				{
 					return (searchTreeHelper(this->_root, data));
 				}
-				return (NULL);
+				return (this->end());
 			}
 
 			void	printTree ( void ) const
@@ -658,36 +740,42 @@ namespace ft
 
 			void		swap ( RedBlackTree &__rhs )
 			{
-				if (this->_root == NULL)
-				{
-					if (__rhs._root != NULL)
-					{
-						this->_root = __rhs._root;
-						this->_header = __rhs._header;
-						this->_node_count = __rhs._node_count;
+				// if (this->_root == NULL)
+				// {
+				// 	if (__rhs._root != NULL)
+				// 	{
+				// 		this->_root = __rhs._root;
+				// 		this->_header = __rhs._header;
+				// 		this->_node_count = __rhs._node_count;
 
-						__rhs._root = NULL;
-						__rhs._node_count = 0;
-					}
-				}
-				else if (__rhs._root == NULL)
-				{
-					__rhs._root = this->_root;
-					__rhs._node_count = this->_node_count;
-					__rhs._header = this->_header;
-
-					this->_root = NULL;
-					this->_node_count = 0;
-				}
-				else
-				{
+				// 		__rhs._root = NULL;
+				// 		__rhs._node_count = 0;
+				// 		this->setLeaf();
+				// 	}
+				// }
+				// else if (__rhs._root == NULL)
+				// {
+				// 	__rhs._root = this->_root;
+				// 	__rhs._node_count = this->_node_count;
+				// 	__rhs._header = this->_header;
+				// 	this->_root = NULL;
+				// 	this->_node_count = 0;
+				// 	__rhs.setLeaf();
+				// }
+				// else
+				// {
 					std::swap(this->_root, __rhs._root);
-					std::swap(this->_header->left, __rhs._header->left);
-					std::swap(this->_header->right, __rhs._header->right);
+					// std::swap(this->_header->left, __rhs._header->left);
+					// std::swap(this->_header->right, __rhs._header->right);
 					std::swap(this->_header, __rhs._header);
 					std::swap(this->_node_count, __rhs._node_count);
-				}
+					if (this->_root)
+						this->setLeaf();
+					if (__rhs._root)
+						__rhs.setLeaf();
+				// }
 				std::swap(this->_node_alloc, __rhs._node_alloc);
+				
 			}
 
 			size_t			getSize ( void ) const

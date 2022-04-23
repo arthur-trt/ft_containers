@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 10:19:04 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/08 15:04:37 by arthur           ###   ########.fr       */
+/*   Updated: 2022/04/22 21:38:46 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 # include <stdexcept>
 # include "random_access_iterator.hpp"
 # include "reverse_iterator.hpp"
-# include "utils/utils.hpp"
-# include "utils/enable_if.hpp"
-# include "utils/is_integral.hpp"
-# include "utils/iterator_traits.hpp"
-# include "utils/lexicographical_compare.hpp"
+# include "utils.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
+# include "iterator_traits.hpp"
+# include "lexicographical_compare.hpp"
 
 namespace ft {
 

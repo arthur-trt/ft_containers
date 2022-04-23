@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 11:54:57 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 14:03:41 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 22:06:36 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ namespace ft
 	template <typename T>
 	bool						__is_leaf ( ft::RB_node<T>* __x )
 	{
-		if (__x->data == T() && __x->left == NULL && __x->right == NULL)
+		if (/*__x->data == T() &&*/ __x->left == NULL && __x->right == NULL)
 			return (true);
 		return (false);
 	}

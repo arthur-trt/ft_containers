@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/22 18:19:32 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/22 21:54:34 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ namespace ft
 		/** ************************************************************************** */
 		/**                              PRIVATE MEMBERS                               */
 		/** ************************************************************************** */
-		protected:
+		public:
 			allocator_type													_alloc;
 			_Compare														_comp;
 			ft::RedBlackTree<const key_type, value_type, _Compare, _Alloc>	_rb_tree;
@@ -188,7 +188,7 @@ namespace ft
 			map ( const map& x ) :
 				_alloc(x._alloc),
 				_comp(x._comp),
-				_rb_tree()
+				_rb_tree(x._rb_tree)
 			{
 				// Insert goes here
 			}
@@ -399,8 +399,7 @@ namespace ft
 			{
 				while (first != last)
 				{
-					insert(*first);
-					++first;
+					insert(*first++);
 				}
 			}
 
@@ -447,9 +446,9 @@ namespace ft
 			{
 				while (first != last)
 				{
-					std::cout << "Erasing : " << (*first) << std::endl;
-					erase (first);
-					first++;
+					// std::cout << "Erasing : " << (*first) << std::endl;
+					this->_rb_tree.deleteNode(*first++);
+					// first++;
 				}
 			}
 
@@ -472,7 +471,8 @@ namespace ft
 			 */
 			void		clear ( void )
 			{
-				this->_rb_tree.delete_tree(this->_rb_tree.getRoot());
+				this->erase(this->begin(), this->end());
+				// this->_rb_tree.delete_tree(this->_rb_tree.getRoot());
 			}
 
 		/** ************************************************************************** */
@@ -557,7 +557,11 @@ namespace ft
 
 			const_iterator	lower_bound ( const key_type& _key ) const
 			{
-				return (const_iterator(this->lower_bound(_key)));
+				const_iterator	low = this->begin();
+
+				while (low != this->end() && key_compare()(low->first, _key))
+					low++;
+				return (low);
 			}
 
 			/**
@@ -584,7 +588,15 @@ namespace ft
 
 			const_iterator	upper_bound ( const key_type& _key ) const
 			{
-				return (const_iterator(this->upper_bound(_key)));
+				const_iterator	upp = this->begin();
+
+				while (upp != this->end())
+				{
+					if (upp->first != _key && !key_compare()(upp->first, _key))
+						return (upp);
+					upp++;
+				}
+				return (upp);
 			}
 
 			/**
@@ -601,9 +613,9 @@ namespace ft
 				return (ft::make_pair<iterator, iterator>(lower_bound(_key), upper_bound(_key)));
 			}
 
-			ft::pair<const iterator, const iterator>	equal_range ( const key_type &_key ) const
+			ft::pair<const_iterator, const_iterator>	equal_range ( const key_type &_key ) const
 			{
-				return (ft::make_pair<const iterator, const iterator>(lower_bound(_key), upper_bound(_key)));
+				return (ft::make_pair<const_iterator, const_iterator>(lower_bound(_key), upper_bound(_key)));
 			}
 
 		/** ************************************************************************** */
