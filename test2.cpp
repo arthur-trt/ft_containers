@@ -1,12 +1,11 @@
-#include "includes/RBTree/rb_tree.hpp"
-#include "includes/RBTree/rb_tree_iterator.hpp"
-#include "includes/utils/pair.hpp"
+#include "includes/rb_tree.hpp"
+#include "includes/rb_tree_iterator.hpp"
+#include "includes/pair.hpp"
 #include <iostream>
 #include <string>
 #include <map>
 #include "includes/vector.hpp"
 #include "includes/map.hpp"
-#include "includes/tester/tester_out.hpp"
 #include <cstdlib>
 #include <memory>
 #include <algorithm>    // For std::shuffle
@@ -18,7 +17,9 @@ int main(void)
 	srand((unsigned) time(0));
 	ft::vector<int>								vec;
 	ft::vector<int>::iterator					it;
-	ft::map<int, int >							test;
+	// ft::RedBlackTree<const int, ft::pair<const int, int> >							test;
+	ft::map<int, int>							mine;
+	std::map<int, int>							our;
 
 	for (size_t i = 1000; i > 0; i--)
 	{
@@ -34,20 +35,25 @@ int main(void)
 
 	while (it != vec.end())
 	{
-		test.insert(ft::make_pair<int, int>(*it, *it));
+		mine.insert(ft::make_pair(*it, *it));
+		our.insert(std::make_pair(*it, *it));
 		it++;
 	}
 
-	//test.printTree();
-	ft::map<int, int>::reverse_iterator	it2 = test.rbegin();
-	ft::map<int, int>::iterator			it3;
-	while (it2 != test.rend())
+	// ft::map<int, int>		super;
+
+	// mine.printTree();
+	ft::map<int, int>::reverse_iterator				it2 = mine.rbegin();
+	std::map<int, int>::reverse_iterator			it3 = our.rbegin();
+	while (it3 != our.rend())
 	{
-		std::cout << *it2 << std::endl;
+		std::cout << *it2 << "\t\t";
+		std::cout << it3->first << ": \"" << it3->second << "\"" << std::endl;
 		it2++;
+		it3++;
 	}
 
-	std::cout << *(test.lower_bound(384)) << std::endl;
+	// std::cout << *(test.lower_bound(384)) << std::endl;
 
 	//for (size_t i = 0; i < 100; i++)
 	//{

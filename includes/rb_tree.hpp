@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:31:29 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/25 17:49:11 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/26 20:12:32 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,24 +302,38 @@ namespace ft
 
 			void	printTreeHelper ( node_pointer node, std::string indent, bool side ) const
 			{
-				if (node != this->_empty && node != this->_leaf_left && node != this->_leaf_right)
+				if (node != this->_empty)
 				{
 					std::cout << indent;
-					if (side)
+					if (node == this->_leaf_left)
+					{
+						std::cout << "L----";
+						std::cout << "Left leaf" << std::endl;						
+					}
+					else if (node == this->_leaf_right)
 					{
 						std::cout << "R----";
-						indent += "   ";
+						std::cout << "r_leaf_right leaf" << std::endl;						
 					}
 					else
 					{
-						std::cout << "L----";
-						indent += "   ";
-					}
+						// std::cout << indent;
+						if (side)
+						{
+							std::cout << "R----";
+							indent += "   ";
+						}
+						else
+						{
+							std::cout << "L----";
+							indent += "   ";
+						}
 
-					std::string sColor = node->color ? "🔴" : "⚫";
-					std::cout << "(" << node->data << ") (" << sColor << ")" << std::endl;
-					printTreeHelper(node->left, indent, false);
-					printTreeHelper(node->right, indent, true);
+						std::string sColor = node->color ? "🔴" : "⚫";
+						std::cout << "(" << node->data << ") (" << sColor << ")" << std::endl;
+						printTreeHelper(node->left, indent, false);
+						printTreeHelper(node->right, indent, true);
+					}
 				}
 			}
 
@@ -359,20 +373,55 @@ namespace ft
 
 			void	setHeader ( void )
 			{
-				this->_leaf_right->parent = this->maximum(this->_root);				
-				this->_leaf_right->parent->right = this->_leaf_right;
-		
+				node_pointer	most_right = this->maximum(this->_root);
+				node_pointer	most_left = this->minimum(this->_root);
 				
-				this->_leaf_left->parent = this->minimum(this->_root);				
-				this->_leaf_left->parent->left = this->_leaf_left;
+				// if (most_right->left == this->_empty && most_right->right == this->_empty)
+				// {
+					this->_leaf_right->parent = most_right;				
+					this->_leaf_right->parent->right = this->_leaf_right;
+					// std::cout << "Set right leaf to : " << most_right->data.first << std::endl;
+				// }
+				// else
+				// {
+				// 	this->_leaf_right->parent = most_right->left;
+				// 	this->_leaf_right->parent->left = this->_leaf_right;
+				// }
+				// if (most_left->left == this->_empty && most_left->right == this->_empty)
+				// {
+					this->_leaf_left->parent = most_left;				
+					this->_leaf_left->parent->left = this->_leaf_left;
+					// std::cout << "Set left leaf to : " << most_left->data.first << std::endl;
+
+				// }
+				// else
+				// {
+				// 	this->_leaf_left->parent = most_left->left;
+				// 	this->_leaf_left->parent->right = this->_leaf_left;
+				// }
+				// this->_leaf_left->parent = this->minimum(this->_root);				
+				// this->_leaf_left->parent->left = this->_leaf_left;
+				this->_empty->parent = 0;
 			}
 
 			void	unsetHeader ( void )
 			{
 				if (this->_leaf_right->parent)
-					this->_leaf_right->parent->right = this->_empty;
+				{
+					// std::cout << "Unset right leaf to " << this->_leaf_right->parent->data.first << std::endl;
+					// if (this->_leaf_right->parent->right == this->_leaf_right)
+						this->_leaf_right->parent->right = this->_empty;
+					// if (this->_leaf_right->parent->left == this->_leaf_right)
+						// this->_leaf_right->parent->left = this->_empty;
+				}
 				if (this->_leaf_left->parent)
-					this->_leaf_left->parent->left = this->_empty;
+				{
+					// std::cout << "Unset left leaf to " << this->_leaf_left->parent->data.first << std::endl;
+					// if (this->_leaf_left->parent->left == this->_leaf_left)
+						this->_leaf_left->parent->left = this->_empty;
+					// if (this->_leaf_left->parent->right == this->_leaf_left)
+						// this->_leaf_left->parent->right = this->_empty;
+				}
 			}
 
 		public:
@@ -386,10 +435,13 @@ namespace ft
 
 				this->_empty = _node_alloc.allocate(1);
 				_node_alloc.construct(this->_empty, tmp);
+				// std::cout << "Empty node (" << this->_empty << ")" << std::endl;
 				this->_leaf_left = _node_alloc.allocate(1);
 				_node_alloc.construct(this->_leaf_left, tmp);
+				// std::cout << "Left leaf (" << this->_leaf_left << ")" << std::endl;
 				this->_leaf_right = _node_alloc.allocate(1);
 				_node_alloc.construct(this->_leaf_right, tmp);
+				// std::cout << "Right leaf (" << this->_leaf_right << ")" << std::endl;
 				this->_root = NULL;
 				this->_node_count = 0;
 			}
@@ -401,8 +453,10 @@ namespace ft
 
 				this->_empty = _node_alloc.allocate(1);
 				_node_alloc.construct(this->_empty, tmp);
-				this->_header = _node_alloc.allocate(1);
-				_node_alloc.construct(this->_header, tmp);
+				this->_leaf_left = _node_alloc.allocate(1);
+				_node_alloc.construct(this->_leaf_left, tmp);
+				this->_leaf_right = _node_alloc.allocate(1);
+				_node_alloc.construct(this->_leaf_right, tmp);
 				this->_root = NULL;
 				this->_node_count = 0;
 
@@ -479,8 +533,8 @@ namespace ft
 					this->setHeader();
 					return (iterator(insert_pos));
 				}
-				this->setHeader();
 				insert_fix(insert_pos);
+				this->setHeader();
 				return (iterator(insert_pos));
 			}
 
@@ -523,6 +577,7 @@ namespace ft
 					tmp->left->parent = tmp;
 					tmp->color = to_delete->color;
 				}
+				// std::cout << "Deallocate (" << to_delete << ") : " << to_delete->data << std::endl;
 				this->_node_alloc.destroy(to_delete);
 				this->_node_alloc.deallocate(to_delete, 1);
 				this->_node_count--;
@@ -534,8 +589,7 @@ namespace ft
 					this->setHeader();
 				else
 				{
-					this->_node_alloc.destroy(this->_root);
-					this->_node_alloc.deallocate(this->_root, 1);
+					// std::cout << "Deallocate (" << this->_root << ") : " << this->_root->data << std::endl;
 					this->_root = NULL;
 				}
 			}
@@ -629,13 +683,18 @@ namespace ft
 
 			void		swap ( RedBlackTree &__rhs )
 			{
+				__rhs.unsetHeader();
+				this->unsetHeader();
 				std::swap(this->_root, __rhs._root);
-				std::swap(this->_header, __rhs._header);
+				std::swap(this->_leaf_left, __rhs._leaf_left);
+				std::swap(this->_leaf_right, __rhs._leaf_right);
+				std::swap(this->_empty, __rhs._empty);
+				// std::swap(this->_header, __rhs._header);
 				std::swap(this->_node_count, __rhs._node_count);
 				if (this->_root)
-					this->setLeaf();
+					this->setHeader();
 				if (__rhs._root)
-					__rhs.setLeaf();
+					__rhs.setHeader();
 				std::swap(this->_node_alloc, __rhs._node_alloc);
 				
 			}
@@ -658,7 +717,7 @@ namespace ft
 								const RedBlackTree<_Key, T, Compare, Alloc> &__rhs )
 	{
 		return (	__lhs._node_count == __rhs._node_count &&
-					ft::equal(__lhs.minimum(), __lhs.end(), __rhs.minimum()));
+					ft::equal(__lhs.begin(), __lhs.end(), __rhs.begin()));
 	}
 
 	template <class _Key, class T, class Compare, class Alloc>
@@ -672,7 +731,7 @@ namespace ft
 	inline bool	operator< (	const RedBlackTree<_Key, T, Compare, Alloc> & __rhs,
 							const RedBlackTree<_Key, T, Compare, Alloc> & __lhs )
 	{
-		return (ft::lexicographical_compare(__rhs.minimum(), __rhs.end(), __lhs.minimum(), __lhs.end()));
+		return (ft::lexicographical_compare(__rhs.begin(), __rhs.end(), __lhs.begin(), __lhs.end()));
 	}
 
 	template <class _Key, class T, class Compare, class Alloc>

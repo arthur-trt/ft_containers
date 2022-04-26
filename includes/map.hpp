@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/25 17:45:02 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/26 19:58:30 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "rb_tree.hpp"
 # include "reverse_iterator.hpp"
 # include "enable_if.hpp"
+# include "stack.hpp"
 # include "is_integral.hpp"
 # include <memory>
 
@@ -445,12 +446,23 @@ namespace ft
 			 */
 			void		erase ( iterator first, iterator last )
 			{
+				ft::stack<key_type>	store;
+				// this->_rb_tree.printTree();
+				// std::cout << "Leaf left parent : " << this->_rb_tree.begin()->first << std::endl;
 				while (first != last)
 				{
-					std::cout << "Erasing : " << (*first) << std::endl;
-					this->_rb_tree.deleteNode(*first);
+					store.push(first->first);
+					// std::cout << store.top() <<std::endl;
 					first++;
 				}
+				while (!store.empty())
+				{
+					
+					this->erase(store.top());
+					store.pop();
+				}
+				// this->_rb_tree.printTree();
+
 			}
 
 			/**

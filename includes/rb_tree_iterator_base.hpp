@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 11:54:57 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/25 17:38:01 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/26 19:42:33 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ namespace ft
 	template <typename T>
 	static	ft::RB_node<T>*		_local_rb_tree_increment ( ft::RB_node<T>* __x/*, ft::RB_node<T>* __header*/ ) throw()
 	{
-		if (!__is_leaf(__x->right)/* || __x->right != 0*/)
+		if (__x->right && __x->right->parent != 0)
+		// if (!__is_leaf(__x->right)/* || __x->right != 0*/)
 		{
 			__x = __x->right;
-			while (__x->left != 0 && !__is_leaf(__x->left))
+			// while (!__is_leaf(__x->left))
+			while (__x->left != 0 && __x->left->parent != 0)
 				__x = __x->left;
 		}
 		else
@@ -44,7 +46,6 @@ namespace ft
 			}
 			if (__x->right != __y)
 				__x = __y;
-
 		}
 		// if (__is_leaf(__x) /*&& __x != __header->right*/)
 		// 	return (_local_rb_tree_increment(__x/*, __header*/));
