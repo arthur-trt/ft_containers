@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/22 21:54:34 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/25 17:45:02 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MAP_HPP
 
 # include "rb_tree.hpp"
+# include "reverse_iterator.hpp"
 # include "enable_if.hpp"
 # include "is_integral.hpp"
 # include <memory>
@@ -226,12 +227,12 @@ namespace ft
 			 */
 			iterator 				begin ( void )
 			{
-				return (_rb_tree.minimum());
+				return (_rb_tree.begin());
 			}
 
 			const_iterator			begin ( void ) const
 			{
-				return (_rb_tree.minimum());
+				return (_rb_tree.begin());
 			}
 
 			/**
@@ -424,7 +425,7 @@ namespace ft
 			size_type	erase ( const key_type& _key )
 			{
 				iterator	tmp = this->_rb_tree.search(_key);
-				if (tmp == NULL)
+				if (tmp == this->end())
 				{
 					return (0);
 				}
@@ -446,9 +447,9 @@ namespace ft
 			{
 				while (first != last)
 				{
-					// std::cout << "Erasing : " << (*first) << std::endl;
-					this->_rb_tree.deleteNode(*first++);
-					// first++;
+					std::cout << "Erasing : " << (*first) << std::endl;
+					this->_rb_tree.deleteNode(*first);
+					first++;
 				}
 			}
 
@@ -471,7 +472,8 @@ namespace ft
 			 */
 			void		clear ( void )
 			{
-				this->erase(this->begin(), this->end());
+				this->_rb_tree.clear();
+				// this->erase(this->begin(), this->end());
 				// this->_rb_tree.delete_tree(this->_rb_tree.getRoot());
 			}
 
