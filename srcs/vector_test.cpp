@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:36:20 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/27 14:00:53 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 15:58:37 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <vector>
 # include <fstream>
 # include <list>
+# include <sys/time.h>
+# include <cstdlib>
 
 #define TESTED_TYPE int
 
@@ -535,52 +537,68 @@ void	swap ( my_out output )
 	output << (it_bar == foo.begin()) << std::endl;
 }
 
+void	big_insert_del ( void )
+{
+	NS::vector<int>	vec;
+
+	srand(42);
+
+	for	(size_t i = 0; i < 1000; i++)
+	{
+		vec.insert(vec.begin(), i);
+	}
+
+	for (size_t i = 0; i < 900; i++)
+	{
+		vec.erase(vec.begin() + (rand() % (vec.size() - 1)));
+	}
+}
+
 int	main(void)
 {
+	struct timeval begin, end;
+	gettimeofday(&begin, 0);
+
 	std::ofstream	vec_out;
 	vec_out.open(STRINGIFY(VECFILE), std::ofstream::out);
 	my_out	output(vec_out, std::cout);
 
-	//std::vector<std::string> test_str;
-	//test_str.push_back("Bonjour");
-	//test_str.push_back("comment");
-	//test_str.push_back("ca");
-	//test_str.push_back("va");
-	//test_str.push_back("?");
-
-	//std::vector<int>	test_int;
-	//for (int i = 0; i < 30; i++)
-	//	test_int.push_back(i);
-
-	//output << CONTAINER_TEST("VECTOR");
-	//output << CATEGORY_TEST("Simple");
-	//vec_constructor_test(15, output);
-	//vec_constructor_test(test_int, output);
-	//vec_operatorequal_test<int>(test_int, output);
-	//vec_iterator_test<int>(test_int, output);
-	//vec_capacity_test<int>(42, test_int, output);
-	//output << CATEGORY_TEST("Complex");
-	//vec_constructor_test(std::string("test"), output);
-	//vec_constructor_test(test_str, output);
-	//vec_operatorequal_test<std::string>(test_str, output);
-	//vec_iterator_test<std::string>(test_str, output);
-
-	//element_access_test(test_int, output)
+	output << CONTAINER_TEST("VECTOR");
+	output << CATEGORY_TEST("Assign");
 	assign(output);
+	output << CATEGORY_TEST("At");
 	at(output);
+	output << CATEGORY_TEST("At const");
 	at_const(output);
+	output << CATEGORY_TEST("Iterator bidirectionnal");
 	bidir_it(output);
+	output << CATEGORY_TEST("Copy constructor");
 	copy_construct(output);
+	output << CATEGORY_TEST("Erase");
 	erase(output);
+	output << CATEGORY_TEST("Insert");
 	insert(output);
 	insert2(output);
+	output << CATEGORY_TEST("Iterator");
 	ite(output);
 	ite_arrow(output);
 	ite_relationnal_op(output);
+	output << CATEGORY_TEST("Reverse iterator");
 	rite(output);
 	rite2(output);
+	output << CATEGORY_TEST("Size");
 	size(output);
+	output << CATEGORY_TEST("Swap");
 	swap(output);
+
+	big_insert_del();
+
+	gettimeofday(&end, 0);
+	long seconds = end.tv_sec - begin.tv_sec;
+	long microseconds = end.tv_usec - begin.tv_usec;
+	double elapsed = seconds + microseconds*1e-6;
+
+	output << "Time elapsed : " << elapsed << std::endl;
 
 	return 0;
 }

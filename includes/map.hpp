@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/27 10:40:38 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 18:04:14 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,7 @@ namespace ft
 
 			const_reverse_iterator	rbegin ( void ) const
 			{
-				return (reverse_iterator(this->end()));
+				return (const_reverse_iterator(this->end()));
 			}
 
 			/**
@@ -277,7 +277,7 @@ namespace ft
 
 			const_reverse_iterator	rend ( void ) const
 			{
-				return (reverse_iterator(this->begin()));
+				return (const_reverse_iterator(this->begin()));
 			}
 
 		/** ************************************************************************** */

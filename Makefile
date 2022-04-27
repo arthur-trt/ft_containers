@@ -4,6 +4,7 @@ ifeq ($(shell uname -s), Darwin)
 endif
 
 VECTOR_TARGET		:= _vector
+STACK_TARGET		:= _stack
 MAP_TARGET			:= _map
 
 BUILD				:= release
@@ -20,6 +21,7 @@ OBJEXT				:= o
 
 VECTOR_OBJECTS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)$(VERSION)/%,$(VECTOR_SOURCES:.$(SRCEXT)=.$(OBJEXT)))
 MAP_OBJECTS			:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)$(VERSION)/%,$(MAP_SOURCES:.$(SRCEXT)=.$(OBJEXT)))
+STACK_OBJECTS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)$(VERSION)/%,$(STACK_SOURCES:.$(SRCEXT)=.$(OBJEXT)))
 
 cflags.release		:= -Wall -Werror -Wextra
 cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -ggdb
@@ -47,7 +49,7 @@ ECHO				:= echo
 ES_ERASE			:= "\033[1A\033[2K\033[1A"
 ERASE				:= $(ECHO) $(ES_ERASE)
 
-all: vector.ft vector.std map.ft
+all: vector.ft vector.std map.ft map.std stack.ft stack.std
 
 vector.%:
 	$(MAKE) VERSION=$* $(TARGETDIR)/$*$(VECTOR_TARGET)
@@ -55,17 +57,26 @@ vector.%:
 map.%:
 	$(MAKE) VERSION=$* $(TARGETDIR)/$*$(MAP_TARGET)
 
+stack.%:
+	$(MAKE) VERSION=$* $(TARGETDIR)/$*$(STACK_TARGET)
+
 clean:
 	@$(RM) -rf $(TARGETDIR)/ft$(VECTOR_TARGET)
 	@$(RM) -rf $(TARGETDIR)/std$(VECTOR_TARGET)
+	@$(RM) -rf $(TARGETDIR)/ft$(MAP_TARGET)
+	@$(RM) -rf $(TARGETDIR)/std$(MAP_TARGET)
+	@$(RM) -rf $(TARGETDIR)/ft$(STACK_TARGET)
+	@$(RM) -rf $(TARGETDIR)/std$(STACK_TARGET)
 
 fclean: clean
 	@$(RM) -f *.d *.o
+	@$(RM) -f std_*.txt ft_*.txt
 	@$(RM) -rf $(BUILDDIR)ft
 	@$(RM) -rf $(BUILDDIR)std
 
 -include $(VECTOR_OBJECTS:.$(OBJEXT)=.$(DEPEXT))
 -include $(MAP_OBJECTS:.$(OBJEXT)=.$(DEPEXT))
+-include $(STACK_OBJECTS:.$(OBJEXT)=.$(DEPEXT))
 
 $(TARGETDIR)/%$(VECTOR_TARGET): $(VECTOR_OBJECTS)
 	@mkdir -p $(TARGETDIR)
@@ -74,6 +85,10 @@ $(TARGETDIR)/%$(VECTOR_TARGET): $(VECTOR_OBJECTS)
 $(TARGETDIR)/%$(MAP_TARGET): $(MAP_OBJECTS)
 	@mkdir -p $(TARGETDIR)
 	$(CXX) -o $(TARGETDIR)/$(VERSION)$(MAP_TARGET) $^ $(LIB)
+
+$(TARGETDIR)/%$(STACK_TARGET): $(STACK_OBJECTS)
+	@mkdir -p $(TARGETDIR)
+	$(CXX) -o $(TARGETDIR)/$(VERSION)$(STACK_TARGET) $^ $(LIB)
 
 $(BUILDDIR)$(VERSION)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)

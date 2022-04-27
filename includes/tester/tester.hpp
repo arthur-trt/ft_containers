@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:36:31 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/27 13:50:40 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 16:31:15 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 #endif
 
 #define VECFILE CONCAT(NS, _vector.txt)
+#define STACKFILE CONCAT(NS, _stack.txt)
+#define MAPFILE CONCAT(NS, _map.txt)
 
 using namespace NS;
 

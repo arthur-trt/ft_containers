@@ -1,7 +1,0 @@
-utils_test.o: srcs/utils_test.cpp includes/utils/utils.hpp \
-  includes/tester/tester_out.hpp includes/tester/tester.hpp \
-  includes/vector.hpp includes/random_access_iterator.hpp \
-  includes/reverse_iterator.hpp includes/utils/iterator_traits.hpp \
-  includes/utils/enable_if.hpp includes/utils/is_integral.hpp \
-  includes/utils/lexicographical_compare.hpp \
-  includes/tester/test_define.hpp
