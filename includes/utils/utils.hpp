@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 15:09:18 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/18 11:40:22 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 10:39:05 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@
 
 namespace ft {
 
-	template< class T >
-	T* addressof(T& arg) 
-	{
-		return reinterpret_cast<T*>(
-				&const_cast<char&>(
-					reinterpret_cast<const volatile char&>(arg)));
-	}
+	//template< class T >
+	//T* addressof(T& arg)
+	//{
+	//	return reinterpret_cast<T*>(
+	//			&const_cast<char&>(
+	//				reinterpret_cast<const volatile char&>(arg)));
+	//}
 
 	template <typename T>
 	std::string	to_string(T n)

@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:37:35 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 13:48:53 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 10:35:56 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define RB_NODE_HPP
 
 # include <memory>
-# include "utils.hpp"
+# include "../utils/utils.hpp"
 # define BLACK	0
 # define RED	1
 
@@ -145,17 +145,6 @@ namespace ft
 				}
 				return (*this);
 			}
-
-			//bool		operator== ( const RB_node &rhs ) const
-			//{
-			//	return (this->data == rhs.data && this->parent == rhs.parent);
-			//}
-
-			//bool		operator!= ( const RB_node &rhs ) const
-			//{
-			//	return (!(*this == rhs));
-			//}
-
 	};
 }
 

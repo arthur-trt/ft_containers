@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 14:41:23 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 14:44:35 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 10:38:35 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ namespace ft
 	{
 		while (first1!=last1)
 		{
-			if (!(*first1 == *first2))   // or: if (!pred(*first1,*first2)), for version 2
+			if (!(*first1 == *first2))
 				return false;
 			++first1; ++first2;
 		}

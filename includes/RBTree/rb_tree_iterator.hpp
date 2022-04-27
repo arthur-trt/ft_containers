@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 13:42:42 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/25 16:22:10 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 11:59:18 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "rb_node.hpp"
 # include "rb_tree_iterator_base.hpp"
-# include "iterator_traits.hpp"
+# include "../utils/iterator_traits.hpp"
 
 namespace ft
 {
@@ -32,16 +32,13 @@ namespace ft
 		typedef				rb_tree_iterator<T>					_Self;
 		typedef	typename	RB_node<T>::node_pointer			_node_pointer;
 
-		// _node_pointer	_header;
 		_node_pointer	_node_;
 
-		rb_tree_iterator (/* _node_pointer header = 0*/ ) :
-			/*_header(header),*/
+		rb_tree_iterator ( void ) :
 			_node_(0)
 		{}
 
-		explicit rb_tree_iterator ( _node_pointer __x/*, _node_pointer header*/ ) :
-			/*_header(header),*/
+		explicit rb_tree_iterator ( _node_pointer __x ) :
 			_node_(__x)
 		{}
 
@@ -57,28 +54,27 @@ namespace ft
 
 		_Self&		operator++ ( void )
 		{
-			// std::cout << "\t(it++) : Header->right: " << this->_header->right << std::endl;
-			_node_ = ft::_rb_tree_increment(_node_/*, _header*/);
+			_node_ = ft::_rb_tree_increment(_node_);
 			return (*this);
 		}
 
 		_Self		operator++ ( int )
 		{
 			_Self	__tmp = *this;
-			_node_ = ft::_rb_tree_increment(_node_/*, _header*/);
+			_node_ = ft::_rb_tree_increment(_node_);
 			return (__tmp);
 		}
 
 		_Self&		operator-- ( void )
 		{
-			_node_ = ft::_rb_tree_decrement(_node_/*, _header*/);
+			_node_ = ft::_rb_tree_decrement(_node_);
 			return (*this);
 		}
 
 		_Self		operator-- ( int )
 		{
 			_Self	__tmp = *this;
-			_node_ = ft::_rb_tree_decrement(_node_/*, _header*/);
+			_node_ = ft::_rb_tree_decrement(_node_);
 			return (__tmp);
 		}
 
@@ -108,27 +104,23 @@ namespace ft
 		typedef				rb_tree_const_iterator<T>			_Self;
 		typedef	typename	RB_node<T>::const_node_pointer		_node_pointer;
 
-		// _node_pointer	_header;
 		_node_pointer	_node_;
 
-		rb_tree_const_iterator ( /*_node_pointer header = 0*/ ) :
-			// _header(header),
+		rb_tree_const_iterator ( void ) :
 			_node_(0)
 		{}
 
-		explicit rb_tree_const_iterator ( _node_pointer __x/*, _node_pointer header*/ ) :
-			// _header(header),
+		explicit rb_tree_const_iterator ( _node_pointer __x ) :
 			_node_(__x)
 		{}
 
 		rb_tree_const_iterator ( const iterator & it ) :
-			// _header(it._header),
 			_node_(it._node_)
 		{}
 
 		iterator	_const_cast( void ) const
 		{
-			return (iterator(const_cast<typename iterator::_node_pointer>(_node_/*, _header*/)));
+			return (iterator(const_cast<typename iterator::_node_pointer>(_node_)));
 		}
 
 		reference	operator* ( void ) const
@@ -143,27 +135,27 @@ namespace ft
 
 		_Self&		operator++ ( void )
 		{
-			_node_ = ft::_rb_tree_increment(_node_/*, _header*/);
+			_node_ = ft::_rb_tree_increment(_node_);
 			return (*this);
 		}
 
 		_Self		operator++ ( int )
 		{
 			_Self	__tmp = *this;
-			_node_ = ft::_rb_tree_increment(_node_/*, _header*/);
+			_node_ = ft::_rb_tree_increment(_node_);
 			return (__tmp);
 		}
 
 		_Self&		operator-- ( void )
 		{
-			_node_ = ft::_rb_tree_decrement(_node_/*, _header*/);
+			_node_ = ft::_rb_tree_decrement(_node_);
 			return (*this);
 		}
 
 		_Self		operator-- ( int )
 		{
 			_Self	__tmp = *this;
-			_node_ = ft::_rb_tree_decrement(_node_/*, _header*/);
+			_node_ = ft::_rb_tree_decrement(_node_);
 			return (__tmp);
 		}
 

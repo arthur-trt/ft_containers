@@ -6,18 +6,18 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/26 19:58:30 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 10:40:38 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
 
-# include "rb_tree.hpp"
+# include "RBTree/rb_tree.hpp"
 # include "reverse_iterator.hpp"
-# include "enable_if.hpp"
+# include "utils/enable_if.hpp"
 # include "stack.hpp"
-# include "is_integral.hpp"
+# include "utils/is_integral.hpp"
 # include <memory>
 
 namespace ft
@@ -192,7 +192,6 @@ namespace ft
 				_comp(x._comp),
 				_rb_tree(x._rb_tree)
 			{
-				// Insert goes here
 			}
 
 			/**
@@ -447,22 +446,17 @@ namespace ft
 			void		erase ( iterator first, iterator last )
 			{
 				ft::stack<key_type>	store;
-				// this->_rb_tree.printTree();
-				// std::cout << "Leaf left parent : " << this->_rb_tree.begin()->first << std::endl;
 				while (first != last)
 				{
 					store.push(first->first);
-					// std::cout << store.top() <<std::endl;
 					first++;
 				}
 				while (!store.empty())
 				{
-					
+
 					this->erase(store.top());
 					store.pop();
 				}
-				// this->_rb_tree.printTree();
-
 			}
 
 			/**
@@ -485,8 +479,6 @@ namespace ft
 			void		clear ( void )
 			{
 				this->_rb_tree.clear();
-				// this->erase(this->begin(), this->end());
-				// this->_rb_tree.delete_tree(this->_rb_tree.getRoot());
 			}
 
 		/** ************************************************************************** */

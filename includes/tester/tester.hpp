@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:36:31 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/05 16:01:56 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 13:50:40 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,70 +35,62 @@
 
 using namespace NS;
 
+# include <iostream>
+# include <string>
+
+// --- Class foo
 template <typename T>
-void	display_vec(vector<T> &vec, my_out output)
+class foo {
+	public:
+		typedef T	value_type;
+
+		foo(void) : value(), _verbose(false) { };
+		foo(value_type src, const bool verbose = false) : value(src), _verbose(verbose) { };
+		foo(foo const &src, const bool verbose = false) : value(src.value), _verbose(verbose) { };
+		~foo(void) { if (this->_verbose) std::cout << "~foo::foo()" << std::endl; };
+		void m(void) { std::cout << "foo::m called [" << this->value << "]" << std::endl; };
+		void m(void) const { std::cout << "foo::m const called [" << this->value << "]" << std::endl; };
+		foo &operator=(value_type src) { this->value = src; return *this; };
+		foo &operator=(foo const &src) {
+			if (this->_verbose || src._verbose)
+				std::cout << "foo::operator=(foo) CALLED" << std::endl;
+			this->value = src.value;
+			return *this;
+		};
+		value_type	getValue(void) const { return this->value; };
+		void		switchVerbose(void) { this->_verbose = !(this->_verbose); };
+
+		operator value_type(void) const {
+			return value_type(this->value);
+		}
+	private:
+		value_type	value;
+		bool		_verbose;
+};
+
+template <typename T>
+std::ostream	&operator<<(std::ostream &o, foo<T> const &bar) {
+	o << bar.getValue();
+	return o;
+}
+// --- End of class foo
+
+template <typename T>
+T	inc(T it, int n)
 {
-	output << BOLD("-> output : ") << std::endl;
-
-	output << FG1("Content :") << std::endl;
-	typename vector<T>::iterator it1;
-	for (it1 = vec.begin(); it1 != vec.end(); it1++)
-		output << *it1 << " ";
-	output << std::endl;
-
-	output << DIM("size : ") << vec.size() << DIM("\tcapacity : ") << vec.capacity() << std::endl;
-	output << std::endl;
+	while (n-- > 0)
+		++it;
+	return (it);
 }
 
 template <typename T>
-void comp_vec(ft::vector<T> &my_vec, std::vector<T> &r_vec)
+T	dec(T it, int n)
 {
-	std::cout << BOLD("-> output : ") << std::endl;
-
-	std::cout << FG1("Mine :") << std::endl;
-	typename ft::vector<T>::iterator it1;
-	for (it1 = my_vec.begin(); it1 != my_vec.end(); it1++)
-		std::cout << *it1 << " ";
-	std::cout << std::endl;
-
-	std::cout << FG2("Real :") << std::endl;
-	typename std::vector<T>::iterator it;
-	for (it = r_vec.begin(); it != r_vec.end(); it++)
-		std::cout << *it << " ";
-	std::cout << std::endl;
-
-	std::cout << DIM("STD\tsize : ") << r_vec.size() << DIM("\tcapacity : ") << r_vec.capacity() << std::endl;
-	std::cout << DIM("FT\tsize : ") << my_vec.size() << DIM("\tcapacity : ") << my_vec.capacity() << std::endl;
-	std::cout << std::endl;
-
-	if (r_vec.size() != my_vec.size() || r_vec.capacity() != my_vec.capacity())
-		getwchar();
+	while (n-- > 0)
+		--it;
+	return (it);
 }
 
-template <typename T>
-void comp_vec(std::vector<T> &r_vec, ft::vector<T> &my_vec)
-{
-	std::cout << BOLD("-> output : ") << std::endl;
-
-	std::cout << FG1("Mine :") << std::endl;
-	typename ft::vector<T>::iterator it1;
-	for (it1 = my_vec.begin(); it1 != my_vec.end(); it1++)
-		std::cout << *it1 << " ";
-	std::cout << std::endl;
-
-	std::cout << FG2("Real :") << std::endl;
-	typename std::vector<T>::iterator it;
-	for (it = r_vec.begin(); it != r_vec.end(); it++)
-		std::cout << *it << " ";
-	std::cout << std::endl;
-
-	std::cout << DIM("STD\tsize : ") << r_vec.size() << DIM("\tcapacity : ") << r_vec.capacity() << std::endl;
-	std::cout << DIM("FT\tsize : ") << my_vec.size() << DIM("\tcapacity : ") << my_vec.capacity() << std::endl;
-	std::cout << std::endl;
-
-	if (r_vec.size() != my_vec.size() || r_vec.capacity() != my_vec.capacity())
-		getwchar();
-}
 
 std::string str_center(int width, const std::string& str);
 

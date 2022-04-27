@@ -6,15 +6,15 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 11:19:54 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/22 13:49:16 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/27 10:41:26 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSE_ITERATOR_HPP
 # define REVERSE_ITERATOR_HPP
 
-# include "utils.hpp"
-# include "iterator_traits.hpp"
+# include "utils/utils.hpp"
+# include "utils/iterator_traits.hpp"
 
 namespace ft {
 	template <typename _Iterator>

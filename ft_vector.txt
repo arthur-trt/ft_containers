@@ -1,0 +1,454 @@
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 18 15 12 9 6 3 
+[2msize : [0m7[2m	capacity : [0m7
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 15 10 5 
+[2msize : [0m4[2m	capacity : [0m4
+
+	### After assign(): ###
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 15 10 5 
+[2msize : [0m4[2m	capacity : [0m7
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+42 42 
+[2msize : [0m2[2m	capacity : [0m4
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 18 15 12 9 6 3 
+[2msize : [0m7[2m	capacity : [0m7
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 21 21 21 
+[2msize : [0m4[2m	capacity : [0m4
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+84 84 84 84 84 84 
+[2msize : [0m6[2m	capacity : [0m6
+
+	### assign() on enough capacity and low size: ###
+[1m-> output : [0m
+[4;30;33mContent :[0m
+53 53 53 53 53 
+[2msize : [0m5[2m	capacity : [0m7
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 18 15 
+[2msize : [0m3[2m	capacity : [0m4
+
+vct.at(): 21 | vct[]: 21
+vct.at(): 18 | vct[]: 18
+vct.at(): 15 | vct[]: 15
+vct.at(): 12 | vct[]: 12
+vct.at(): 9 | vct[]: 9
+vct.at(): 6 | vct[]: 6
+vct.at(): 3 | vct[]: 3
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 18 15 12 9 6 3 
+[2msize : [0m7[2m	capacity : [0m7
+
+front(): 21 21
+back(): 3 3
+Catch out_of_range exception!
+vct[]: 21
+vct[]: 18
+vct[]: 15
+vct[]: 12
+vct[]: 9
+vct[]: 6
+vct[]: 3
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 18 15 12 9 6 3 
+[2msize : [0m7[2m	capacity : [0m7
+
+front(): 21 21
+back(): 3 3
+vct_c.at(): 21
+vct_c.at(): 18
+vct_c.at(): 15
+vct_c.at(): 12
+vct_c.at(): 9
+vct_c.at(): 6
+vct_c.at(): 3
+Catch out_of_range exception!
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 18 15 12 9 6 3 
+[2msize : [0m7[2m	capacity : [0m7
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+3 6 9 12 
+[2msize : [0m4[2m	capacity : [0m4
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+5 10 15 20 
+[2msize : [0m4[2m	capacity : [0m4
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+5 10 15 20 20 15 10 5 
+[2msize : [0m8[2m	capacity : [0m8
+
+len: 5
+	-- PART ONE --
+[1m-> output : [0m
+[4;30;33mContent :[0m
+7 14 21 2 1 
+[2msize : [0m5[2m	capacity : [0m5
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+5 4 3 
+[2msize : [0m3[2m	capacity : [0m3
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+5 10 15 2 1 42 21 
+[2msize : [0m7[2m	capacity : [0m10
+
+	-- PART TWO --
+[1m-> output : [0m
+[4;30;33mContent :[0m
+5 10 15 2 1 42 21 
+[2msize : [0m7[2m	capacity : [0m7
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+
+[2msize : [0m0[2m	capacity : [0m3
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+5 4 3 
+[2msize : [0m3[2m	capacity : [0m10
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+AAAAAAAAAA BBBBBBBBB CCCCCCCC DDDDDDD EEEEEE FFFFF GGGG HHH II J 
+[2msize : [0m10[2m	capacity : [0m10
+
+[0] erase: 2
+[1m-> output : [0m
+[4;30;33mContent :[0m
+AAAAAAAAAA BBBBBBBBB DDDDDDD EEEEEE FFFFF GGGG HHH II J 
+[2msize : [0m9[2m	capacity : [0m10
+
+[1] erase: 0
+[1m-> output : [0m
+[4;30;33mContent :[0m
+BBBBBBBBB DDDDDDD EEEEEE FFFFF GGGG HHH II J 
+[2msize : [0m8[2m	capacity : [0m10
+
+[2] erase: 7
+[1m-> output : [0m
+[4;30;33mContent :[0m
+BBBBBBBBB DDDDDDD EEEEEE FFFFF GGGG HHH II 
+[2msize : [0m7[2m	capacity : [0m10
+
+[3] erase: 0
+[1m-> output : [0m
+[4;30;33mContent :[0m
+FFFFF GGGG HHH II 
+[2msize : [0m4[2m	capacity : [0m10
+
+[4] erase: 1
+[1m-> output : [0m
+[4;30;33mContent :[0m
+FFFFF II 
+[2msize : [0m2[2m	capacity : [0m10
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+FFFFF II Hello Hi there 
+[2msize : [0m4[2m	capacity : [0m10
+
+[5] erase: 1
+[1m-> output : [0m
+[4;30;33mContent :[0m
+FFFFF 
+[2msize : [0m1[2m	capacity : [0m10
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+FFFFF ONE TWO THREE FOUR 
+[2msize : [0m5[2m	capacity : [0m10
+
+[6] erase: 0
+[1m-> output : [0m
+[4;30;33mContent :[0m
+
+[2msize : [0m0[2m	capacity : [0m10
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+30 27 24 21 18 15 12 9 6 3 
+[2msize : [0m10[2m	capacity : [0m10
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 21 42 
+[2msize : [0m3[2m	capacity : [0m3
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 42 21 42 
+[2msize : [0m4[2m	capacity : [0m6
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 42 21 42 84 84 
+[2msize : [0m6[2m	capacity : [0m8
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 42 21 42 
+[2msize : [0m4[2m	capacity : [0m8
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+21 42 30 27 24 21 18 15 12 9 6 3 21 42 
+[2msize : [0m14[2m	capacity : [0m14
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+
+[2msize : [0m0[2m	capacity : [0m10
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+35 28 21 14 7 
+[2msize : [0m5[2m	capacity : [0m5
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+35 28 21 
+[2msize : [0m3[2m	capacity : [0m3
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+14 7 35 28 21 
+[2msize : [0m5[2m	capacity : [0m6
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+14 7 35 28 21 35 28 21 
+[2msize : [0m8[2m	capacity : [0m10
+
+insert return:
+42
+84
+----------------------------------------
+[1m-> output : [0m
+[4;30;33mContent :[0m
+14 7 35 28 21 84 35 28 21 42 
+[2msize : [0m10[2m	capacity : [0m18
+
+Pre inc
+20 | 20
+Pre dec
+25 | 25
+Post inc
+25 | 20
+Post dec
+20 | 25
+###############################################
+5
+10
+const_ite +=: 15
+const_ite -=: 25
+(it == const_it): 0
+(const_ite - it): -3
+(ite + 3 == it): 1
+[1m-> output : [0m
+[4;30;33mContent :[0m
+25 42 15 21 5 
+[2msize : [0m5[2m	capacity : [0m5
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+1 2 3 4 5 
+[2msize : [0m5[2m	capacity : [0m5
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+5 4 3 2 1 
+[2msize : [0m5[2m	capacity : [0m5
+
+true
+		ft_eq_ope:
+false
+true
+false
+true
+true
+true
+false
+false
+true
+true
+false
+false
+false
+true
+false
+true
+true
+true
+false
+false
+true
+true
+false
+false
+false
+true
+false
+true
+false
+true
+false
+true
+true
+true
+false
+false
+false
+false
+true
+true
+true
+true
+false
+false
+false
+false
+true
+true
+[1m-> output : [0m
+[4;30;33mContent :[0m
+5 10 15 20 25 
+[2msize : [0m5[2m	capacity : [0m5
+
+true
+false
+10
+15
+20
+20
+TEST OFFSET
+15
+20
+15
+20
+25
+5
+10
+const_ite +=/-=: 15 | 25
+(it == const_it): false
+(const_ite - it): -3
+(ite + 3 == it): true
+[1m-> output : [0m
+[4;30;33mContent :[0m
+5 21 15 42 25 
+[2msize : [0m5[2m	capacity : [0m5
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 6 3 
+[2msize : [0m7[2m	capacity : [0m7
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 6 3 42 42 42 
+[2msize : [0m10[2m	capacity : [0m14
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 6 3 42 42 42 43 43 43 43 43 43 43 43 
+[2msize : [0m18[2m	capacity : [0m20
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 6 3 42 42 42 
+[2msize : [0m10[2m	capacity : [0m20
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 6 3 42 42 42 44 44 44 44 44 44 44 44 44 44 44 44 44 
+[2msize : [0m23[2m	capacity : [0m23
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 
+[2msize : [0m5[2m	capacity : [0m23
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 
+[2msize : [0m5[2m	capacity : [0m23
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 
+[2msize : [0m5[2m	capacity : [0m87
+
+is_empty: true
+is_empty: false
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 
+[2msize : [0m5[2m	capacity : [0m88
+
+[1m-> output : [0m
+[4;30;33mContent :[0m
+20 20 15 12 9 
+[2msize : [0m5[2m	capacity : [0m5
+
+is_empty: true
+[1m-> output : [0m
+[4;30;33mContent :[0m
+
+[2msize : [0m0[2m	capacity : [0m5
+
+BEFORE SWAP
+foo contains:
+[1m-> output : [0m
+[4;30;33mContent :[0m
+15 15 15 
+[2msize : [0m3[2m	capacity : [0m3
+
+bar contains:
+[1m-> output : [0m
+[4;30;33mContent :[0m
+42 42 42 42 42 
+[2msize : [0m5[2m	capacity : [0m5
+
+AFTER SWAP
+foo contains:
+[1m-> output : [0m
+[4;30;33mContent :[0m
+42 42 42 42 42 
+[2msize : [0m5[2m	capacity : [0m5
+
+bar contains:
+[1m-> output : [0m
+[4;30;33mContent :[0m
+15 15 15 
+[2msize : [0m3[2m	capacity : [0m3
+
+Iterator validity:
+true
+true
