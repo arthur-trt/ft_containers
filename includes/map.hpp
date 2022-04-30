@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 10:27:02 by arthur            #+#    #+#             */
-/*   Updated: 2022/04/27 18:04:14 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/30 09:46:28 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ namespace ft
 		/** ************************************************************************** */
 		/**                              PRIVATE MEMBERS                               */
 		/** ************************************************************************** */
-		public:
+		private:
 			allocator_type													_alloc;
 			_Compare														_comp;
 			ft::RedBlackTree<const key_type, value_type, _Compare, _Alloc>	_rb_tree;

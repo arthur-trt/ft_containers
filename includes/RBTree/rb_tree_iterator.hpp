@@ -6,7 +6,7 @@
 /*   By: atrouill <atrouill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 13:42:42 by atrouill          #+#    #+#             */
-/*   Updated: 2022/04/27 17:57:49 by atrouill         ###   ########.fr       */
+/*   Updated: 2022/04/30 09:46:49 by atrouill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,11 +167,6 @@ namespace ft
 		bool		operator!= ( const _Self & rhs ) const
 		{
 			return (_node_ != rhs._node_);
-		}
-
-		operator random_access_iterator<const T> () const
-		{
-			return (random_access_iterator<const T>(this->_elem));
 		}
 	};
 
